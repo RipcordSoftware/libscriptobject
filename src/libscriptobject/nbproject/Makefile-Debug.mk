@@ -35,8 +35,15 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/script_object.o
+	${OBJECTDIR}/script_object.o \
+	${OBJECTDIR}/script_object_keys.o
 
+# Test Directory
+TESTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tests
+
+# Test Files
+TESTFILES= \
+	${TESTDIR}/TestFiles/f1
 
 # C Compiler Flags
 CFLAGS=
@@ -67,10 +74,63 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libscriptobject.a: ${OBJECTFILES}
 ${OBJECTDIR}/script_object.o: script_object.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object.o script_object.cpp
+	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT_KEYS=1 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object.o script_object.cpp
+
+${OBJECTDIR}/script_object_keys.o: script_object_keys.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT_KEYS=1 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_keys.o script_object_keys.cpp
 
 # Subprojects
 .build-subprojects:
+
+# Build Test Targets
+.build-tests-conf: .build-conf ${TESTFILES}
+${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests/object_keys_tests.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc} ../../externals/installed/lib/libgtest_main.a ../../externals/installed/lib/libgtest.a ../../externals/installed/lib/libjsoncpp_debug.a  -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS} -lpthread 
+
+
+${TESTDIR}/tests/object_keys_tests.o: tests/object_keys_tests.cpp 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT_KEYS=1 -I../../externals/installed/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/object_keys_tests.o tests/object_keys_tests.cpp
+
+
+${OBJECTDIR}/script_object_nomain.o: ${OBJECTDIR}/script_object.o script_object.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/script_object.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT_KEYS=1 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_nomain.o script_object.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/script_object.o ${OBJECTDIR}/script_object_nomain.o;\
+	fi
+
+${OBJECTDIR}/script_object_keys_nomain.o: ${OBJECTDIR}/script_object_keys.o script_object_keys.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/script_object_keys.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT_KEYS=1 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_keys_nomain.o script_object_keys.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/script_object_keys.o ${OBJECTDIR}/script_object_keys_nomain.o;\
+	fi
+
+# Run Test Targets
+.test-conf:
+	@if [ "${TEST}" = "" ]; \
+	then  \
+	    ${TESTDIR}/TestFiles/f1 || true; \
+	else  \
+	    ./${TEST} || true; \
+	fi
 
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
