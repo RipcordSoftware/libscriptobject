@@ -30,7 +30,7 @@ clean: force_true
 .jsoncpp: force_true
 	if ! test `grep '\[submodule' .git/config`; then \
 		git submodule init; \
-	fi
+	fi; \
 	if [ ! -d externals/jsoncpp/.git ]; then \
 		git submodule update; \
 	fi; \
