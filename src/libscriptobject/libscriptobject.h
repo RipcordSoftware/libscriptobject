@@ -1,0 +1,6 @@
+#ifndef RS_LIBSCRIPTOBJECT_H
+#define RS_LIBSCRIPTOBJECT_H
+
+
+#endif	/* RS_LIBSCRIPTOBJECT_H */
+
