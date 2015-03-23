@@ -1,12 +1,12 @@
 GTEST_VER=1.7.0
 
-build: force_true .googletest
+build: force_true .googletest .jsoncpp
 	cd src/libscriptobject && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) build
 
-all: force_true .googletest
+all: force_true .googletest .jsoncpp
 	cd src/libscriptobject && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) all
 
-test: force_true .googletest
+test: force_true .googletest .jsoncpp
 	cd src/libscriptobject && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) test
 
 clean: force_true
@@ -25,6 +25,31 @@ clean: force_true
 		if [ ! -d "../installed/lib" ]; then mkdir -p ../installed/lib; fi && \
 		cp -Rf include/* ../installed/include && \
 		cp -Rf lib/.libs/* ../installed/lib; \
+	fi
+
+.jsoncpp: force_true
+	if [ ! -d externals/jsoncpp ]; then \
+		git submodule update; \
+	fi; \
+	if [ ! -d externals/jsoncpp/build/debug ]; then \
+		mkdir -p externals/jsoncpp/build/debug && \
+		pushd externals/jsoncpp/build/debug && \
+		cmake -DCMAKE_BUILD_TYPE=debug -DJSONCPP_LIB_BUILD_STATIC=ON -DJSONCPP_LIB_BUILD_SHARED=OFF -G "Unix Makefiles" ../.. && \
+		make -j 2 && \
+		cp -f src/lib_json/libjsoncpp.a ../../../installed/lib/libjsoncpp_debug.a && \
+		popd; \
+	fi; \
+	if [ ! -d externals/jsoncpp/build/release ]; then \
+		mkdir -p externals/jsoncpp/build/release && \
+		pushd externals/jsoncpp/build/release && \
+		cmake -DJSONCPP_LIB_BUILD_STATIC=ON -DJSONCPP_LIB_BUILD_SHARED=OFF -G "Unix Makefiles" ../.. && \
+		make -j 2 && \
+		cp -f src/lib_json/libjsoncpp.a ../../../installed/lib && \
+		popd; \
+	fi; \
+	if [ ! -f externals/installed/include/json ]; then \
+		mkdir -p externals/installed/include/json && \
+		cp -Rf externals/jsoncpp/include/json/* externals/installed/include/json/; \
 	fi
 
 force_true:
