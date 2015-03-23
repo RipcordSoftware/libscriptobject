@@ -36,19 +36,19 @@ clean: force_true
 	fi; \
 	if [ ! -d externals/jsoncpp/build/debug ]; then \
 		mkdir -p externals/jsoncpp/build/debug && \
-		pushd externals/jsoncpp/build/debug && \
+		cd externals/jsoncpp/build/debug && \
 		cmake -DCMAKE_BUILD_TYPE=debug -DJSONCPP_LIB_BUILD_STATIC=ON -DJSONCPP_LIB_BUILD_SHARED=OFF -G "Unix Makefiles" ../.. && \
 		make -j 2 && \
 		cp -f src/lib_json/libjsoncpp.a ../../../installed/lib/libjsoncpp_debug.a && \
-		popd; \
+		cd ../../../..; \
 	fi; \
 	if [ ! -d externals/jsoncpp/build/release ]; then \
 		mkdir -p externals/jsoncpp/build/release && \
-		pushd externals/jsoncpp/build/release && \
+		cd externals/jsoncpp/build/release && \
 		cmake -DJSONCPP_LIB_BUILD_STATIC=ON -DJSONCPP_LIB_BUILD_SHARED=OFF -G "Unix Makefiles" ../.. && \
 		make -j 2 && \
 		cp -f src/lib_json/libjsoncpp.a ../../../installed/lib && \
-		popd; \
+		cd ../../../..; \
 	fi; \
 	if [ ! -f externals/installed/include/json ]; then \
 		mkdir -p externals/installed/include/json && \
