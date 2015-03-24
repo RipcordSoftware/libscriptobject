@@ -10,7 +10,7 @@ void rs::scriptobject::ScriptObjectDefinition::CalculateHash(unsigned char diges
         md5.update(name(i), length(i));
     }
     
-    unsigned char typeBuffer[16];
+    unsigned char typeBuffer[64];
     int typeBufferBlocks = fieldCount / sizeof(typeBuffer);
     int typeBufferOverflow = fieldCount % sizeof(typeBuffer);
     int typeIndex = 0;
