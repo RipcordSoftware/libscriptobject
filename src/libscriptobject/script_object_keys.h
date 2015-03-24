@@ -7,14 +7,25 @@
 
 namespace rs {
 namespace scriptobject {
-    
+
+/**
+ * A key which contains the field type, raw index and offset
+ */    
 struct ScriptObjectKey {
     unsigned type : 4;                  /// < The type of the key
     unsigned index : 12;                /// < The original key index
     unsigned offset : 16;               /// < The key string offset
 };
 
+/**
+ * A collection of keys, allocated from a single memory block
+ * @ note
+ * This structure is designed to be very efficient with memory. Only a single
+ * block is allocated to contain the field names, types and other associated data.
+ */
 struct ScriptObjectKeys {
+    ScriptObjectKeys() = delete;
+    
     unsigned short size;                /// < The size of the entire key structure
     unsigned short count;               /// < The number of keys
     unsigned char hash[16];             /// < The MD5 hash generated from key+type
@@ -29,7 +40,8 @@ struct ScriptObjectKeys {
 private:    
     friend class ScriptObjectKeysFactory;
     
-    static unsigned short* getIndexes(ScriptObjectKeys& keys);
+    static char* getKeyNameStart(ScriptObjectKeys& keys);
+    static unsigned short* getIndexesStart(ScriptObjectKeys& keys);
     static int FindKey(ScriptObjectKeys& keys, const char* name, int min, int max);
 } __attribute__ ((aligned (2)));
 
@@ -41,11 +53,20 @@ public:
     virtual unsigned length(int index) const = 0;
 };
 
+typedef std::shared_ptr<ScriptObjectKeys> ScriptObjectKeysPtr;
+
+/**
+ * A factory for creating ScriptObjectKeys
+ */
 class ScriptObjectKeysFactory final {
 public:
     ScriptObjectKeysFactory() = delete;
-    
-    typedef std::shared_ptr<ScriptObjectKeys> ScriptObjectKeysPtr;
+
+    /**
+     * Creates a ScriptObjectKeys smart pointer instance
+     * @param defn The source object definition
+     * @return A smart pointer containing the new object
+     */    
     static ScriptObjectKeysPtr CreateKeys(const ScriptObjectDefinition& defn);
     
 private:       
