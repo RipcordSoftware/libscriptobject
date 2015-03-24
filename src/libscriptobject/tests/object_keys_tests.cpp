@@ -178,3 +178,25 @@ TEST_F(ObjectKeysTests, test6) {
     ASSERT_FALSE(rs::scriptobject::ScriptObjectKeys::getKey(*keys, "childa", key));
     ASSERT_FALSE(rs::scriptobject::ScriptObjectKeys::getKey(*keys, "childx", key));
 }
+
+TEST_F(ObjectKeysTests, test7) {
+    ObjectKeysDefn defn({
+        { "hello", rs::scriptobject::ScriptObjectType::String }, 
+        { "world", rs::scriptobject::ScriptObjectType::String },
+        { "pi", rs::scriptobject::ScriptObjectType::Double },
+        { "child", rs::scriptobject::ScriptObjectType::Object }
+    });
+    
+    auto keys = rs::scriptobject::ScriptObjectKeysFactory::CreateKeys(defn);
+    
+    ASSERT_EQ(4, keys->count);
+    rs::scriptobject::ScriptObjectKey key;
+    ASSERT_TRUE(rs::scriptobject::ScriptObjectKeys::getKey(*keys, "hello", key));
+    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::String, key.type);
+    ASSERT_TRUE(rs::scriptobject::ScriptObjectKeys::getKey(*keys, "world", key));
+    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::String, key.type);
+    ASSERT_TRUE(rs::scriptobject::ScriptObjectKeys::getKey(*keys, "pi", key));    
+    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Double, key.type);
+    ASSERT_TRUE(rs::scriptobject::ScriptObjectKeys::getKey(*keys, "child", key));
+    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Object, key.type);
+}
