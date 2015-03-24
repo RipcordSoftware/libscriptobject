@@ -45,33 +45,7 @@ private:
     static int FindKey(ScriptObjectKeys& keys, const char* name, int min, int max);
 } __attribute__ ((aligned (2)));
 
-class ScriptObjectDefinition {
-public:
-    virtual unsigned count() const = 0;
-    virtual ScriptObjectType type(int index) const = 0;
-    virtual const char* name(int index) const = 0;    
-    virtual unsigned length(int index) const = 0;
-};
-
 typedef std::shared_ptr<ScriptObjectKeys> ScriptObjectKeysPtr;
-
-/**
- * A factory for creating ScriptObjectKeys
- */
-class ScriptObjectKeysFactory final {
-public:
-    ScriptObjectKeysFactory() = delete;
-
-    /**
-     * Creates a ScriptObjectKeys smart pointer instance
-     * @param defn The source object definition
-     * @return A smart pointer containing the new object
-     */    
-    static ScriptObjectKeysPtr CreateKeys(const ScriptObjectDefinition& defn);
-    
-private:       
-    static void ScriptObjectKeysDeleter(ScriptObjectKeys* ptr);
-};
 
 }}
 

@@ -8,7 +8,7 @@ if [ $? -ne 0 ]; then
 fi
 
 lcov -b src/libscriptobject --directory src/libscriptobject/build/Debug/GNU-Linux-x86/ --capture --output-file coverage.info
-lcov --remove coverage.info 'tests/*' '/usr/*' '*/externals/*' --output-file coverage.info
+lcov --remove coverage.info 'tests/*' '/usr/*' '*/externals/*' 'md5.*' --output-file coverage.info
 lcov --list coverage.info
 if [ "$CI" = "true" ] && [ "$TRAVIS" = "true" ]; then
     coveralls-lcov coverage.info

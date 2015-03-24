@@ -1,10 +1,9 @@
 #include <gtest/gtest.h>
 
-#include <thread>
 #include <vector>
 #include <string>
 
-#include "../script_object_keys.h"
+#include "../libscriptobject.h"
 
 typedef std::vector<std::pair<std::string, rs::scriptobject::ScriptObjectType>> KeysDefn;
 
