@@ -28,8 +28,8 @@
 *.app
 
 # ignore the coverage output files
- coverage.info
- coverage/*
+coverage.info
+coverage/*
 
 # ignore NetBeans related stuff
 /src/*/dist/

@@ -49,6 +49,7 @@
       <compileType>
         <ccTool>
           <standard>8</standard>
+          <commandLine>--coverage</commandLine>
           <preprocessorList>
             <Elem>DEBUG_SCRIPT_OBJECT_KEYS=1</Elem>
           </preprocessorList>
@@ -62,12 +63,13 @@
           <incDir>
             <pElem>../../externals/installed/include</pElem>
           </incDir>
+          <commandLine>--coverage</commandLine>
         </ccTool>
         <linkerTool>
           <linkerLibItems>
             <linkerLibStdlibItem>PosixThreads</linkerLibStdlibItem>
           </linkerLibItems>
-          <commandLine>../../externals/installed/lib/libgtest_main.a ../../externals/installed/lib/libgtest.a ../../externals/installed/lib/libjsoncpp_debug.a</commandLine>
+          <commandLine>../../externals/installed/lib/libgtest_main.a ../../externals/installed/lib/libgtest.a ../../externals/installed/lib/libjsoncpp_debug.a --coverage</commandLine>
         </linkerTool>
       </folder>
       <folder path="TestFiles/f1">
