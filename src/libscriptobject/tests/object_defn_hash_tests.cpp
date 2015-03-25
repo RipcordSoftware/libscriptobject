@@ -5,23 +5,8 @@
 #include <algorithm>
 
 #include "../libscriptobject.h"
-
-typedef std::vector<std::pair<std::string, rs::scriptobject::ScriptObjectType>> KeysDefn;
-
-class ObjectKeysDefn : public rs::scriptobject::ScriptObjectDefinition {
-public:
-    ObjectKeysDefn(const KeysDefn& keys) : keys_(keys) {
-        
-    }
-    
-    virtual unsigned count() const override { return keys_.size(); }
-    virtual const char* name(int index) const override { return keys_[index].first.c_str(); }
-    virtual unsigned length(int index) const override { return keys_[index].first.length(); }
-    virtual rs::scriptobject::ScriptObjectType type(int index) const override { return keys_[index].second; }
-        
-private:
-    KeysDefn keys_;
-};
+#include "../script_object_vector_definition.h"
+#include "script_object_vector_definition.h"
 
 class ObjectDefnHashTests : public ::testing::Test {
 protected:
@@ -35,7 +20,7 @@ protected:
 };
 
 TEST_F(ObjectDefnHashTests, test1) {
-    ObjectKeysDefn defn({{ "hello", rs::scriptobject::ScriptObjectType::String }});
+    rs::scriptobject::test::VectorKeysDefn defn({{ "hello", rs::scriptobject::ScriptObjectType::String }});
     
     unsigned char hash[16];
     std::fill_n(hash, sizeof(hash), 0);
@@ -51,7 +36,7 @@ TEST_F(ObjectDefnHashTests, test1) {
 }
 
 TEST_F(ObjectDefnHashTests, test2) {
-    ObjectKeysDefn defn1({{ "hello", rs::scriptobject::ScriptObjectType::String }});
+    rs::scriptobject::test::VectorKeysDefn defn1({{ "hello", rs::scriptobject::ScriptObjectType::String }});
     
     unsigned char hash1[16];
     std::fill_n(hash1, sizeof(hash1), 0);
@@ -69,8 +54,8 @@ TEST_F(ObjectDefnHashTests, test2) {
 }
 
 TEST_F(ObjectDefnHashTests, test3) {
-    ObjectKeysDefn defn1({{ "hello1", rs::scriptobject::ScriptObjectType::String }});
-    ObjectKeysDefn defn2({{ "hello2", rs::scriptobject::ScriptObjectType::String }});
+    rs::scriptobject::test::VectorKeysDefn defn1({{ "hello1", rs::scriptobject::ScriptObjectType::String }});
+    rs::scriptobject::test::VectorKeysDefn defn2({{ "hello2", rs::scriptobject::ScriptObjectType::String }});
     
     unsigned char hash1[16];
     std::fill_n(hash1, sizeof(hash1), 0);
@@ -94,8 +79,8 @@ TEST_F(ObjectDefnHashTests, test3) {
 }
 
 TEST_F(ObjectDefnHashTests, test4) {
-    ObjectKeysDefn defn1({{ "hello", rs::scriptobject::ScriptObjectType::String }});
-    ObjectKeysDefn defn2({{ "hello", rs::scriptobject::ScriptObjectType::Double }});
+    rs::scriptobject::test::VectorKeysDefn defn1({{ "hello", rs::scriptobject::ScriptObjectType::String }});
+    rs::scriptobject::test::VectorKeysDefn defn2({{ "hello", rs::scriptobject::ScriptObjectType::Double }});
     
     unsigned char hash1[16];
     std::fill_n(hash1, sizeof(hash1), 0);
@@ -119,8 +104,8 @@ TEST_F(ObjectDefnHashTests, test4) {
 }
 
 TEST_F(ObjectDefnHashTests, test5) {
-    ObjectKeysDefn defn1({{ "hello", rs::scriptobject::ScriptObjectType::String }, { "pi", rs::scriptobject::ScriptObjectType::Double }});
-    ObjectKeysDefn defn2({{ "hello", rs::scriptobject::ScriptObjectType::String }});
+    rs::scriptobject::test::VectorKeysDefn defn1({{ "hello", rs::scriptobject::ScriptObjectType::String }, { "pi", rs::scriptobject::ScriptObjectType::Double }});
+    rs::scriptobject::test::VectorKeysDefn defn2({{ "hello", rs::scriptobject::ScriptObjectType::String }});
     
     unsigned char hash1[16];
     std::fill_n(hash1, sizeof(hash1), 0);
@@ -144,7 +129,7 @@ TEST_F(ObjectDefnHashTests, test5) {
 }
 
 TEST_F(ObjectDefnHashTests, test6) {
-    ObjectKeysDefn defn({
+    rs::scriptobject::test::VectorKeysDefn defn({
         { "0", rs::scriptobject::ScriptObjectType::String },
         { "1", rs::scriptobject::ScriptObjectType::String },
         { "2", rs::scriptobject::ScriptObjectType::String },
@@ -181,7 +166,7 @@ TEST_F(ObjectDefnHashTests, test6) {
 }
 
 TEST_F(ObjectDefnHashTests, test7) {
-    ObjectKeysDefn defn1({
+    rs::scriptobject::test::VectorKeysDefn defn1({
         { "0", rs::scriptobject::ScriptObjectType::String },
         { "1", rs::scriptobject::ScriptObjectType::String },
         { "2", rs::scriptobject::ScriptObjectType::String },
@@ -220,7 +205,7 @@ TEST_F(ObjectDefnHashTests, test7) {
 }
 
 TEST_F(ObjectDefnHashTests, test8) {
-    ObjectKeysDefn defn1({
+    rs::scriptobject::test::VectorKeysDefn defn1({
         { "0", rs::scriptobject::ScriptObjectType::String },
         { "1", rs::scriptobject::ScriptObjectType::String },
         { "2", rs::scriptobject::ScriptObjectType::String },
@@ -243,7 +228,7 @@ TEST_F(ObjectDefnHashTests, test8) {
         { "19", rs::scriptobject::ScriptObjectType::String }
     });
     
-    ObjectKeysDefn defn2({
+    rs::scriptobject::test::VectorKeysDefn defn2({
         { "0", rs::scriptobject::ScriptObjectType::String },
         { "1", rs::scriptobject::ScriptObjectType::String },
         { "2", rs::scriptobject::ScriptObjectType::String },
@@ -285,4 +270,25 @@ TEST_F(ObjectDefnHashTests, test8) {
     ASSERT_NE(0, total2);
     ASSERT_NE(0, total2);
     ASSERT_NE(total1, total2);
+}
+
+TEST_F(ObjectDefnHashTests, test9) {
+    rs::scriptobject::test::VectorDefn vect;
+    for (int i = 0; i < 1024; ++i) {        
+        vect.push_back({ std::to_string(i), rs::scriptobject::ScriptObjectType::String });
+    }
+    
+    rs::scriptobject::test::VectorKeysDefn defn(vect);
+    
+    unsigned char hash[16];
+    std::fill_n(hash, sizeof(hash), 0);
+    
+    defn.CalculateHash(hash);
+    
+    unsigned total = 0;
+    for (int i = 0; i < sizeof(hash); ++i) {
+        total += hash[i];
+    }
+    
+    ASSERT_NE(0, total);
 }
