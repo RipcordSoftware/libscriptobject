@@ -183,3 +183,35 @@ TEST_F(ObjectKeysTests, test7) {
     ASSERT_TRUE(keys->getKey("child", key));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Object, key.type);
 }
+
+TEST_F(ObjectKeysTests, test8) {
+    rs::scriptobject::test::VectorDefn vect;
+    rs::scriptobject::ScriptObjectType types[] = { rs::scriptobject::ScriptObjectType::String, rs::scriptobject::ScriptObjectType::Double, rs::scriptobject::ScriptObjectType::Int32 };
+    
+    for (int i = 0; i < 1024; ++i) {
+        auto type = types[i % (sizeof(types) / sizeof(types[0]))];
+        vect.push_back({ std::to_string(i), type });
+    }
+    
+    rs::scriptobject::test::VectorKeysDefn defn(vect);            
+    auto keys = rs::scriptobject::ScriptObjectKeysFactory::CreateKeys(defn);
+    
+    ASSERT_EQ(vect.size(), keys->count);    
+    
+    for (int i = 0; i < vect.size(); ++i) {
+        ASSERT_STREQ(vect[i].first.c_str(), keys->getKeyName(i));
+        ASSERT_EQ(vect[i].second, keys->getKeyType(i));
+    }
+    
+    for (int i = 0; i < vect.size(); ++i) {
+        rs::scriptobject::ScriptObjectKey key;
+        ASSERT_TRUE(keys->getKey(vect[i].first.c_str(), key));
+        ASSERT_EQ((unsigned)vect[i].second, key.type);
+    }
+    
+    for (int i = 0; i < vect.size(); ++i) {
+        rs::scriptobject::ScriptObjectKey key;
+        ASSERT_TRUE(keys->getKey(i, key));
+        ASSERT_EQ((unsigned)vect[i].second, key.type);
+    }
+}

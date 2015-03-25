@@ -346,3 +346,55 @@ TEST_F(SimpleObjectTests, test10) {
         rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
     }, rs::scriptobject::UnknownSourceFieldTypeException);
 }
+
+TEST_F(SimpleObjectTests, test11) {
+    rs::scriptobject::test::VectorObject vect;
+    rs::scriptobject::ScriptObjectType types[] = { rs::scriptobject::ScriptObjectType::String, rs::scriptobject::ScriptObjectType::Double, rs::scriptobject::ScriptObjectType::Int32 };
+    
+    for (int i = 0; i < 1024; ++i) {
+        auto type = types[i % (sizeof(types) / sizeof(types[0]))];
+        vect.push_back(std::make_tuple(std::to_string(i), type, std::to_string(i)));
+    }
+    
+    rs::scriptobject::test::VectorObjectSource source(vect);        
+    
+    auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(source);
+    
+    ASSERT_EQ(vect.size(), object->getCount());
+    
+    for (int i = 0; i < vect.size(); ++i) {
+        ASSERT_EQ(std::get<1>(vect[i]), object->getType(i));
+        ASSERT_STREQ(std::get<0>(vect[i]).c_str(), object->getName(i));
+        
+        switch (std::get<1>(vect[i])) {
+            case rs::scriptobject::ScriptObjectType::String:
+                ASSERT_STREQ(std::get<2>(vect[i]).c_str(), object->getString(i));
+                break;
+            case rs::scriptobject::ScriptObjectType::Double:                
+                ASSERT_FLOAT_EQ(std::stod(std::get<2>(vect[i])), object->getDouble(i));
+                break;
+            case rs::scriptobject::ScriptObjectType::Int32:                
+                ASSERT_FLOAT_EQ(std::stoi(std::get<2>(vect[i])), object->getInt32(i));
+                break;
+        }
+    }
+    
+    for (int i = 0; i < vect.size(); ++i) {
+        auto name = std::get<0>(vect[i]).c_str();
+        auto type = std::get<1>(vect[i]);
+        
+        ASSERT_EQ(type, object->getType(name));
+        
+        switch (type) {
+            case rs::scriptobject::ScriptObjectType::String:
+                ASSERT_STREQ(std::get<2>(vect[i]).c_str(), object->getString(name));
+                break;
+            case rs::scriptobject::ScriptObjectType::Double:                
+                ASSERT_FLOAT_EQ(std::stod(std::get<2>(vect[i])), object->getDouble(name));
+                break;
+            case rs::scriptobject::ScriptObjectType::Int32:                
+                ASSERT_FLOAT_EQ(std::stoi(std::get<2>(vect[i])), object->getInt32(name));
+                break;
+        }
+    }
+}

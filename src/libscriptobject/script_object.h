@@ -17,6 +17,7 @@ struct ScriptObject {
     unsigned getCount() const;
     ScriptObjectType getType(int index) const;
     ScriptObjectType getType(const char* name) const;
+    const char* getName(int index) const;
     const char* getString(int index) const;
     const char* getString(const char* name) const;
     std::int32_t getInt32(int index) const;

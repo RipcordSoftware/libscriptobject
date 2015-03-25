@@ -62,6 +62,10 @@ unsigned rs::scriptobject::ScriptObject::getCount() const {
     return keys->count; 
 }
 
+const char* rs::scriptobject::ScriptObject::getName(int index) const {
+    return keys->getKeyName(index);
+}
+
 rs::scriptobject::ScriptObjectType rs::scriptobject::ScriptObject::getType(int index) const {
     ScriptObjectKey key;
     if (keys->getKey(index, key)) {
