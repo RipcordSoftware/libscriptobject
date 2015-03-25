@@ -4,7 +4,7 @@
 #include "script_object_type.h"
 
 namespace rs {
-namespace scriptobject {   
+namespace scriptobject {
 
 class ScriptObjectDefinition {
 public:

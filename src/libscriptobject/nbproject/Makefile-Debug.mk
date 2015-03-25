@@ -38,6 +38,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/md5.o \
 	${OBJECTDIR}/script_object.o \
 	${OBJECTDIR}/script_object_definition.o \
+	${OBJECTDIR}/script_object_factory.o \
 	${OBJECTDIR}/script_object_keys.o \
 	${OBJECTDIR}/script_object_keys_factory.o
 
@@ -47,7 +48,8 @@ TESTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tests
 # Test Files
 TESTFILES= \
 	${TESTDIR}/TestFiles/f2 \
-	${TESTDIR}/TestFiles/f1
+	${TESTDIR}/TestFiles/f1 \
+	${TESTDIR}/TestFiles/f3
 
 # C Compiler Flags
 CFLAGS=
@@ -90,6 +92,11 @@ ${OBJECTDIR}/script_object_definition.o: script_object_definition.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT_KEYS=1 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_definition.o script_object_definition.cpp
 
+${OBJECTDIR}/script_object_factory.o: script_object_factory.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT_KEYS=1 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_factory.o script_object_factory.cpp
+
 ${OBJECTDIR}/script_object_keys.o: script_object_keys.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
@@ -113,6 +120,10 @@ ${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests/object_keys_tests.o ${OBJECTFILES:%.o=
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} ../../externals/installed/lib/libgtest_main.a ../../externals/installed/lib/libgtest.a ../../externals/installed/lib/libjsoncpp_debug.a --coverage  -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS} -lpthread 
 
+${TESTDIR}/TestFiles/f3: ${TESTDIR}/tests/simple_object_tests.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc} ../../externals/installed/lib/libgtest_main.a ../../externals/installed/lib/libgtest.a ../../externals/installed/lib/libjsoncpp_debug.a --coverage  -o ${TESTDIR}/TestFiles/f3 $^ ${LDLIBSOPTIONS} -lpthread 
+
 
 ${TESTDIR}/tests/object_defn_hash_tests.o: tests/object_defn_hash_tests.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
@@ -124,6 +135,12 @@ ${TESTDIR}/tests/object_keys_tests.o: tests/object_keys_tests.cpp
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT_KEYS=1 -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/object_keys_tests.o tests/object_keys_tests.cpp
+
+
+${TESTDIR}/tests/simple_object_tests.o: tests/simple_object_tests.cpp 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT_KEYS=1 -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/simple_object_tests.o tests/simple_object_tests.cpp
 
 
 ${OBJECTDIR}/md5_nomain.o: ${OBJECTDIR}/md5.o md5.cpp 
@@ -165,6 +182,19 @@ ${OBJECTDIR}/script_object_definition_nomain.o: ${OBJECTDIR}/script_object_defin
 	    ${CP} ${OBJECTDIR}/script_object_definition.o ${OBJECTDIR}/script_object_definition_nomain.o;\
 	fi
 
+${OBJECTDIR}/script_object_factory_nomain.o: ${OBJECTDIR}/script_object_factory.o script_object_factory.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/script_object_factory.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT_KEYS=1 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_factory_nomain.o script_object_factory.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/script_object_factory.o ${OBJECTDIR}/script_object_factory_nomain.o;\
+	fi
+
 ${OBJECTDIR}/script_object_keys_nomain.o: ${OBJECTDIR}/script_object_keys.o script_object_keys.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	@NMOUTPUT=`${NM} ${OBJECTDIR}/script_object_keys.o`; \
@@ -197,6 +227,7 @@ ${OBJECTDIR}/script_object_keys_factory_nomain.o: ${OBJECTDIR}/script_object_key
 	then  \
 	    ${TESTDIR}/TestFiles/f2 || true; \
 	    ${TESTDIR}/TestFiles/f1 || true; \
+	    ${TESTDIR}/TestFiles/f3 || true; \
 	else  \
 	    ./${TEST} || true; \
 	fi

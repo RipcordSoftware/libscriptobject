@@ -30,19 +30,27 @@ struct ScriptObjectKeys {
     unsigned short count;               /// < The number of keys
     unsigned char hash[16];             /// < The MD5 hash generated from key+type
     ScriptObjectKey keys[/*count*/];    /// < The key definitions
-    // unsigned short index[count];     // a map of original index position to sorted position
+    // Index index[count];              // a map of original index position to sorted position
     // char names[count];               // the null terminated field names
     
-    static bool getKey(ScriptObjectKeys& keys, const char* name, ScriptObjectKey& key);
-    static char* getKeyName(ScriptObjectKeys& keys, int index);
-    static ScriptObjectType getKeyType(ScriptObjectKeys& keys, int index);
+    bool getKey(int index, ScriptObjectKey& key) const;
+    bool getKey(const char* name, ScriptObjectKey& key) const;
+    const char* getKeyName(int index) const;
+    ScriptObjectType getKeyType(int index) const;
     
 private:    
     friend class ScriptObjectKeysFactory;
     
+    typedef unsigned short Index;
+    
+    static void ScriptObjectKeysDeleter(ScriptObjectKeys* ptr);
+    
+    const char* getKeyNameByOffset(unsigned offset) const;
+    const char* getKeyNameStart() const;
     static char* getKeyNameStart(ScriptObjectKeys& keys);
-    static unsigned short* getIndexesStart(ScriptObjectKeys& keys);
-    static int FindKey(ScriptObjectKeys& keys, const char* name, int min, int max);
+    const Index* getIndexesStart() const;
+    static Index* getIndexesStart(ScriptObjectKeys& keys);
+    int FindKey(const char* name) const;
 } __attribute__ ((aligned (2)));
 
 typedef std::shared_ptr<ScriptObjectKeys> ScriptObjectKeysPtr;

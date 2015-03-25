@@ -3,15 +3,11 @@
 #include <algorithm>
 #include <cstring>
 
-void rs::scriptobject::ScriptObjectKeysFactory::ScriptObjectKeysDeleter(ScriptObjectKeys* ptr) { 
-    delete[] reinterpret_cast<char*>(ptr); 
-}
-
 rs::scriptobject::ScriptObjectKeysPtr rs::scriptobject::ScriptObjectKeysFactory::CreateKeys(const ScriptObjectDefinition& defn) {    
     int fieldCount = defn.count();
     
     // calculate the total size required for the header, indexes and strings
-    int size = sizeof(ScriptObjectKeys) + (fieldCount * sizeof(ScriptObjectKey)) + (fieldCount * sizeof(unsigned short));    
+    int size = sizeof(ScriptObjectKeys) + (fieldCount * sizeof(ScriptObjectKey)) + (fieldCount * sizeof(ScriptObjectKeys::Index));    
     for (int i = 0; i < fieldCount; ++i) {
         size += defn.length(i) + 1;        
     }
@@ -20,7 +16,7 @@ rs::scriptobject::ScriptObjectKeysPtr rs::scriptobject::ScriptObjectKeysFactory:
     auto objectKeysPtr = new char[size];
 #ifdef DEBUG_SCRIPT_OBJECT_KEYS
     // in debug mode fill the memory with ? chars
-    std::fill(objectKeysPtr, objectKeysPtr + size, '?');
+    std::fill_n(objectKeysPtr, size, '?');
 #endif
     // cast to the real keys object
     auto objectKeys = reinterpret_cast<ScriptObjectKeys*>(objectKeysPtr);
@@ -46,7 +42,7 @@ rs::scriptobject::ScriptObjectKeysPtr rs::scriptobject::ScriptObjectKeysFactory:
         auto nameLength = defn.length(i);
         
         // copy the string and add a null
-        std::copy(name, name + nameLength, keyNameStart + offset);
+        std::copy_n(name, nameLength, keyNameStart + offset);
         *(keyNameStart + nameLength + offset) = '\0';
         
         // move the offset to the next key
@@ -55,8 +51,8 @@ rs::scriptobject::ScriptObjectKeysPtr rs::scriptobject::ScriptObjectKeysFactory:
     
     // sort the keys so we can locate them quickly
     std::sort(&objectKeys->keys[0], &objectKeys->keys[fieldCount], [&](const ScriptObjectKey& a, const ScriptObjectKey& b) {
-        auto keyA = ScriptObjectKeys::getKeyName(*objectKeys, a.index);
-        auto keyB = ScriptObjectKeys::getKeyName(*objectKeys, b.index);
+        auto keyA = objectKeys->getKeyNameByOffset(a.offset);
+        auto keyB = objectKeys->getKeyNameByOffset(b.offset);
         return ::strcmp(keyA, keyB) < 0;
     });
     
@@ -67,5 +63,5 @@ rs::scriptobject::ScriptObjectKeysPtr rs::scriptobject::ScriptObjectKeysFactory:
     }
 
     // allocate the smart pointer and return it
-    return ScriptObjectKeysPtr(objectKeys, ScriptObjectKeysDeleter);
+    return ScriptObjectKeysPtr(objectKeys, ScriptObjectKeys::ScriptObjectKeysDeleter);
 }

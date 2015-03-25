@@ -2,76 +2,121 @@
 
 #include <cstring>
 
-char* rs::scriptobject::ScriptObjectKeys::getKeyNameStart(ScriptObjectKeys& keys) {
-    char* start = reinterpret_cast<char*>(&keys);
-    start += sizeof(ScriptObjectKeys) + (keys.count * sizeof(ScriptObjectKey)) + (keys.count * sizeof(unsigned short));
+void rs::scriptobject::ScriptObjectKeys::ScriptObjectKeysDeleter(ScriptObjectKeys* ptr) { 
+    delete[] reinterpret_cast<char*>(ptr); 
+}
+
+const char* rs::scriptobject::ScriptObjectKeys::getKeyNameStart() const {
+    auto start = reinterpret_cast<const char*>(this);
+    start += sizeof(ScriptObjectKeys) + (count * sizeof(ScriptObjectKey)) + (count * sizeof(Index));
     return start;
 }
 
-char* rs::scriptobject::ScriptObjectKeys::getKeyName(ScriptObjectKeys& keys, int index) {
+char* rs::scriptobject::ScriptObjectKeys::getKeyNameStart(ScriptObjectKeys& keys) {
+    auto start = reinterpret_cast<char*>(&keys);
+    start += sizeof(ScriptObjectKeys) + (keys.count * sizeof(ScriptObjectKey)) + (keys.count * sizeof(Index));
+    return start;
+}
+
+const char* rs::scriptobject::ScriptObjectKeys::getKeyNameByOffset(unsigned offset) const {
+    const char* name = getKeyNameStart() + offset;
+    return name;
+}
+
+const char* rs::scriptobject::ScriptObjectKeys::getKeyName(int index) const {
     if (index >= 0) {
         // if the index is non-negative then it needs to be mapped to the new index position
-        auto indexes = ScriptObjectKeys::getIndexesStart(keys);
-        index = indexes[index];
+        auto indexes = getIndexesStart();
+        index = index >= 0 && index < count ? indexes[index] : -1;
     } else {
         // a negative index denotes a raw (non-mapped) index
         index = ~index;
     }
                 
-    char* name = nullptr;
-    if (index >= 0 && index < keys.count) {        
-        name = getKeyNameStart(keys) + keys.keys[index].offset;
+    const char* name = nullptr;
+    if (index >= 0 && index < count) {        
+        name = getKeyNameStart() + keys[index].offset;
     }        
     
     return name;
 }
 
-rs::scriptobject::ScriptObjectType rs::scriptobject::ScriptObjectKeys::getKeyType(ScriptObjectKeys& keys, int index) {
+rs::scriptobject::ScriptObjectType rs::scriptobject::ScriptObjectKeys::getKeyType(int index) const {
     if (index >= 0) {
         // if the index is non-negative then it needs to be mapped to the new index position
-        auto indexes = ScriptObjectKeys::getIndexesStart(keys);
-        index = indexes[index];
+        auto indexes = getIndexesStart();
+        index = index >= 0 && index < count ? indexes[index] : -1;
     } else {
         // a negative index denotes a raw (non-mapped) index
         index = ~index;
     }
     
     auto type = rs::scriptobject::ScriptObjectType::Unknown;
-    if (index >= 0 && index < keys.count) {
-        type = static_cast<rs::scriptobject::ScriptObjectType>(keys.keys[index].type);
+    if (index >= 0 && index < count) {
+        type = static_cast<rs::scriptobject::ScriptObjectType>(keys[index].type);
     }
     return type;
 }
 
-unsigned short* rs::scriptobject::ScriptObjectKeys::getIndexesStart(ScriptObjectKeys& keys) {
-    return reinterpret_cast<unsigned short*>(&keys.keys[keys.count]);
+const rs::scriptobject::ScriptObjectKeys::Index* rs::scriptobject::ScriptObjectKeys::getIndexesStart() const {
+    return reinterpret_cast<const ScriptObjectKeys::Index*>(&keys[count]);
 }
 
-bool rs::scriptobject::ScriptObjectKeys::getKey(ScriptObjectKeys& keys, const char* name, ScriptObjectKey& key) {
-    auto index = -1;
+rs::scriptobject::ScriptObjectKeys::Index* rs::scriptobject::ScriptObjectKeys::getIndexesStart(ScriptObjectKeys& keys) {
+    return reinterpret_cast<ScriptObjectKeys::Index*>(&keys.keys[keys.count]);
+}
+
+bool rs::scriptobject::ScriptObjectKeys::getKey(int index, ScriptObjectKey& key) const {
+    if (index >= 0) {
+        // if the index is non-negative then it needs to be mapped to the new index position
+        auto indexes = getIndexesStart();
+        index = index >= 0 && index < count ? indexes[index] : -1;
+    } else {
+        // a negative index denotes a raw (non-mapped) index
+        index = ~index;
+    }
     
-    if (name != nullptr) {
-        if (keys.count == 1) {
-            // if there is only 1 key then just compare it here
-            index = ::strcmp(name, getKeyName(keys, 0)) == 0 ? 0 : -1;
-        } else if (keys.count > 1) {
-            // do a binary search on the keys to find a match
-            index = FindKey(keys, name, 0, keys.count - 1);
-        }
+    // check the bounds
+    if (index < 0 || index >= count) {
+        index = -1;
     }
     
     if (index >= 0) {
-        key = keys.keys[index];
+        key = keys[index];
     }
     
     return index >= 0;
 }
 
-int rs::scriptobject::ScriptObjectKeys::FindKey(ScriptObjectKeys& keys, const char* name, int min, int max) {
+bool rs::scriptobject::ScriptObjectKeys::getKey(const char* name, ScriptObjectKey& key) const {
+    auto index = -1;
+    
+    if (name != nullptr) {
+        if (count == 1) {
+            // if there is only 1 key then just compare it here
+            index = ::strcmp(name, getKeyName(0)) == 0 ? 0 : -1;
+        } else if (count > 1) {
+            // do a binary search on the keys to find a match
+            index = ScriptObjectKeys::FindKey(name);
+        }
+    }
+    
+    if (index >= 0) {
+        key = keys[index];
+    }
+    
+    return index >= 0;
+}
+
+int rs::scriptobject::ScriptObjectKeys::FindKey(const char* name) const {
+    int min = 0;
+    int max = count - 1;
+
     while (max >= min) {
         int mid = ((max - min) / 2) + min;
         
-        auto diff = ::strcmp(name, ScriptObjectKeys::getKeyName(keys, ~mid));
+        auto keyName = ScriptObjectKeys::getKeyName(~mid);
+        auto diff = ::strcmp(name, keyName);
         if (diff == 0) {
             return mid;
         } else if (diff < 0) {

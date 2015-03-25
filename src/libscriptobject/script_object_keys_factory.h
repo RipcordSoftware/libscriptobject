@@ -20,9 +20,6 @@ public:
      * @return A smart pointer containing the new object
      */    
     static ScriptObjectKeysPtr CreateKeys(const ScriptObjectDefinition& defn);
-    
-private:       
-    static void ScriptObjectKeysDeleter(ScriptObjectKeys* ptr);
 };
 
 }}
