@@ -44,7 +44,7 @@ unsigned rs::scriptobject::ScriptObject::CalculateSize(const ScriptObjectSource&
                 size += 0;
                 break;
             case ScriptObjectType::Object:
-                // TODO: recursive call to CalculateSize here
+                size += CalculateSize(source.getObject(i));
                 break;
             case ScriptObjectType::Array:
                 // TODO: implement

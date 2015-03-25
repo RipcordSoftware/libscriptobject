@@ -15,7 +15,7 @@ public:
     virtual double getDouble(int index) const = 0;
     virtual const char* getString(int index) const = 0;
     virtual int getStringLength(int index) const = 0;
-    //virtual ScriptObjectSource& getObject(int index) = 0;
+    virtual const ScriptObjectSource& getObject(int index) const = 0;
     //virtual void* getArray(int index) = 0;
 };
 
