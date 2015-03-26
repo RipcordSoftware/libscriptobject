@@ -36,6 +36,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 # Object Files
 OBJECTFILES= \
 	${OBJECTDIR}/md5.o \
+	${OBJECTDIR}/script_array.o \
 	${OBJECTDIR}/script_object.o \
 	${OBJECTDIR}/script_object_definition.o \
 	${OBJECTDIR}/script_object_factory.o \
@@ -82,6 +83,11 @@ ${OBJECTDIR}/md5.o: md5.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/md5.o md5.cpp
+
+${OBJECTDIR}/script_array.o: script_array.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_array.o script_array.cpp
 
 ${OBJECTDIR}/script_object.o: script_object.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -160,6 +166,19 @@ ${OBJECTDIR}/md5_nomain.o: ${OBJECTDIR}/md5.o md5.cpp
 	    $(COMPILE.cc) -O2 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/md5_nomain.o md5.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/md5.o ${OBJECTDIR}/md5_nomain.o;\
+	fi
+
+${OBJECTDIR}/script_array_nomain.o: ${OBJECTDIR}/script_array.o script_array.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/script_array.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_array_nomain.o script_array.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/script_array.o ${OBJECTDIR}/script_array_nomain.o;\
 	fi
 
 ${OBJECTDIR}/script_object_nomain.o: ${OBJECTDIR}/script_object.o script_object.cpp 

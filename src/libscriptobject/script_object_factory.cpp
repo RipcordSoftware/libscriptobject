@@ -46,6 +46,13 @@ rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptObjectFactory::CreateO
                 offset += sizeof(ScriptObjectPtr);
                 break;
             }
+            case ScriptObjectType::Array: {
+                auto child = source.getArray(i);
+                new (static_cast<void*>(valueStart + offset)) ScriptArrayPtr(child);
+                object->valueOffsets[i] = offset;
+                offset += sizeof(ScriptArrayPtr);
+                break;
+            }
             case ScriptObjectType::String: {
                 auto stringLength = source.getStringLength(i);
                 stringOffset -= stringLength + 1;

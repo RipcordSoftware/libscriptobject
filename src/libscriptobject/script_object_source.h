@@ -3,6 +3,7 @@
 
 #include "script_object_definition.h"
 #include "script_object.h"
+#include "script_array.h"
 
 #include <cstdint>
 
@@ -17,7 +18,7 @@ public:
     virtual const char* getString(int index) const = 0;
     virtual int getStringLength(int index) const = 0;
     virtual const ScriptObjectPtr getObject(int index) const = 0;
-    //virtual void* getArray(int index) = 0;
+    virtual const ScriptArrayPtr getArray(int index) const = 0;
 };
 
 }}

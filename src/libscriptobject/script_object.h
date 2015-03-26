@@ -13,6 +13,9 @@ class ScriptObjectSource;
 class ScriptObject;
 typedef std::shared_ptr<ScriptObject> ScriptObjectPtr;
 
+class ScriptArray;
+typedef std::shared_ptr<ScriptArray> ScriptArrayPtr;
+
 struct ScriptObject {
     unsigned size;
     ScriptObjectKeysPtr keys;
@@ -32,6 +35,8 @@ struct ScriptObject {
     bool getBoolean(const char* name) const;
     const ScriptObjectPtr getObject(int index) const;
     const ScriptObjectPtr getObject(const char* name) const;
+    const ScriptArrayPtr getArray(int index) const;
+    const ScriptArrayPtr getArray(const char* name) const;
     
 private:
     static unsigned CalculateSize(const ScriptObjectSource& source);

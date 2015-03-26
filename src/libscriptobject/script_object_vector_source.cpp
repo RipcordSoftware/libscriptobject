@@ -7,12 +7,19 @@
 rs::scriptobject::test::VectorObjectValue::VectorObjectValue(const VectorObjectValue& other) {
     type_ = other.type_;
 
-    if (type_ == rs::scriptobject::ScriptObjectType::String) {
-        value_.s_ = CopyString(other.value_.s_);    
-    } else if (type_ == rs::scriptobject::ScriptObjectType::Object) {
-        value_.obj_ = new ScriptObjectPtr(*other.value_.obj_);
-    } else {
-        value_ = other.value_;
+    switch (type_) {
+        case rs::scriptobject::ScriptObjectType::String:
+            value_.s_ = CopyString(other.value_.s_);
+            break;
+        case rs::scriptobject::ScriptObjectType::Object:
+            value_.obj_ = new ScriptObjectPtr(*other.value_.obj_);
+            break;
+        case rs::scriptobject::ScriptObjectType::Array:
+            value_.arr_ = new ScriptArrayPtr(*other.value_.arr_);
+            break;
+        default:
+            value_ = other.value_;
+            break;
     }
 }
 
@@ -55,11 +62,22 @@ rs::scriptobject::test::VectorObjectValue::VectorObjectValue(const ScriptObjectP
     value_.obj_ = new ScriptObjectPtr(value);
 }
 
+rs::scriptobject::test::VectorObjectValue::VectorObjectValue(const ScriptArrayPtr value) :
+    type_(rs::scriptobject::ScriptObjectType::Array) {
+    value_.arr_ = new ScriptArrayPtr(value);
+}
+
 rs::scriptobject::test::VectorObjectValue::~VectorObjectValue() {
-    if (type_ == rs::scriptobject::ScriptObjectType::String) {
-        delete[] value_.s_;
-    } else if (type_ == rs::scriptobject::ScriptObjectType::Object) {
-        delete value_.obj_;
+    switch (type_) {
+        case rs::scriptobject::ScriptObjectType::String:
+            delete[] value_.s_;
+            break;
+        case rs::scriptobject::ScriptObjectType::Object:
+            delete value_.obj_;
+            break;
+        case rs::scriptobject::ScriptObjectType::Array:
+            delete value_.arr_;
+            break;
     }
 }
 
@@ -85,6 +103,10 @@ const char* rs::scriptobject::test::VectorObjectValue::getString() const {
 
 const rs::scriptobject::ScriptObjectPtr rs::scriptobject::test::VectorObjectValue::getObject() const {
     return *value_.obj_;
+}
+
+const rs::scriptobject::ScriptArrayPtr rs::scriptobject::test::VectorObjectValue::getArray() const {
+    return *value_.arr_;
 }
 
 char* rs::scriptobject::test::VectorObjectValue::CopyString(const char* source) {
@@ -136,4 +158,8 @@ int rs::scriptobject::test::VectorObjectSource::getStringLength(int index) const
 
 const rs::scriptobject::ScriptObjectPtr rs::scriptobject::test::VectorObjectSource::getObject(int index) const { 
     return std::get<1>(source_[index]).getObject();
+}
+
+const rs::scriptobject::ScriptArrayPtr rs::scriptobject::test::VectorObjectSource::getArray(int index) const {
+    return std::get<1>(source_[index]).getArray();
 }

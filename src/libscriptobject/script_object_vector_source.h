@@ -21,6 +21,7 @@ public:
     VectorObjectValue(bool value);    
     VectorObjectValue(const char* value);    
     VectorObjectValue(const ScriptObjectPtr value);
+    VectorObjectValue(const ScriptArrayPtr value);
     ~VectorObjectValue();
     
     rs::scriptobject::ScriptObjectType getType() const;
@@ -29,6 +30,7 @@ public:
     bool getBoolean() const;    
     const char* getString() const;
     const ScriptObjectPtr getObject() const;
+    const ScriptArrayPtr getArray() const;
     
 private:
     static char* CopyString(const char* source);
@@ -40,6 +42,7 @@ private:
         bool b_;
         char* s_;
         ScriptObjectPtr* obj_;
+        ScriptArrayPtr* arr_;
     } value_;
 };
     
@@ -61,6 +64,7 @@ public:
     virtual int getStringLength(int index) const override;
     
     virtual const ScriptObjectPtr getObject(int index) const override;
+    virtual const ScriptArrayPtr getArray(int index) const override;
         
 private:
     VectorObject source_;

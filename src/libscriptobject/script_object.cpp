@@ -4,13 +4,22 @@
 #include "script_object_source.h"
 
 void rs::scriptobject::ScriptObject::ScriptObjectDeleter(ScriptObject* ptr) {
-    // destroy all child object references
+    // destroy all child object/array references
     auto valueStart = getValueStart(*ptr);
     for (int i = 0; i < ptr->keys->count; ++i) {
-        if (ptr->keys->keys[i].type == (unsigned)ScriptObjectType::Object) {
-            auto index = ptr->keys->keys[i].index;
-            auto child = reinterpret_cast<ScriptObjectPtr*>(valueStart + ptr->valueOffsets[index]);
-            child->~ScriptObjectPtr();
+        auto index = ptr->keys->keys[i].index;
+
+        switch (static_cast<rs::scriptobject::ScriptObjectType>(ptr->keys->keys[i].type)) {
+            case ScriptObjectType::Object: {
+                auto child = reinterpret_cast<ScriptObjectPtr*>(valueStart + ptr->valueOffsets[index]);
+                child->~ScriptObjectPtr();
+                break;
+            }
+            case ScriptObjectType::Array: {
+                auto child = reinterpret_cast<ScriptArrayPtr*>(valueStart + ptr->valueOffsets[index]);
+                child->~ScriptArrayPtr();
+                break;
+            }
         }
     }
 
@@ -60,7 +69,7 @@ unsigned rs::scriptobject::ScriptObject::CalculateSize(const ScriptObjectSource&
                 size += sizeof(ScriptObjectPtr);
                 break;
             case ScriptObjectType::Array:
-                // TODO: implement
+                size += sizeof(ScriptArrayPtr);
                 break;
             default:
                 throw UnknownSourceFieldTypeException();
@@ -234,5 +243,33 @@ const rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptObject::getObjec
     }
     
     auto ptr = reinterpret_cast<const ScriptObjectPtr*>(getValueStart() + valueOffsets[key.index]);
+    return *ptr;
+}
+
+const rs::scriptobject::ScriptArrayPtr rs::scriptobject::ScriptObject::getArray(int index) const {
+    ScriptObjectKey key;
+    if (!keys->getKey(index, key)) {
+        throw UnknownScriptObjectFieldException();
+    }
+    
+    if (key.type != (unsigned)ScriptObjectType::Array) {
+        throw TypeCastException();
+    }
+    
+    auto ptr = reinterpret_cast<const ScriptArrayPtr*>(getValueStart() + valueOffsets[key.index]);
+    return *ptr;
+}
+
+const rs::scriptobject::ScriptArrayPtr rs::scriptobject::ScriptObject::getArray(const char* name) const {
+    ScriptObjectKey key;
+    if (!keys->getKey(name, key)) {
+        throw UnknownScriptObjectFieldException();
+    }
+    
+    if (key.type != (unsigned)ScriptObjectType::Array) {
+        throw TypeCastException();
+    }
+    
+    auto ptr = reinterpret_cast<const ScriptArrayPtr*>(getValueStart() + valueOffsets[key.index]);
     return *ptr;
 }

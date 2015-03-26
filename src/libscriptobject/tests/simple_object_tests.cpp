@@ -436,3 +436,16 @@ TEST_F(SimpleObjectTests, test12) {
         ASSERT_STREQ("world", childObj->getString("hello"));        
     }
 }
+
+TEST_F(SimpleObjectTests, test13) {
+    rs::scriptobject::ScriptArrayPtr arr;
+    
+    rs::scriptobject::test::VectorObjectSource defn({
+        std::make_tuple("array", rs::scriptobject::test::VectorObjectValue(arr))
+    });
+    
+    auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
+    ASSERT_EQ(1, object->getCount());
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::Array, object->getType(0));
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::Array, object->getType("array"));
+}
