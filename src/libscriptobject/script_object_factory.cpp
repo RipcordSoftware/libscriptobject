@@ -39,13 +39,21 @@ rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptObjectFactory::CreateO
                 object->valueOffsets[i] = source.getBoolean(i);
                 offset += 0;
                 break;
-            case ScriptObjectType::String:
+            case ScriptObjectType::Object: {
+                auto child = source.getObject(i);
+                new (static_cast<void*>(valueStart + offset)) ScriptObjectPtr(child);
+                object->valueOffsets[i] = offset;
+                offset += sizeof(ScriptObjectPtr);
+                break;
+            }
+            case ScriptObjectType::String: {
                 auto stringLength = source.getStringLength(i);
                 stringOffset -= stringLength + 1;
                 std::copy_n(source.getString(i), stringLength, valueStart + stringOffset);
                 *(valueStart + stringOffset + stringLength) = '\0';
                 object->valueOffsets[i] = stringOffset;
                 break;
+            }
         }
     }
     

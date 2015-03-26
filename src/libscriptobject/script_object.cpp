@@ -1,9 +1,22 @@
 #include "script_object.h"
 
 #include "exceptions.h"
+#include "script_object_source.h"
 
-void rs::scriptobject::ScriptObject::ScriptObjectDeleter(ScriptObject* ptr) { 
-    ptr->keys.reset();
+void rs::scriptobject::ScriptObject::ScriptObjectDeleter(ScriptObject* ptr) {
+    // destroy all child object references
+    auto valueStart = getValueStart(*ptr);
+    for (int i = 0; i < ptr->keys->count; ++i) {
+        if (ptr->keys->keys[i].type == (unsigned)ScriptObjectType::Object) {
+            auto index = ptr->keys->keys[i].index;
+            auto child = reinterpret_cast<ScriptObjectPtr*>(valueStart + ptr->valueOffsets[index]);
+            child->~ScriptObjectPtr();
+        }
+    }
+
+    // destroy the key reference
+    ptr->keys.~ScriptObjectKeysPtr();
+
     delete[] reinterpret_cast<unsigned char*>(ptr); 
 }
 
@@ -31,7 +44,7 @@ unsigned rs::scriptobject::ScriptObject::CalculateSize(const ScriptObjectSource&
                 size += source.getStringLength(i) + 1;
                 break;
             case ScriptObjectType::Boolean:
-                // bools store their state in their valueOffset[] field
+                // booleans store their state in their valueOffset[] field
                 size += 0;
                 break;
             case ScriptObjectType::Double:
@@ -44,7 +57,7 @@ unsigned rs::scriptobject::ScriptObject::CalculateSize(const ScriptObjectSource&
                 size += 0;
                 break;
             case ScriptObjectType::Object:
-                size += CalculateSize(source.getObject(i));
+                size += sizeof(ScriptObjectPtr);
                 break;
             case ScriptObjectType::Array:
                 // TODO: implement
@@ -193,5 +206,33 @@ std::int32_t rs::scriptobject::ScriptObject::getInt32(const char* name) const {
     }
     
     auto ptr = reinterpret_cast<const std::int32_t*>(getValueStart() + valueOffsets[key.index]);
+    return *ptr;
+}
+
+const rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptObject::getObject(int index) const {
+    ScriptObjectKey key;
+    if (!keys->getKey(index, key)) {
+        throw UnknownScriptObjectFieldException();
+    }
+    
+    if (key.type != (unsigned)ScriptObjectType::Object) {
+        throw TypeCastException();
+    }
+    
+    auto ptr = reinterpret_cast<const ScriptObjectPtr*>(getValueStart() + valueOffsets[key.index]);
+    return *ptr;
+}
+
+const rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptObject::getObject(const char* name) const {
+    ScriptObjectKey key;
+    if (!keys->getKey(name, key)) {
+        throw UnknownScriptObjectFieldException();
+    }
+    
+    if (key.type != (unsigned)ScriptObjectType::Object) {
+        throw TypeCastException();
+    }
+    
+    auto ptr = reinterpret_cast<const ScriptObjectPtr*>(getValueStart() + valueOffsets[key.index]);
     return *ptr;
 }

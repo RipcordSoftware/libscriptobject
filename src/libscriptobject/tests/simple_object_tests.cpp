@@ -398,3 +398,41 @@ TEST_F(SimpleObjectTests, test11) {
         }
     }
 }
+
+TEST_F(SimpleObjectTests, test12) {
+    rs::scriptobject::test::VectorObjectSource child({
+        std::make_tuple("hello", rs::scriptobject::test::VectorObjectValue("world"))
+    });
+    
+    auto childObject = rs::scriptobject::ScriptObjectFactory::CreateObject(child);
+    
+    rs::scriptobject::test::VectorObjectSource defn({
+        std::make_tuple("child", childObject)
+    });
+    
+    auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
+    
+    ASSERT_EQ(1, object->getCount());
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::Object, object->getType(0));
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::Object, object->getType("child"));
+    
+    {
+        auto childObj = object->getObject(0);
+        ASSERT_TRUE(!!childObj);
+
+        ASSERT_EQ(1, childObj->getCount());
+        ASSERT_EQ(rs::scriptobject::ScriptObjectType::String, childObj->getType(0));
+        ASSERT_EQ(rs::scriptobject::ScriptObjectType::String, childObj->getType("hello"));
+        ASSERT_STREQ("world", childObj->getString("hello"));
+    }
+    
+    {
+        auto childObj = object->getObject("child");
+        ASSERT_TRUE(!!childObj);
+        
+        ASSERT_EQ(1, childObj->getCount());
+        ASSERT_EQ(rs::scriptobject::ScriptObjectType::String, childObj->getType(0));
+        ASSERT_EQ(rs::scriptobject::ScriptObjectType::String, childObj->getType("hello"));
+        ASSERT_STREQ("world", childObj->getString("hello"));        
+    }
+}

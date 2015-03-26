@@ -40,7 +40,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/script_object_definition.o \
 	${OBJECTDIR}/script_object_factory.o \
 	${OBJECTDIR}/script_object_keys.o \
-	${OBJECTDIR}/script_object_keys_factory.o
+	${OBJECTDIR}/script_object_keys_factory.o \
+	${OBJECTDIR}/script_object_vector_source.o
 
 # Test Directory
 TESTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tests
@@ -106,6 +107,11 @@ ${OBJECTDIR}/script_object_keys_factory.o: script_object_keys_factory.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT_KEYS=1 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_keys_factory.o script_object_keys_factory.cpp
+
+${OBJECTDIR}/script_object_vector_source.o: script_object_vector_source.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT_KEYS=1 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_vector_source.o script_object_vector_source.cpp
 
 # Subprojects
 .build-subprojects:
@@ -219,6 +225,19 @@ ${OBJECTDIR}/script_object_keys_factory_nomain.o: ${OBJECTDIR}/script_object_key
 	    $(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT_KEYS=1 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_keys_factory_nomain.o script_object_keys_factory.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/script_object_keys_factory.o ${OBJECTDIR}/script_object_keys_factory_nomain.o;\
+	fi
+
+${OBJECTDIR}/script_object_vector_source_nomain.o: ${OBJECTDIR}/script_object_vector_source.o script_object_vector_source.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/script_object_vector_source.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT_KEYS=1 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_vector_source_nomain.o script_object_vector_source.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/script_object_vector_source.o ${OBJECTDIR}/script_object_vector_source_nomain.o;\
 	fi
 
 # Run Test Targets

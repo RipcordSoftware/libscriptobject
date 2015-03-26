@@ -3,11 +3,15 @@
 
 #include <memory>
 
-#include "script_object_source.h"
 #include "script_object_keys.h"
 
 namespace rs {
 namespace scriptobject {
+    
+class ScriptObjectSource;
+
+class ScriptObject;
+typedef std::shared_ptr<ScriptObject> ScriptObjectPtr;
 
 struct ScriptObject {
     unsigned size;
@@ -26,6 +30,8 @@ struct ScriptObject {
     double getDouble(const char* name) const;
     bool getBoolean(int index) const;
     bool getBoolean(const char* name) const;
+    const ScriptObjectPtr getObject(int index) const;
+    const ScriptObjectPtr getObject(const char* name) const;
     
 private:
     static unsigned CalculateSize(const ScriptObjectSource& source);
@@ -36,8 +42,6 @@ private:
     
     friend class ScriptObjectFactory;
 } __attribute__ ((aligned (2)));
-
-typedef std::shared_ptr<ScriptObject> ScriptObjectPtr;
 
 }}
 

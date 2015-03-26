@@ -31,6 +31,7 @@
       <itemPath>script_object_factory.cpp</itemPath>
       <itemPath>script_object_keys.cpp</itemPath>
       <itemPath>script_object_keys_factory.cpp</itemPath>
+      <itemPath>script_object_vector_source.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -177,6 +178,8 @@
       </item>
       <item path="script_object_vector_definition.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="script_object_vector_source.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="script_object_vector_source.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="tests/object_defn_hash_tests.cpp" ex="false" tool="1" flavor2="0">
@@ -300,6 +303,8 @@
       <item path="script_object_type.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="script_object_vector_definition.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="script_object_vector_source.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="script_object_vector_source.h" ex="false" tool="3" flavor2="0">
       </item>
