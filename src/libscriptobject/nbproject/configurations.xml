@@ -8,6 +8,9 @@
       <itemPath>libscriptobject.h</itemPath>
       <itemPath>md5.h</itemPath>
       <itemPath>script_array.h</itemPath>
+      <itemPath>script_array_factory.h</itemPath>
+      <itemPath>script_array_source.h</itemPath>
+      <itemPath>script_array_vector_source.h</itemPath>
       <itemPath>script_object.h</itemPath>
       <itemPath>script_object_definition.h</itemPath>
       <itemPath>script_object_factory.h</itemPath>
@@ -28,6 +31,8 @@
                    projectFiles="true">
       <itemPath>md5.cpp</itemPath>
       <itemPath>script_array.cpp</itemPath>
+      <itemPath>script_array_factory.cpp</itemPath>
+      <itemPath>script_array_vector_source.cpp</itemPath>
       <itemPath>script_object.cpp</itemPath>
       <itemPath>script_object_definition.cpp</itemPath>
       <itemPath>script_object_factory.cpp</itemPath>
@@ -78,7 +83,7 @@
           <standard>8</standard>
           <commandLine>--coverage</commandLine>
           <preprocessorList>
-            <Elem>DEBUG_SCRIPT_OBJECT_KEYS=1</Elem>
+            <Elem>DEBUG_SCRIPT_OBJECT=1</Elem>
           </preprocessorList>
         </ccTool>
         <archiverTool>
@@ -155,6 +160,16 @@
       <item path="script_array.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="script_array.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="script_array_factory.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="script_array_factory.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="script_array_source.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="script_array_vector_source.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="script_array_vector_source.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="script_object.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -285,6 +300,16 @@
       <item path="script_array.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="script_array.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="script_array_factory.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="script_array_factory.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="script_array_source.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="script_array_vector_source.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="script_array_vector_source.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="script_object.cpp" ex="false" tool="1" flavor2="0">
       </item>

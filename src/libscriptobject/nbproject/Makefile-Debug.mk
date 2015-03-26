@@ -37,6 +37,8 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/md5.o \
 	${OBJECTDIR}/script_array.o \
+	${OBJECTDIR}/script_array_factory.o \
+	${OBJECTDIR}/script_array_vector_source.o \
 	${OBJECTDIR}/script_object.o \
 	${OBJECTDIR}/script_object_definition.o \
 	${OBJECTDIR}/script_object_factory.o \
@@ -82,42 +84,52 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libscriptobject.a: ${OBJECTFILES}
 ${OBJECTDIR}/md5.o: md5.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT_KEYS=1 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/md5.o md5.cpp
+	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT=1 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/md5.o md5.cpp
 
 ${OBJECTDIR}/script_array.o: script_array.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT_KEYS=1 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_array.o script_array.cpp
+	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT=1 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_array.o script_array.cpp
+
+${OBJECTDIR}/script_array_factory.o: script_array_factory.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT=1 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_array_factory.o script_array_factory.cpp
+
+${OBJECTDIR}/script_array_vector_source.o: script_array_vector_source.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT=1 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_array_vector_source.o script_array_vector_source.cpp
 
 ${OBJECTDIR}/script_object.o: script_object.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT_KEYS=1 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object.o script_object.cpp
+	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT=1 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object.o script_object.cpp
 
 ${OBJECTDIR}/script_object_definition.o: script_object_definition.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT_KEYS=1 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_definition.o script_object_definition.cpp
+	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT=1 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_definition.o script_object_definition.cpp
 
 ${OBJECTDIR}/script_object_factory.o: script_object_factory.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT_KEYS=1 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_factory.o script_object_factory.cpp
+	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT=1 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_factory.o script_object_factory.cpp
 
 ${OBJECTDIR}/script_object_keys.o: script_object_keys.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT_KEYS=1 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_keys.o script_object_keys.cpp
+	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT=1 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_keys.o script_object_keys.cpp
 
 ${OBJECTDIR}/script_object_keys_factory.o: script_object_keys_factory.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT_KEYS=1 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_keys_factory.o script_object_keys_factory.cpp
+	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT=1 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_keys_factory.o script_object_keys_factory.cpp
 
 ${OBJECTDIR}/script_object_vector_source.o: script_object_vector_source.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT_KEYS=1 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_vector_source.o script_object_vector_source.cpp
+	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT=1 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_vector_source.o script_object_vector_source.cpp
 
 # Subprojects
 .build-subprojects:
@@ -140,19 +152,19 @@ ${TESTDIR}/TestFiles/f3: ${TESTDIR}/tests/simple_object_tests.o ${OBJECTFILES:%.
 ${TESTDIR}/tests/object_defn_hash_tests.o: tests/object_defn_hash_tests.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT_KEYS=1 -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/object_defn_hash_tests.o tests/object_defn_hash_tests.cpp
+	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT=1 -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/object_defn_hash_tests.o tests/object_defn_hash_tests.cpp
 
 
 ${TESTDIR}/tests/object_keys_tests.o: tests/object_keys_tests.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT_KEYS=1 -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/object_keys_tests.o tests/object_keys_tests.cpp
+	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT=1 -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/object_keys_tests.o tests/object_keys_tests.cpp
 
 
 ${TESTDIR}/tests/simple_object_tests.o: tests/simple_object_tests.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT_KEYS=1 -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/simple_object_tests.o tests/simple_object_tests.cpp
+	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT=1 -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/simple_object_tests.o tests/simple_object_tests.cpp
 
 
 ${OBJECTDIR}/md5_nomain.o: ${OBJECTDIR}/md5.o md5.cpp 
@@ -163,7 +175,7 @@ ${OBJECTDIR}/md5_nomain.o: ${OBJECTDIR}/md5.o md5.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT_KEYS=1 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/md5_nomain.o md5.cpp;\
+	    $(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT=1 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/md5_nomain.o md5.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/md5.o ${OBJECTDIR}/md5_nomain.o;\
 	fi
@@ -176,9 +188,35 @@ ${OBJECTDIR}/script_array_nomain.o: ${OBJECTDIR}/script_array.o script_array.cpp
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT_KEYS=1 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_array_nomain.o script_array.cpp;\
+	    $(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT=1 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_array_nomain.o script_array.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/script_array.o ${OBJECTDIR}/script_array_nomain.o;\
+	fi
+
+${OBJECTDIR}/script_array_factory_nomain.o: ${OBJECTDIR}/script_array_factory.o script_array_factory.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/script_array_factory.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT=1 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_array_factory_nomain.o script_array_factory.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/script_array_factory.o ${OBJECTDIR}/script_array_factory_nomain.o;\
+	fi
+
+${OBJECTDIR}/script_array_vector_source_nomain.o: ${OBJECTDIR}/script_array_vector_source.o script_array_vector_source.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/script_array_vector_source.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT=1 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_array_vector_source_nomain.o script_array_vector_source.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/script_array_vector_source.o ${OBJECTDIR}/script_array_vector_source_nomain.o;\
 	fi
 
 ${OBJECTDIR}/script_object_nomain.o: ${OBJECTDIR}/script_object.o script_object.cpp 
@@ -189,7 +227,7 @@ ${OBJECTDIR}/script_object_nomain.o: ${OBJECTDIR}/script_object.o script_object.
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT_KEYS=1 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_nomain.o script_object.cpp;\
+	    $(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT=1 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_nomain.o script_object.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/script_object.o ${OBJECTDIR}/script_object_nomain.o;\
 	fi
@@ -202,7 +240,7 @@ ${OBJECTDIR}/script_object_definition_nomain.o: ${OBJECTDIR}/script_object_defin
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT_KEYS=1 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_definition_nomain.o script_object_definition.cpp;\
+	    $(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT=1 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_definition_nomain.o script_object_definition.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/script_object_definition.o ${OBJECTDIR}/script_object_definition_nomain.o;\
 	fi
@@ -215,7 +253,7 @@ ${OBJECTDIR}/script_object_factory_nomain.o: ${OBJECTDIR}/script_object_factory.
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT_KEYS=1 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_factory_nomain.o script_object_factory.cpp;\
+	    $(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT=1 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_factory_nomain.o script_object_factory.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/script_object_factory.o ${OBJECTDIR}/script_object_factory_nomain.o;\
 	fi
@@ -228,7 +266,7 @@ ${OBJECTDIR}/script_object_keys_nomain.o: ${OBJECTDIR}/script_object_keys.o scri
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT_KEYS=1 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_keys_nomain.o script_object_keys.cpp;\
+	    $(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT=1 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_keys_nomain.o script_object_keys.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/script_object_keys.o ${OBJECTDIR}/script_object_keys_nomain.o;\
 	fi
@@ -241,7 +279,7 @@ ${OBJECTDIR}/script_object_keys_factory_nomain.o: ${OBJECTDIR}/script_object_key
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT_KEYS=1 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_keys_factory_nomain.o script_object_keys_factory.cpp;\
+	    $(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT=1 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_keys_factory_nomain.o script_object_keys_factory.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/script_object_keys_factory.o ${OBJECTDIR}/script_object_keys_factory_nomain.o;\
 	fi
@@ -254,7 +292,7 @@ ${OBJECTDIR}/script_object_vector_source_nomain.o: ${OBJECTDIR}/script_object_ve
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT_KEYS=1 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_vector_source_nomain.o script_object_vector_source.cpp;\
+	    $(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT=1 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_vector_source_nomain.o script_object_vector_source.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/script_object_vector_source.o ${OBJECTDIR}/script_object_vector_source_nomain.o;\
 	fi

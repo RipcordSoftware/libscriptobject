@@ -10,19 +10,19 @@ namespace rs {
 namespace scriptobject {
 namespace test {
 
-class VectorObjectValue {
+class VectorValue {
 public: 
-    VectorObjectValue();
-    VectorObjectValue(const VectorObjectValue& other);    
-    VectorObjectValue(VectorObjectValue&& other);        
-    VectorObjectValue(rs::scriptobject::ScriptObjectType type);    
-    VectorObjectValue(double value);
-    VectorObjectValue(std::int32_t value);    
-    VectorObjectValue(bool value);    
-    VectorObjectValue(const char* value);    
-    VectorObjectValue(const ScriptObjectPtr value);
-    VectorObjectValue(const ScriptArrayPtr value);
-    ~VectorObjectValue();
+    VectorValue();
+    VectorValue(const VectorValue& other);    
+    VectorValue(VectorValue&& other);        
+    VectorValue(rs::scriptobject::ScriptObjectType type);    
+    VectorValue(double value);
+    VectorValue(std::int32_t value);    
+    VectorValue(bool value);    
+    VectorValue(const char* value);    
+    VectorValue(const ScriptObjectPtr value);
+    VectorValue(const ScriptArrayPtr value);
+    ~VectorValue();
     
     rs::scriptobject::ScriptObjectType getType() const;
     double getDouble() const;    
@@ -46,11 +46,11 @@ private:
     } value_;
 };
     
-typedef std::vector<std::tuple<std::string, VectorObjectValue>> VectorObject;
+typedef std::vector<std::tuple<std::string, VectorValue>> ObjectVector;
 
-class VectorObjectSource : public rs::scriptobject::ScriptObjectSource {
+class ScriptObjectVectorSource : public rs::scriptobject::ScriptObjectSource {
 public:
-    VectorObjectSource(const VectorObject& source);
+    ScriptObjectVectorSource(const ObjectVector& source);
     
     virtual unsigned count() const override;
     virtual const char* name(int index) const override;
@@ -67,7 +67,7 @@ public:
     virtual const ScriptArrayPtr getArray(int index) const override;
         
 private:
-    VectorObject source_;
+    ObjectVector source_;
 };
 
 }}}

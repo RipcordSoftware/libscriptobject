@@ -10,13 +10,15 @@ namespace scriptobject {
     
 class ScriptObjectSource;
 
-class ScriptObject;
+struct ScriptObject;
 typedef std::shared_ptr<ScriptObject> ScriptObjectPtr;
 
-class ScriptArray;
+struct ScriptArray;
 typedef std::shared_ptr<ScriptArray> ScriptArrayPtr;
 
 struct ScriptObject {
+    ScriptObject() = delete;
+    
     unsigned size;
     ScriptObjectKeysPtr keys;
     unsigned valueOffsets[];
@@ -46,7 +48,7 @@ private:
     static void ScriptObjectDeleter(ScriptObject* ptr);
     
     friend class ScriptObjectFactory;
-} __attribute__ ((aligned (2)));
+} __attribute__ ((aligned (4)));
 
 }}
 

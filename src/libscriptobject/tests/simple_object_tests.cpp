@@ -5,6 +5,7 @@
 
 #include "../libscriptobject.h"
 #include "../script_object_vector_source.h"
+#include "../script_array_vector_source.h"
 
 class SimpleObjectTests : public ::testing::Test {
 protected:
@@ -18,14 +19,14 @@ protected:
 };
 
 TEST_F(SimpleObjectTests, test0) {
-    rs::scriptobject::test::VectorObjectSource defn({});
+    rs::scriptobject::test::ScriptObjectVectorSource defn({});
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
     ASSERT_EQ(0, object->getCount());
 }
 
 TEST_F(SimpleObjectTests, test1) {
-    rs::scriptobject::test::VectorObjectSource defn({
-        std::make_tuple("hello", rs::scriptobject::test::VectorObjectValue("world"))
+    rs::scriptobject::test::ScriptObjectVectorSource defn({
+        std::make_tuple("hello", rs::scriptobject::test::VectorValue("world"))
     });
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
@@ -39,9 +40,9 @@ TEST_F(SimpleObjectTests, test1) {
 }
 
 TEST_F(SimpleObjectTests, test2) {
-    rs::scriptobject::test::VectorObjectSource defn({
-        std::make_tuple("hello", rs::scriptobject::test::VectorObjectValue("world")),
-        std::make_tuple("lorem", rs::scriptobject::test::VectorObjectValue("ipsum"))
+    rs::scriptobject::test::ScriptObjectVectorSource defn({
+        std::make_tuple("hello", rs::scriptobject::test::VectorValue("world")),
+        std::make_tuple("lorem", rs::scriptobject::test::VectorValue("ipsum"))
     });
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
@@ -59,9 +60,9 @@ TEST_F(SimpleObjectTests, test2) {
 }
 
 TEST_F(SimpleObjectTests, test3) {
-    rs::scriptobject::test::VectorObjectSource defn({
-        std::make_tuple("hello", rs::scriptobject::test::VectorObjectValue("world")),
-        std::make_tuple("pi", rs::scriptobject::test::VectorObjectValue(3.14159))
+    rs::scriptobject::test::ScriptObjectVectorSource defn({
+        std::make_tuple("hello", rs::scriptobject::test::VectorValue("world")),
+        std::make_tuple("pi", rs::scriptobject::test::VectorValue(3.14159))
     });
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
@@ -79,10 +80,10 @@ TEST_F(SimpleObjectTests, test3) {
 }
 
 TEST_F(SimpleObjectTests, test4) {
-    rs::scriptobject::test::VectorObjectSource defn({
-        std::make_tuple("wet", rs::scriptobject::test::VectorObjectValue(false)),
-        std::make_tuple("hello", rs::scriptobject::test::VectorObjectValue("world")),
-        std::make_tuple("sunny", rs::scriptobject::test::VectorObjectValue(true))
+    rs::scriptobject::test::ScriptObjectVectorSource defn({
+        std::make_tuple("wet", rs::scriptobject::test::VectorValue(false)),
+        std::make_tuple("hello", rs::scriptobject::test::VectorValue("world")),
+        std::make_tuple("sunny", rs::scriptobject::test::VectorValue(true))
     });
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
@@ -102,11 +103,11 @@ TEST_F(SimpleObjectTests, test4) {
 }
 
 TEST_F(SimpleObjectTests, test5) {
-    rs::scriptobject::test::VectorObjectSource defn({
-        std::make_tuple("wet", rs::scriptobject::test::VectorObjectValue(false)),
-        std::make_tuple("hello", rs::scriptobject::test::VectorObjectValue("world")),
-        std::make_tuple("sunny", rs::scriptobject::test::VectorObjectValue(true)),
-        std::make_tuple("the_answer", rs::scriptobject::test::VectorObjectValue(42))
+    rs::scriptobject::test::ScriptObjectVectorSource defn({
+        std::make_tuple("wet", rs::scriptobject::test::VectorValue(false)),
+        std::make_tuple("hello", rs::scriptobject::test::VectorValue("world")),
+        std::make_tuple("sunny", rs::scriptobject::test::VectorValue(true)),
+        std::make_tuple("the_answer", rs::scriptobject::test::VectorValue(42))
     });
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
@@ -130,11 +131,11 @@ TEST_F(SimpleObjectTests, test5) {
 }
 
 TEST_F(SimpleObjectTests, test6) {
-    rs::scriptobject::test::VectorObjectSource defn({
-        std::make_tuple("wet", rs::scriptobject::test::VectorObjectValue(false)),        
-        std::make_tuple("sunny", rs::scriptobject::test::VectorObjectValue(true)),
-        std::make_tuple("hello", rs::scriptobject::test::VectorObjectValue("world")),
-        std::make_tuple("the_answer", rs::scriptobject::test::VectorObjectValue(42))
+    rs::scriptobject::test::ScriptObjectVectorSource defn({
+        std::make_tuple("wet", rs::scriptobject::test::VectorValue(false)),        
+        std::make_tuple("sunny", rs::scriptobject::test::VectorValue(true)),
+        std::make_tuple("hello", rs::scriptobject::test::VectorValue("world")),
+        std::make_tuple("the_answer", rs::scriptobject::test::VectorValue(42))
     });
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
@@ -158,11 +159,11 @@ TEST_F(SimpleObjectTests, test6) {
 }
 
 TEST_F(SimpleObjectTests, test7) {
-    rs::scriptobject::test::VectorObjectSource defn({
-        std::make_tuple("wet", rs::scriptobject::test::VectorObjectValue(false)),        
-        std::make_tuple("sunny", rs::scriptobject::test::VectorObjectValue(true)),
-        std::make_tuple("hello", rs::scriptobject::test::VectorObjectValue("world")),
-        std::make_tuple("the_answer", rs::scriptobject::test::VectorObjectValue(42))
+    rs::scriptobject::test::ScriptObjectVectorSource defn({
+        std::make_tuple("wet", rs::scriptobject::test::VectorValue(false)),        
+        std::make_tuple("sunny", rs::scriptobject::test::VectorValue(true)),
+        std::make_tuple("hello", rs::scriptobject::test::VectorValue("world")),
+        std::make_tuple("the_answer", rs::scriptobject::test::VectorValue(42))
     });
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
@@ -213,11 +214,11 @@ TEST_F(SimpleObjectTests, test7) {
 }
 
 TEST_F(SimpleObjectTests, test8) {
-    rs::scriptobject::test::VectorObjectSource defn({
-        std::make_tuple("wet", rs::scriptobject::test::VectorObjectValue(false)),        
-        std::make_tuple("sunny", rs::scriptobject::test::VectorObjectValue(true)),
-        std::make_tuple("hello", rs::scriptobject::test::VectorObjectValue("world")),
-        std::make_tuple("the_answer", rs::scriptobject::test::VectorObjectValue(42))
+    rs::scriptobject::test::ScriptObjectVectorSource defn({
+        std::make_tuple("wet", rs::scriptobject::test::VectorValue(false)),        
+        std::make_tuple("sunny", rs::scriptobject::test::VectorValue(true)),
+        std::make_tuple("hello", rs::scriptobject::test::VectorValue("world")),
+        std::make_tuple("the_answer", rs::scriptobject::test::VectorValue(42))
     });
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
@@ -321,9 +322,9 @@ TEST_F(SimpleObjectTests, test8) {
 }
 
 TEST_F(SimpleObjectTests, test9) {
-    rs::scriptobject::test::VectorObjectSource defn({
-        std::make_tuple("nil", rs::scriptobject::test::VectorObjectValue()),
-        std::make_tuple("hello", rs::scriptobject::test::VectorObjectValue("world"))        
+    rs::scriptobject::test::ScriptObjectVectorSource defn({
+        std::make_tuple("nil", rs::scriptobject::test::VectorValue()),
+        std::make_tuple("hello", rs::scriptobject::test::VectorValue("world"))        
     });
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
@@ -337,9 +338,9 @@ TEST_F(SimpleObjectTests, test9) {
 }
 
 TEST_F(SimpleObjectTests, test10) {
-    rs::scriptobject::test::VectorObjectSource defn({
-        std::make_tuple("bad", rs::scriptobject::test::VectorObjectValue(rs::scriptobject::ScriptObjectType::MAX)),
-        std::make_tuple("hello", rs::scriptobject::test::VectorObjectValue("world"))        
+    rs::scriptobject::test::ScriptObjectVectorSource defn({
+        std::make_tuple("bad", rs::scriptobject::test::VectorValue(rs::scriptobject::ScriptObjectType::MAX)),
+        std::make_tuple("hello", rs::scriptobject::test::VectorValue("world"))        
     });
     
     ASSERT_THROW({
@@ -348,15 +349,15 @@ TEST_F(SimpleObjectTests, test10) {
 }
 
 TEST_F(SimpleObjectTests, test11) {
-    rs::scriptobject::test::VectorObject vect;
+    rs::scriptobject::test::ObjectVector vect;
     rs::scriptobject::ScriptObjectType types[] = { rs::scriptobject::ScriptObjectType::String, rs::scriptobject::ScriptObjectType::Double, rs::scriptobject::ScriptObjectType::Int32 };
     
     for (int i = 0; i < 1024; ++i) {
         auto type = types[i % (sizeof(types) / sizeof(types[0]))];
-        vect.push_back(std::make_tuple(std::to_string(i), rs::scriptobject::test::VectorObjectValue(std::to_string(i).c_str())));
+        vect.push_back(std::make_tuple(std::to_string(i), rs::scriptobject::test::VectorValue(std::to_string(i).c_str())));
     }
     
-    rs::scriptobject::test::VectorObjectSource source(vect);        
+    rs::scriptobject::test::ScriptObjectVectorSource source(vect);        
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(source);
     
@@ -400,13 +401,13 @@ TEST_F(SimpleObjectTests, test11) {
 }
 
 TEST_F(SimpleObjectTests, test12) {
-    rs::scriptobject::test::VectorObjectSource child({
-        std::make_tuple("hello", rs::scriptobject::test::VectorObjectValue("world"))
+    rs::scriptobject::test::ScriptObjectVectorSource child({
+        std::make_tuple("hello", rs::scriptobject::test::VectorValue("world"))
     });
     
     auto childObject = rs::scriptobject::ScriptObjectFactory::CreateObject(child);
     
-    rs::scriptobject::test::VectorObjectSource defn({
+    rs::scriptobject::test::ScriptObjectVectorSource defn({
         std::make_tuple("child", childObject)
     });
     
@@ -438,24 +439,20 @@ TEST_F(SimpleObjectTests, test12) {
 }
 
 TEST_F(SimpleObjectTests, test13) {
-    rs::scriptobject::ScriptArrayPtr arr(new rs::scriptobject::ScriptArray());
+    rs::scriptobject::test::ScriptArrayVectorSource arrayDefn({
+        rs::scriptobject::test::VectorValue(3.14159)
+    });
     
-    rs::scriptobject::test::VectorObjectSource defn({
-        std::make_tuple("array", rs::scriptobject::test::VectorObjectValue(arr))
+    auto array = rs::scriptobject::ScriptArrayFactory::CreateArray(arrayDefn);
+    
+    rs::scriptobject::test::ScriptObjectVectorSource defn({
+        std::make_tuple("array", array)
     });
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
     ASSERT_EQ(1, object->getCount());
     ASSERT_EQ(rs::scriptobject::ScriptObjectType::Array, object->getType(0));
-    ASSERT_EQ(rs::scriptobject::ScriptObjectType::Array, object->getType("array"));
-    
-    {
-        auto childArray = object->getArray(0);
-        ASSERT_TRUE(!!childArray);
-    }
-    
-    {
-        auto childArray = object->getArray("array");
-        ASSERT_TRUE(!!childArray);
-    }
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::Array, object->getType("array"));    
+    ASSERT_TRUE(!!object->getArray(0));
+    ASSERT_TRUE(!!object->getArray("array"));
 }

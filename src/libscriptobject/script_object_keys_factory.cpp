@@ -14,7 +14,7 @@ rs::scriptobject::ScriptObjectKeysPtr rs::scriptobject::ScriptObjectKeysFactory:
     
     // allocate the memory we need
     auto objectKeysPtr = new char[size];
-#ifdef DEBUG_SCRIPT_OBJECT_KEYS
+#ifdef DEBUG_SCRIPT_OBJECT
     // in debug mode fill the memory with ? chars
     std::fill_n(objectKeysPtr, size, '?');
 #endif
