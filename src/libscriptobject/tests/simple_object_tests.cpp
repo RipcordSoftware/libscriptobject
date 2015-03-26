@@ -438,7 +438,7 @@ TEST_F(SimpleObjectTests, test12) {
 }
 
 TEST_F(SimpleObjectTests, test13) {
-    rs::scriptobject::ScriptArrayPtr arr;
+    rs::scriptobject::ScriptArrayPtr arr(new rs::scriptobject::ScriptArray());
     
     rs::scriptobject::test::VectorObjectSource defn({
         std::make_tuple("array", rs::scriptobject::test::VectorObjectValue(arr))
@@ -448,4 +448,14 @@ TEST_F(SimpleObjectTests, test13) {
     ASSERT_EQ(1, object->getCount());
     ASSERT_EQ(rs::scriptobject::ScriptObjectType::Array, object->getType(0));
     ASSERT_EQ(rs::scriptobject::ScriptObjectType::Array, object->getType("array"));
+    
+    {
+        auto childArray = object->getArray(0);
+        ASSERT_TRUE(!!childArray);
+    }
+    
+    {
+        auto childArray = object->getArray("array");
+        ASSERT_TRUE(!!childArray);
+    }
 }

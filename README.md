@@ -8,7 +8,7 @@ Features:
 * A single allocated memory block per object
 * Fast member lookup (log N)
 * Native type storage
-* Support for arrays and nested objects (TODO)
+* Support for arrays (TODO) and nested objects
 * Repeated string caching (TODO)
 * Shared object definitions
 * Script language agnostic - integrates with JavaScript, Python, etc.
@@ -18,11 +18,12 @@ Requires:
 * GCC 4.8.1+
 * GNU Make
 * lcov and Ruby (for test coverage)
+* valgrind (for memory analysis)
 
 To build type:
 ```bash
 $ make
-````
+```
 
 To build tests with coverage:
 ```bash
@@ -30,7 +31,11 @@ $ make test
 ```
 
 To create a coverage report:
-
 ```bash
-./coverage.sh
+$ ./coverage.sh
+```
+
+To analyze memory:
+```bash
+$ ./grind.sh
 ```
