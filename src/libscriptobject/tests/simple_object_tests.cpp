@@ -354,7 +354,18 @@ TEST_F(SimpleObjectTests, test11) {
     
     for (int i = 0; i < 1024; ++i) {
         auto type = types[i % (sizeof(types) / sizeof(types[0]))];
-        vect.push_back(std::make_tuple(std::to_string(i), rs::scriptobject::test::VectorValue(std::to_string(i).c_str())));
+        
+        switch (type) {
+            case rs::scriptobject::ScriptObjectType::String:
+                vect.push_back(std::make_tuple(std::to_string(i), rs::scriptobject::test::VectorValue(std::to_string(i).c_str())));
+                break;
+            case rs::scriptobject::ScriptObjectType::Double:
+                vect.push_back(std::make_tuple(std::to_string(i), rs::scriptobject::test::VectorValue(((double)i) / 1000)));
+                break;
+            case rs::scriptobject::ScriptObjectType::Int32:
+                vect.push_back(std::make_tuple(std::to_string(i), rs::scriptobject::test::VectorValue(i)));
+                break;
+        }                
     }
     
     rs::scriptobject::test::ScriptObjectVectorSource source(vect);        
@@ -375,7 +386,7 @@ TEST_F(SimpleObjectTests, test11) {
                 ASSERT_FLOAT_EQ(std::get<1>(vect[i]).getDouble(), object->getDouble(i));
                 break;
             case rs::scriptobject::ScriptObjectType::Int32:                
-                ASSERT_FLOAT_EQ(std::get<1>(vect[i]).getInt32(), object->getInt32(i));
+                ASSERT_EQ(std::get<1>(vect[i]).getInt32(), object->getInt32(i));
                 break;
         }
     }
