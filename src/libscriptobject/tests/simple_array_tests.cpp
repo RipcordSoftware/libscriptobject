@@ -241,3 +241,37 @@ TEST_F(SimpleArrayTests, test10) {
         rs::scriptobject::ScriptArrayFactory::CreateArray(defn);
     }, rs::scriptobject::UnknownSourceFieldTypeException);
 }
+
+TEST_F(SimpleArrayTests, test13) {
+    rs::scriptobject::test::ScriptArrayVectorSource childDefn({
+        rs::scriptobject::test::VectorValue(3.14159)
+    });
+    
+    auto childArray = rs::scriptobject::ScriptArrayFactory::CreateArray(childDefn);
+    
+    rs::scriptobject::test::ScriptArrayVectorSource defn({
+        childArray
+    });
+    
+    auto array = rs::scriptobject::ScriptArrayFactory::CreateArray(defn);
+    ASSERT_EQ(1, array->getCount());
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::Array, array->getType(0));
+    ASSERT_TRUE(!!array->getArray(0));
+}
+
+TEST_F(SimpleArrayTests, test14) {
+    rs::scriptobject::test::ScriptObjectVectorSource childDefn({
+        std::make_tuple("pi", rs::scriptobject::test::VectorValue(3.14159))
+    });
+    
+    auto childObject = rs::scriptobject::ScriptObjectFactory::CreateObject(childDefn);
+    
+    rs::scriptobject::test::ScriptArrayVectorSource defn({
+        childObject
+    });
+    
+    auto array = rs::scriptobject::ScriptArrayFactory::CreateArray(defn);
+    ASSERT_EQ(1, array->getCount());
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::Object, array->getType(0));
+    ASSERT_TRUE(!!array->getObject(0));
+}
