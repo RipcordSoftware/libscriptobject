@@ -183,6 +183,14 @@ TEST_F(SimpleObjectTests, test7) {
     ASSERT_THROW({
         object->getDouble("xyz");
     }, rs::scriptobject::UnknownScriptObjectFieldException);
+    
+    ASSERT_THROW({
+        object->getObject("xyz");
+    }, rs::scriptobject::UnknownScriptObjectFieldException);
+    
+    ASSERT_THROW({
+        object->getArray("xyz");
+    }, rs::scriptobject::UnknownScriptObjectFieldException);
 
     ASSERT_EQ(rs::scriptobject::ScriptObjectType::Unknown, object->getType("xyz"));
         
@@ -236,6 +244,14 @@ TEST_F(SimpleObjectTests, test8) {
     }, rs::scriptobject::TypeCastException);
     
     ASSERT_THROW({
+        object->getObject("wet");
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
+        object->getArray("wet");
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
         object->getDouble("hello");
     }, rs::scriptobject::TypeCastException);    
     
@@ -245,7 +261,15 @@ TEST_F(SimpleObjectTests, test8) {
     
     ASSERT_THROW({
         object->getInt32("hello");
-    }, rs::scriptobject::TypeCastException);    
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
+        object->getObject("hello");
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
+        object->getArray("hello");
+    }, rs::scriptobject::TypeCastException);
     
     ASSERT_THROW({
         object->getDouble("the_answer");
@@ -260,6 +284,14 @@ TEST_F(SimpleObjectTests, test8) {
     }, rs::scriptobject::TypeCastException);    
     
     ASSERT_THROW({
+        object->getObject("the_answer");
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
+        object->getArray("the_answer");
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
         object->getDouble("sunny");
     }, rs::scriptobject::TypeCastException);    
     
@@ -272,6 +304,14 @@ TEST_F(SimpleObjectTests, test8) {
     }, rs::scriptobject::TypeCastException);
     
     ASSERT_THROW({
+        object->getObject("sunny");
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
+        object->getArray("sunny");
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
         object->getDouble(0);
     }, rs::scriptobject::TypeCastException);    
     
@@ -281,6 +321,14 @@ TEST_F(SimpleObjectTests, test8) {
     
     ASSERT_THROW({
         object->getInt32(0);
+    }, rs::scriptobject::TypeCastException);
+
+    ASSERT_THROW({
+        object->getArray(0);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        object->getObject(0);
     }, rs::scriptobject::TypeCastException);    
     
     ASSERT_THROW({
@@ -293,7 +341,15 @@ TEST_F(SimpleObjectTests, test8) {
     
     ASSERT_THROW({
         object->getString(1);
+    }, rs::scriptobject::TypeCastException);  
+    
+    ASSERT_THROW({
+        object->getArray(1);
     }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        object->getObject(1);
+    }, rs::scriptobject::TypeCastException);
     
     ASSERT_THROW({
         object->getDouble(2);
@@ -308,6 +364,14 @@ TEST_F(SimpleObjectTests, test8) {
     }, rs::scriptobject::TypeCastException);    
     
     ASSERT_THROW({
+        object->getArray(2);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        object->getObject(2);
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
         object->getDouble(3);
     }, rs::scriptobject::TypeCastException);    
     
@@ -319,6 +383,13 @@ TEST_F(SimpleObjectTests, test8) {
         object->getBoolean(3);
     }, rs::scriptobject::TypeCastException);            
     
+    ASSERT_THROW({
+        object->getArray(3);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        object->getObject(3);
+    }, rs::scriptobject::TypeCastException);
 }
 
 TEST_F(SimpleObjectTests, test9) {
@@ -365,7 +436,7 @@ TEST_F(SimpleObjectTests, test11) {
             case rs::scriptobject::ScriptObjectType::Int32:
                 vect.push_back(std::make_tuple(std::to_string(i), rs::scriptobject::test::VectorValue(i)));
                 break;
-        }                
+        }
     }
     
     rs::scriptobject::test::ScriptObjectVectorSource source(vect);        
