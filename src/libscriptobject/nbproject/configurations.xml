@@ -44,6 +44,12 @@
                    displayName="Test Files"
                    projectFiles="false"
                    kind="TEST_LOGICAL_FOLDER">
+      <logicalFolder name="f5"
+                     displayName="Exception Tests"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/exception_tests.cpp</itemPath>
+      </logicalFolder>
       <logicalFolder name="f2"
                      displayName="Object Defintion Hash Tests"
                      projectFiles="true"
@@ -172,6 +178,21 @@
           <output>${TESTDIR}/TestFiles/f4</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f5">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f5</output>
+        </linkerTool>
+      </folder>
       <item path="libscriptobject.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="md5.cpp" ex="false" tool="1" flavor2="0">
@@ -223,6 +244,8 @@
       <item path="script_object_vector_source.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="script_object_vector_source.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/exception_tests.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/object_defn_hash_tests.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -329,6 +352,21 @@
           <output>${TESTDIR}/TestFiles/f4</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f5">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f5</output>
+        </linkerTool>
+      </folder>
       <item path="libscriptobject.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="md5.cpp" ex="false" tool="1" flavor2="0">
@@ -380,6 +418,8 @@
       <item path="script_object_vector_source.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="script_object_vector_source.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/exception_tests.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/object_defn_hash_tests.cpp" ex="false" tool="1" flavor2="0">
       </item>
