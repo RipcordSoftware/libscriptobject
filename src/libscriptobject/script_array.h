@@ -13,6 +13,9 @@ class ScriptArraySource;
 struct ScriptArray;
 typedef std::shared_ptr<ScriptArray> ScriptArrayPtr;
 
+struct ScriptObject;
+typedef std::shared_ptr<ScriptObject> ScriptObjectPtr;
+
 struct ScriptArray {        
     const unsigned size;    
     struct {
@@ -25,12 +28,23 @@ struct ScriptArray {
     unsigned offsets[/*count*/];
     //unsigned char values[];
     //ScriptObjectType types[count];
+    
+    unsigned getCount() const;
+    ScriptObjectType getType(int index) const;
+    const char* getString(int index) const;
+    std::int32_t getInt32(int index) const;
+    double getDouble(int index) const;
+    bool getBoolean(int index) const;
+    const ScriptObjectPtr getObject(int index) const;
+    const ScriptArrayPtr getArray(int index) const;
+    
 private:    
     friend class ScriptArrayFactory;
     
     ScriptArray(unsigned size, unsigned count);
     
     static unsigned CalculateSize(const ScriptArraySource& source);
+    static unsigned CalculateTypesSize(unsigned fieldCount);
     const unsigned char* getValueStart() const;
     static unsigned char* getValueStart(ScriptArray& array);
     const ScriptObjectType* getTypeStart() const;

@@ -202,13 +202,13 @@ TEST_F(SimpleObjectTests, test7) {
         object->getDouble(-99);
     }, rs::scriptobject::UnknownScriptObjectFieldException);
     
-    //ASSERT_THROW({
-    //    object->getObject(-199);
-    //}, rs::scriptobject::UnknownScriptObjectFieldException);
+    ASSERT_THROW({
+        object->getObject(-199);
+    }, rs::scriptobject::UnknownScriptObjectFieldException);
     
-    //ASSERT_THROW({
-    //    object->getArray(111);
-    //}, rs::scriptobject::UnknownScriptObjectFieldException);
+    ASSERT_THROW({
+        object->getArray(111);
+    }, rs::scriptobject::UnknownScriptObjectFieldException);
     
     ASSERT_EQ(rs::scriptobject::ScriptObjectType::Unknown, object->getType(345));
 }

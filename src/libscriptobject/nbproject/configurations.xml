@@ -56,6 +56,12 @@
                      kind="TEST">
         <itemPath>tests/object_keys_tests.cpp</itemPath>
       </logicalFolder>
+      <logicalFolder name="f4"
+                     displayName="Simple Array Tests"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/simple_array_tests.cpp</itemPath>
+      </logicalFolder>
       <logicalFolder name="f3"
                      displayName="Simple Object Tests"
                      projectFiles="true"
@@ -151,6 +157,21 @@
           <output>${TESTDIR}/TestFiles/f3</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f4">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f4</output>
+        </linkerTool>
+      </folder>
       <item path="libscriptobject.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="md5.cpp" ex="false" tool="1" flavor2="0">
@@ -206,6 +227,8 @@
       <item path="tests/object_defn_hash_tests.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/object_keys_tests.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/simple_array_tests.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/simple_object_tests.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -291,6 +314,21 @@
           <output>${TESTDIR}/TestFiles/f3</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f4">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f4</output>
+        </linkerTool>
+      </folder>
       <item path="libscriptobject.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="md5.cpp" ex="false" tool="1" flavor2="0">
@@ -346,6 +384,8 @@
       <item path="tests/object_defn_hash_tests.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/object_keys_tests.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/simple_array_tests.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/simple_object_tests.cpp" ex="false" tool="1" flavor2="0">
       </item>

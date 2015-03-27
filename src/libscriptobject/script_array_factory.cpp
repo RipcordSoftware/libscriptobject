@@ -17,7 +17,7 @@ rs::scriptobject::ScriptArrayPtr rs::scriptobject::ScriptArrayFactory::CreateArr
     
     auto valueStart = ScriptArray::getValueStart(*array);
     auto types = ScriptArray::getTypeStart(*array);
-    unsigned offset = 0, stringOffset = size - (valueStart - arrayPtr);
+    unsigned offset = 0, stringOffset = size - (valueStart - arrayPtr) - ScriptArray::CalculateTypesSize(source.count());
     for (int i = 0; i < array->count; ++i) {
         const auto type = source.type(i);
         switch (type) {

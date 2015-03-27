@@ -53,6 +53,7 @@ TESTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tests
 TESTFILES= \
 	${TESTDIR}/TestFiles/f2 \
 	${TESTDIR}/TestFiles/f1 \
+	${TESTDIR}/TestFiles/f4 \
 	${TESTDIR}/TestFiles/f3
 
 # C Compiler Flags
@@ -144,6 +145,10 @@ ${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests/object_keys_tests.o ${OBJECTFILES:%.o=
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} ../../externals/installed/lib/libgtest_main.a ../../externals/installed/lib/libgtest.a ../../externals/installed/lib/libjsoncpp.a  -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS} 
 
+${TESTDIR}/TestFiles/f4: ${TESTDIR}/tests/simple_array_tests.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc} ../../externals/installed/lib/libgtest_main.a ../../externals/installed/lib/libgtest.a ../../externals/installed/lib/libjsoncpp.a  -o ${TESTDIR}/TestFiles/f4 $^ ${LDLIBSOPTIONS} 
+
 ${TESTDIR}/TestFiles/f3: ${TESTDIR}/tests/simple_object_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} ../../externals/installed/lib/libgtest_main.a ../../externals/installed/lib/libgtest.a ../../externals/installed/lib/libjsoncpp.a  -o ${TESTDIR}/TestFiles/f3 $^ ${LDLIBSOPTIONS} 
@@ -159,6 +164,12 @@ ${TESTDIR}/tests/object_keys_tests.o: tests/object_keys_tests.cpp
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../../externals/installed/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/object_keys_tests.o tests/object_keys_tests.cpp
+
+
+${TESTDIR}/tests/simple_array_tests.o: tests/simple_array_tests.cpp 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../../externals/installed/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/simple_array_tests.o tests/simple_array_tests.cpp
 
 
 ${TESTDIR}/tests/simple_object_tests.o: tests/simple_object_tests.cpp 
@@ -303,6 +314,7 @@ ${OBJECTDIR}/script_object_vector_source_nomain.o: ${OBJECTDIR}/script_object_ve
 	then  \
 	    ${TESTDIR}/TestFiles/f2 || true; \
 	    ${TESTDIR}/TestFiles/f1 || true; \
+	    ${TESTDIR}/TestFiles/f4 || true; \
 	    ${TESTDIR}/TestFiles/f3 || true; \
 	else  \
 	    ./${TEST} || true; \
