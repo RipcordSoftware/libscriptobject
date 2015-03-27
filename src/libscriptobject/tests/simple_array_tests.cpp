@@ -182,6 +182,14 @@ TEST_F(SimpleArrayTests, test8) {
     }, rs::scriptobject::TypeCastException);    
     
     ASSERT_THROW({
+        array->getArray(0);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        array->getObject(0);
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
         array->getDouble(1);
     }, rs::scriptobject::TypeCastException);    
     
@@ -192,6 +200,14 @@ TEST_F(SimpleArrayTests, test8) {
     ASSERT_THROW({
         array->getString(1);
     }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        array->getArray(1);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        array->getObject(1);
+    }, rs::scriptobject::TypeCastException);
     
     ASSERT_THROW({
         array->getDouble(2);
@@ -206,6 +222,14 @@ TEST_F(SimpleArrayTests, test8) {
     }, rs::scriptobject::TypeCastException);    
     
     ASSERT_THROW({
+        array->getArray(2);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        array->getObject(2);
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
         array->getDouble(3);
     }, rs::scriptobject::TypeCastException);    
     
@@ -215,7 +239,15 @@ TEST_F(SimpleArrayTests, test8) {
     
     ASSERT_THROW({
         array->getBoolean(3);
-    }, rs::scriptobject::TypeCastException);                
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
+        array->getArray(3);
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
+        array->getObject(3);
+    }, rs::scriptobject::TypeCastException);
 }
 
 TEST_F(SimpleArrayTests, test9) {
@@ -240,6 +272,72 @@ TEST_F(SimpleArrayTests, test10) {
     ASSERT_THROW({
         rs::scriptobject::ScriptArrayFactory::CreateArray(defn);
     }, rs::scriptobject::UnknownSourceFieldTypeException);
+}
+
+TEST_F(SimpleArrayTests, test11) {
+    rs::scriptobject::test::ArrayVector vect;
+    rs::scriptobject::ScriptObjectType types[] = { rs::scriptobject::ScriptObjectType::String, rs::scriptobject::ScriptObjectType::Double, rs::scriptobject::ScriptObjectType::Int32 };
+    
+    for (int i = 0; i < 1024; ++i) {
+        auto type = types[i % (sizeof(types) / sizeof(types[0]))];
+        switch (type) {
+            case rs::scriptobject::ScriptObjectType::String:
+                vect.push_back(std::to_string(i).c_str());
+                break;
+            case rs::scriptobject::ScriptObjectType::Double:
+                vect.push_back(((double)i)/1000);
+                break;
+            case rs::scriptobject::ScriptObjectType::Int32:
+                vect.push_back(i);
+                break;
+        }                
+    }
+    
+    rs::scriptobject::test::ScriptArrayVectorSource source(vect);        
+    
+    auto array = rs::scriptobject::ScriptArrayFactory::CreateArray(source);
+    
+    ASSERT_EQ(vect.size(), array->getCount());
+    
+    for (int i = 0; i < vect.size(); ++i) {
+        ASSERT_EQ(vect[i].getType(), array->getType(i));
+        
+        switch (vect[i].getType()) {
+            case rs::scriptobject::ScriptObjectType::String:
+                ASSERT_STREQ(vect[i].getString(), array->getString(i));
+                break;
+            case rs::scriptobject::ScriptObjectType::Double:                
+                ASSERT_FLOAT_EQ(vect[i].getDouble(), array->getDouble(i));
+                break;
+            case rs::scriptobject::ScriptObjectType::Int32:                
+                ASSERT_EQ(vect[i].getInt32(), array->getInt32(i));
+                break;
+        }
+    }    
+}
+
+TEST_F(SimpleArrayTests, test12) {
+    rs::scriptobject::test::ScriptArrayVectorSource childDefn({
+        rs::scriptobject::test::VectorValue("world")
+    });
+    
+    auto childArray = rs::scriptobject::ScriptArrayFactory::CreateArray(childDefn);
+    
+    rs::scriptobject::test::ScriptArrayVectorSource defn({
+        rs::scriptobject::test::VectorValue(childArray)
+    });
+    
+    auto array = rs::scriptobject::ScriptArrayFactory::CreateArray(defn);
+    
+    ASSERT_EQ(1, array->getCount());
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::Array, array->getType(0));
+    
+    auto child = array->getArray(0);
+    ASSERT_TRUE(!!child);
+
+    ASSERT_EQ(1, child->getCount());
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::String, child->getType(0));
+    ASSERT_STREQ("world", child->getString(0));
 }
 
 TEST_F(SimpleArrayTests, test13) {
