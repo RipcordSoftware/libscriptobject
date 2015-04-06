@@ -366,6 +366,6 @@ std::string md5(const std::string str)
 
 //////////////////////////////
 // RS: added new method
-void MD5::bindigest(uint1 hash[blocksize]) const {
+void MD5::bindigest(uint1 hash[16]) const {
     ::memcpy(hash, digest, sizeof(digest));
 }

@@ -70,7 +70,7 @@ public:
   friend std::ostream& operator<<(std::ostream&, MD5 md5);
   
   // RS: added
- void bindigest(uint1 digest[blocksize]) const;
+ void bindigest(uint1 digest[16]) const;
   
 private:
   void init();  
