@@ -13,7 +13,7 @@ public:
     virtual const char* name(int index) const = 0;    
     virtual unsigned length(int index) const = 0;
     
-    void CalculateHash(unsigned char digest[16]);
+    void CalculateHash(unsigned char digest[16]) const;
 };
 
 }}
