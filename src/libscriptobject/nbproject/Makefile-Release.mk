@@ -43,6 +43,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/script_object_definition.o \
 	${OBJECTDIR}/script_object_factory.o \
 	${OBJECTDIR}/script_object_keys.o \
+	${OBJECTDIR}/script_object_keys_cache.o \
 	${OBJECTDIR}/script_object_keys_factory.o \
 	${OBJECTDIR}/script_object_vector_source.o
 
@@ -122,6 +123,11 @@ ${OBJECTDIR}/script_object_keys.o: script_object_keys.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_keys.o script_object_keys.cpp
+
+${OBJECTDIR}/script_object_keys_cache.o: script_object_keys_cache.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_keys_cache.o script_object_keys_cache.cpp
 
 ${OBJECTDIR}/script_object_keys_factory.o: script_object_keys_factory.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -291,6 +297,19 @@ ${OBJECTDIR}/script_object_keys_nomain.o: ${OBJECTDIR}/script_object_keys.o scri
 	    $(COMPILE.cc) -O2 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_keys_nomain.o script_object_keys.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/script_object_keys.o ${OBJECTDIR}/script_object_keys_nomain.o;\
+	fi
+
+${OBJECTDIR}/script_object_keys_cache_nomain.o: ${OBJECTDIR}/script_object_keys_cache.o script_object_keys_cache.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/script_object_keys_cache.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_keys_cache_nomain.o script_object_keys_cache.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/script_object_keys_cache.o ${OBJECTDIR}/script_object_keys_cache_nomain.o;\
 	fi
 
 ${OBJECTDIR}/script_object_keys_factory_nomain.o: ${OBJECTDIR}/script_object_keys_factory.o script_object_keys_factory.cpp 

@@ -6,11 +6,12 @@
 #include "../libscriptobject.h"
 #include "../script_object_vector_source.h"
 #include "../script_array_vector_source.h"
+#include "../script_object_keys_cache.h"
 
 class SimpleObjectTests : public ::testing::Test {
 protected:
     virtual void SetUp() {
-        
+        rs::scriptobject::ScriptObjectKeysCache::Flush();
     }
     
     virtual void TearDown() {
@@ -537,4 +538,38 @@ TEST_F(SimpleObjectTests, test13) {
     ASSERT_EQ(rs::scriptobject::ScriptObjectType::Array, object->getType("array"));    
     ASSERT_TRUE(!!object->getArray(0));
     ASSERT_TRUE(!!object->getArray("array"));
+}
+
+TEST_F(SimpleObjectTests, test14) {
+     rs::scriptobject::test::ScriptObjectVectorSource defn({
+        std::make_tuple("hello", rs::scriptobject::test::VectorValue("world"))
+    });        
+    
+    rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
+    rs::scriptobject::ScriptObjectFactory::CreateObject(defn);    
+    rs::scriptobject::ScriptObjectFactory::CreateObject(defn);    
+    rs::scriptobject::ScriptObjectFactory::CreateObject(defn);    
+    rs::scriptobject::ScriptObjectFactory::CreateObject(defn);    
+    
+    ASSERT_EQ(1, rs::scriptobject::ScriptObjectKeysCache::getCount());
+}
+
+TEST_F(SimpleObjectTests, test15) {
+     rs::scriptobject::test::ScriptObjectVectorSource defn1({
+        std::make_tuple("hello", rs::scriptobject::test::VectorValue("world"))
+    });        
+    
+    rs::scriptobject::test::ScriptObjectVectorSource defn2({
+        std::make_tuple("hello", rs::scriptobject::test::VectorValue("world")),
+        std::make_tuple("lorem", rs::scriptobject::test::VectorValue("ipsum"))
+    });
+    
+    rs::scriptobject::ScriptObjectFactory::CreateObject(defn1);
+    rs::scriptobject::ScriptObjectFactory::CreateObject(defn1);
+    rs::scriptobject::ScriptObjectFactory::CreateObject(defn1);
+    rs::scriptobject::ScriptObjectFactory::CreateObject(defn2);
+    rs::scriptobject::ScriptObjectFactory::CreateObject(defn2);
+    rs::scriptobject::ScriptObjectFactory::CreateObject(defn2);
+    
+    ASSERT_EQ(2, rs::scriptobject::ScriptObjectKeysCache::getCount());
 }

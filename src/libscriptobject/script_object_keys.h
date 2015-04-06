@@ -23,9 +23,7 @@ struct ScriptObjectKey {
  * This structure is designed to be very efficient with memory. Only a single
  * block is allocated to contain the field names, types and other associated data.
  */
-struct ScriptObjectKeys {
-    ScriptObjectKeys() = delete;
-    
+struct ScriptObjectKeys {        
     unsigned short size;                /// < The size of the entire key structure
     unsigned short count;               /// < The number of keys
     unsigned char hash[16];             /// < The MD5 hash generated from key+type
@@ -40,6 +38,8 @@ struct ScriptObjectKeys {
     
 private:    
     friend class ScriptObjectKeysFactory;
+    
+    ScriptObjectKeys(unsigned short size, unsigned short count, const unsigned char hash[16]);            
     
     typedef unsigned short Index;
     

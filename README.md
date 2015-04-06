@@ -12,8 +12,8 @@ data structure. For example the following JS structure can easily be expressed:
 ```
 
 The library uses the standard libc memory allocator with std::shared_ptr<> for object and array reference counting.
-In this example the object b refers to something declared in the scope of object a:
-```
+In this example the object `b` refers to something declared in the scope of object `a`:
+```js
 var a = { great_rock_years: [ 1970, 1971, 1972, 1973, 1974, 1975, 1976, 1977, 1978, 1979 ] };
 var b = { old_man_music_years: a.great_rock_years };
 ```
@@ -28,7 +28,7 @@ acceptable.
 * Native type storage
 * Support for arrays and nested objects
 * Repeated string caching (TODO)
-* Shared object definitions (TODO)
+* Shared object definitions
 * Script language agnostic - integrates with JavaScript, Python, etc.
 
 # Building

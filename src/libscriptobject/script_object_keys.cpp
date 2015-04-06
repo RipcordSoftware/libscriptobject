@@ -1,9 +1,14 @@
 #include "script_object_keys.h"
 
 #include <cstring>
+#include <algorithm>
 
 void rs::scriptobject::ScriptObjectKeys::ScriptObjectKeysDeleter(ScriptObjectKeys* ptr) { 
     delete[] reinterpret_cast<char*>(ptr); 
+}
+
+rs::scriptobject::ScriptObjectKeys::ScriptObjectKeys(unsigned short s, unsigned short c, const unsigned char h[16]) : size(s), count(c) {
+    std::copy_n(h, sizeof(hash), hash);
 }
 
 const char* rs::scriptobject::ScriptObjectKeys::getKeyNameStart() const {
