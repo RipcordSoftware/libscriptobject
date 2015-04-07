@@ -27,7 +27,7 @@ TEST_F(SimpleObjectTests, test0) {
 
 TEST_F(SimpleObjectTests, test1) {
     rs::scriptobject::test::ScriptObjectVectorSource defn({
-        std::make_tuple("hello", rs::scriptobject::test::VectorValue("world"))
+        std::make_pair("hello", rs::scriptobject::test::VectorValue("world"))
     });
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
@@ -42,8 +42,8 @@ TEST_F(SimpleObjectTests, test1) {
 
 TEST_F(SimpleObjectTests, test2) {
     rs::scriptobject::test::ScriptObjectVectorSource defn({
-        std::make_tuple("hello", rs::scriptobject::test::VectorValue("world")),
-        std::make_tuple("lorem", rs::scriptobject::test::VectorValue("ipsum"))
+        std::make_pair("hello", rs::scriptobject::test::VectorValue("world")),
+        std::make_pair("lorem", rs::scriptobject::test::VectorValue("ipsum"))
     });
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
@@ -62,8 +62,8 @@ TEST_F(SimpleObjectTests, test2) {
 
 TEST_F(SimpleObjectTests, test3) {
     rs::scriptobject::test::ScriptObjectVectorSource defn({
-        std::make_tuple("hello", rs::scriptobject::test::VectorValue("world")),
-        std::make_tuple("pi", rs::scriptobject::test::VectorValue(3.14159))
+        std::make_pair("hello", rs::scriptobject::test::VectorValue("world")),
+        std::make_pair("pi", rs::scriptobject::test::VectorValue(3.14159))
     });
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
@@ -82,9 +82,9 @@ TEST_F(SimpleObjectTests, test3) {
 
 TEST_F(SimpleObjectTests, test4) {
     rs::scriptobject::test::ScriptObjectVectorSource defn({
-        std::make_tuple("wet", rs::scriptobject::test::VectorValue(false)),
-        std::make_tuple("hello", rs::scriptobject::test::VectorValue("world")),
-        std::make_tuple("sunny", rs::scriptobject::test::VectorValue(true))
+        std::make_pair("wet", rs::scriptobject::test::VectorValue(false)),
+        std::make_pair("hello", rs::scriptobject::test::VectorValue("world")),
+        std::make_pair("sunny", rs::scriptobject::test::VectorValue(true))
     });
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
@@ -105,10 +105,10 @@ TEST_F(SimpleObjectTests, test4) {
 
 TEST_F(SimpleObjectTests, test5) {
     rs::scriptobject::test::ScriptObjectVectorSource defn({
-        std::make_tuple("wet", rs::scriptobject::test::VectorValue(false)),
-        std::make_tuple("hello", rs::scriptobject::test::VectorValue("world")),
-        std::make_tuple("sunny", rs::scriptobject::test::VectorValue(true)),
-        std::make_tuple("the_answer", rs::scriptobject::test::VectorValue(42))
+        std::make_pair("wet", rs::scriptobject::test::VectorValue(false)),
+        std::make_pair("hello", rs::scriptobject::test::VectorValue("world")),
+        std::make_pair("sunny", rs::scriptobject::test::VectorValue(true)),
+        std::make_pair("the_answer", rs::scriptobject::test::VectorValue(42))
     });
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
@@ -133,10 +133,10 @@ TEST_F(SimpleObjectTests, test5) {
 
 TEST_F(SimpleObjectTests, test6) {
     rs::scriptobject::test::ScriptObjectVectorSource defn({
-        std::make_tuple("wet", rs::scriptobject::test::VectorValue(false)),        
-        std::make_tuple("sunny", rs::scriptobject::test::VectorValue(true)),
-        std::make_tuple("hello", rs::scriptobject::test::VectorValue("world")),
-        std::make_tuple("the_answer", rs::scriptobject::test::VectorValue(42))
+        std::make_pair("wet", rs::scriptobject::test::VectorValue(false)),        
+        std::make_pair("sunny", rs::scriptobject::test::VectorValue(true)),
+        std::make_pair("hello", rs::scriptobject::test::VectorValue("world")),
+        std::make_pair("the_answer", rs::scriptobject::test::VectorValue(42))
     });
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
@@ -161,10 +161,10 @@ TEST_F(SimpleObjectTests, test6) {
 
 TEST_F(SimpleObjectTests, test7) {
     rs::scriptobject::test::ScriptObjectVectorSource defn({
-        std::make_tuple("wet", rs::scriptobject::test::VectorValue(false)),        
-        std::make_tuple("sunny", rs::scriptobject::test::VectorValue(true)),
-        std::make_tuple("hello", rs::scriptobject::test::VectorValue("world")),
-        std::make_tuple("the_answer", rs::scriptobject::test::VectorValue(42))
+        std::make_pair("wet", rs::scriptobject::test::VectorValue(false)),        
+        std::make_pair("sunny", rs::scriptobject::test::VectorValue(true)),
+        std::make_pair("hello", rs::scriptobject::test::VectorValue("world")),
+        std::make_pair("the_answer", rs::scriptobject::test::VectorValue(42))
     });
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
@@ -224,10 +224,10 @@ TEST_F(SimpleObjectTests, test7) {
 
 TEST_F(SimpleObjectTests, test8) {
     rs::scriptobject::test::ScriptObjectVectorSource defn({
-        std::make_tuple("wet", rs::scriptobject::test::VectorValue(false)),        
-        std::make_tuple("sunny", rs::scriptobject::test::VectorValue(true)),
-        std::make_tuple("hello", rs::scriptobject::test::VectorValue("world")),
-        std::make_tuple("the_answer", rs::scriptobject::test::VectorValue(42))
+        std::make_pair("wet", rs::scriptobject::test::VectorValue(false)),        
+        std::make_pair("sunny", rs::scriptobject::test::VectorValue(true)),
+        std::make_pair("hello", rs::scriptobject::test::VectorValue("world")),
+        std::make_pair("the_answer", rs::scriptobject::test::VectorValue(42))
     });
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
@@ -395,8 +395,8 @@ TEST_F(SimpleObjectTests, test8) {
 
 TEST_F(SimpleObjectTests, test9) {
     rs::scriptobject::test::ScriptObjectVectorSource defn({
-        std::make_tuple("nil", rs::scriptobject::test::VectorValue()),
-        std::make_tuple("hello", rs::scriptobject::test::VectorValue("world"))        
+        std::make_pair("nil", rs::scriptobject::test::VectorValue()),
+        std::make_pair("hello", rs::scriptobject::test::VectorValue("world"))        
     });
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
@@ -411,8 +411,8 @@ TEST_F(SimpleObjectTests, test9) {
 
 TEST_F(SimpleObjectTests, test10) {
     rs::scriptobject::test::ScriptObjectVectorSource defn({
-        std::make_tuple("bad", rs::scriptobject::test::VectorValue(rs::scriptobject::ScriptObjectType::MAX)),
-        std::make_tuple("hello", rs::scriptobject::test::VectorValue("world"))        
+        std::make_pair("bad", rs::scriptobject::test::VectorValue(rs::scriptobject::ScriptObjectType::MAX)),
+        std::make_pair("hello", rs::scriptobject::test::VectorValue("world"))        
     });
     
     ASSERT_THROW({
@@ -429,13 +429,13 @@ TEST_F(SimpleObjectTests, test11) {
         
         switch (type) {
             case rs::scriptobject::ScriptObjectType::String:
-                vect.push_back(std::make_tuple(std::to_string(i), rs::scriptobject::test::VectorValue(std::to_string(i).c_str())));
+                vect.push_back(std::make_pair(std::to_string(i), rs::scriptobject::test::VectorValue(std::to_string(i).c_str())));
                 break;
             case rs::scriptobject::ScriptObjectType::Double:
-                vect.push_back(std::make_tuple(std::to_string(i), rs::scriptobject::test::VectorValue(((double)i) / 1000)));
+                vect.push_back(std::make_pair(std::to_string(i), rs::scriptobject::test::VectorValue(((double)i) / 1000)));
                 break;
             case rs::scriptobject::ScriptObjectType::Int32:
-                vect.push_back(std::make_tuple(std::to_string(i), rs::scriptobject::test::VectorValue(i)));
+                vect.push_back(std::make_pair(std::to_string(i), rs::scriptobject::test::VectorValue(i)));
                 break;
         }
     }
@@ -485,13 +485,13 @@ TEST_F(SimpleObjectTests, test11) {
 
 TEST_F(SimpleObjectTests, test12) {
     rs::scriptobject::test::ScriptObjectVectorSource child({
-        std::make_tuple("hello", rs::scriptobject::test::VectorValue("world"))
+        std::make_pair("hello", rs::scriptobject::test::VectorValue("world"))
     });
     
     auto childObject = rs::scriptobject::ScriptObjectFactory::CreateObject(child);
     
     rs::scriptobject::test::ScriptObjectVectorSource defn({
-        std::make_tuple("child", childObject)
+        std::make_pair("child", childObject)
     });
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
@@ -529,7 +529,7 @@ TEST_F(SimpleObjectTests, test13) {
     auto array = rs::scriptobject::ScriptArrayFactory::CreateArray(arrayDefn);
     
     rs::scriptobject::test::ScriptObjectVectorSource defn({
-        std::make_tuple("array", array)
+        std::make_pair("array", array)
     });
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
@@ -542,7 +542,7 @@ TEST_F(SimpleObjectTests, test13) {
 
 TEST_F(SimpleObjectTests, test14) {
      rs::scriptobject::test::ScriptObjectVectorSource defn({
-        std::make_tuple("hello", rs::scriptobject::test::VectorValue("world"))
+        std::make_pair("hello", rs::scriptobject::test::VectorValue("world"))
     });        
     
     rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
@@ -556,12 +556,12 @@ TEST_F(SimpleObjectTests, test14) {
 
 TEST_F(SimpleObjectTests, test15) {
      rs::scriptobject::test::ScriptObjectVectorSource defn1({
-        std::make_tuple("hello", rs::scriptobject::test::VectorValue("world"))
+        std::make_pair("hello", rs::scriptobject::test::VectorValue("world"))
     });        
     
     rs::scriptobject::test::ScriptObjectVectorSource defn2({
-        std::make_tuple("hello", rs::scriptobject::test::VectorValue("world")),
-        std::make_tuple("lorem", rs::scriptobject::test::VectorValue("ipsum"))
+        std::make_pair("hello", rs::scriptobject::test::VectorValue("world")),
+        std::make_pair("lorem", rs::scriptobject::test::VectorValue("ipsum"))
     });
     
     rs::scriptobject::ScriptObjectFactory::CreateObject(defn1);

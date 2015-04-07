@@ -46,7 +46,7 @@ private:
     } value_;
 };
     
-typedef std::vector<std::tuple<std::string, VectorValue>> ObjectVector;
+typedef std::vector<std::pair<std::string, VectorValue>> ObjectVector;
 
 class ScriptObjectVectorSource : public rs::scriptobject::ScriptObjectSource {
 public:

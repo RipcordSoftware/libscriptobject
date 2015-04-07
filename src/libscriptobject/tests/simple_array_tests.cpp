@@ -359,7 +359,7 @@ TEST_F(SimpleArrayTests, test13) {
 
 TEST_F(SimpleArrayTests, test14) {
     rs::scriptobject::test::ScriptObjectVectorSource childDefn({
-        std::make_tuple("pi", rs::scriptobject::test::VectorValue(3.14159))
+        std::make_pair("pi", rs::scriptobject::test::VectorValue(3.14159))
     });
     
     auto childObject = rs::scriptobject::ScriptObjectFactory::CreateObject(childDefn);
