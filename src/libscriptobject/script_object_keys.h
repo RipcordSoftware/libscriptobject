@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "script_object_type.h"
+#include "script_object_definition.h"
 
 namespace rs {
 namespace scriptobject {
@@ -26,7 +27,7 @@ struct ScriptObjectKey {
 struct ScriptObjectKeys {        
     unsigned short size;                /// < The size of the entire key structure
     unsigned short count;               /// < The number of keys
-    unsigned char hash[16];             /// < The MD5 hash generated from key+type
+    ScriptObjectHash hash;              /// < The MD5 hash generated from key+type
     ScriptObjectKey keys[/*count*/];    /// < The key definitions
     // Index index[count];              // a map of original index position to sorted position
     // char names[count];               // the null terminated field names
@@ -39,7 +40,7 @@ struct ScriptObjectKeys {
 private:    
     friend class ScriptObjectKeysFactory;
     
-    ScriptObjectKeys(unsigned short size, unsigned short count, const unsigned char hash[16]);            
+    ScriptObjectKeys(unsigned short size, unsigned short count, const ScriptObjectHash hash);            
     
     typedef unsigned short Index;
     

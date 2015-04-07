@@ -7,7 +7,7 @@ void rs::scriptobject::ScriptObjectKeys::ScriptObjectKeysDeleter(ScriptObjectKey
     delete[] reinterpret_cast<char*>(ptr); 
 }
 
-rs::scriptobject::ScriptObjectKeys::ScriptObjectKeys(unsigned short s, unsigned short c, const unsigned char h[16]) : size(s), count(c) {
+rs::scriptobject::ScriptObjectKeys::ScriptObjectKeys(unsigned short s, unsigned short c, const ScriptObjectHash h) : size(s), count(c) {
     std::copy_n(h, sizeof(hash), hash);
 }
 

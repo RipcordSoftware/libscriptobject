@@ -8,7 +8,7 @@
 rs::scriptobject::ScriptObjectKeysPtr rs::scriptobject::ScriptObjectKeysFactory::CreateKeys(const ScriptObjectDefinition& defn) {    
     int fieldCount = defn.count();
     
-    unsigned char hash[16];
+    ScriptObjectHash hash;
     defn.CalculateHash(hash);    
     
     // TODO: this lookup is horrible

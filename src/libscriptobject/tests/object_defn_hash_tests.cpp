@@ -22,7 +22,7 @@ protected:
 TEST_F(ObjectDefnHashTests, test1) {
     rs::scriptobject::test::VectorKeysDefn defn({{ "hello", rs::scriptobject::ScriptObjectType::String }});
     
-    unsigned char hash[16];
+    rs::scriptobject::ScriptObjectHash hash;
     std::fill_n(hash, sizeof(hash), 0);
     
     defn.CalculateHash(hash);
@@ -38,12 +38,12 @@ TEST_F(ObjectDefnHashTests, test1) {
 TEST_F(ObjectDefnHashTests, test2) {
     rs::scriptobject::test::VectorKeysDefn defn1({{ "hello", rs::scriptobject::ScriptObjectType::String }});
     
-    unsigned char hash1[16];
+    rs::scriptobject::ScriptObjectHash hash1;
     std::fill_n(hash1, sizeof(hash1), 0);
     
     defn1.CalculateHash(hash1);
     
-    unsigned char hash2[16];
+    rs::scriptobject::ScriptObjectHash hash2;
     std::fill_n(hash2, sizeof(hash2), 0);        
     
     defn1.CalculateHash(hash2);
@@ -57,12 +57,12 @@ TEST_F(ObjectDefnHashTests, test3) {
     rs::scriptobject::test::VectorKeysDefn defn1({{ "hello1", rs::scriptobject::ScriptObjectType::String }});
     rs::scriptobject::test::VectorKeysDefn defn2({{ "hello2", rs::scriptobject::ScriptObjectType::String }});
     
-    unsigned char hash1[16];
+    rs::scriptobject::ScriptObjectHash hash1;
     std::fill_n(hash1, sizeof(hash1), 0);
     
     defn1.CalculateHash(hash1);
     
-    unsigned char hash2[16];
+    rs::scriptobject::ScriptObjectHash hash2;
     std::fill_n(hash2, sizeof(hash2), 0);        
     
     defn2.CalculateHash(hash2);
@@ -82,12 +82,12 @@ TEST_F(ObjectDefnHashTests, test4) {
     rs::scriptobject::test::VectorKeysDefn defn1({{ "hello", rs::scriptobject::ScriptObjectType::String }});
     rs::scriptobject::test::VectorKeysDefn defn2({{ "hello", rs::scriptobject::ScriptObjectType::Double }});
     
-    unsigned char hash1[16];
+    rs::scriptobject::ScriptObjectHash hash1;
     std::fill_n(hash1, sizeof(hash1), 0);
     
     defn1.CalculateHash(hash1);
     
-    unsigned char hash2[16];
+    rs::scriptobject::ScriptObjectHash hash2;
     std::fill_n(hash2, sizeof(hash2), 0);        
     
     defn2.CalculateHash(hash2);
@@ -107,12 +107,12 @@ TEST_F(ObjectDefnHashTests, test5) {
     rs::scriptobject::test::VectorKeysDefn defn1({{ "hello", rs::scriptobject::ScriptObjectType::String }, { "pi", rs::scriptobject::ScriptObjectType::Double }});
     rs::scriptobject::test::VectorKeysDefn defn2({{ "hello", rs::scriptobject::ScriptObjectType::String }});
     
-    unsigned char hash1[16];
+    rs::scriptobject::ScriptObjectHash hash1;
     std::fill_n(hash1, sizeof(hash1), 0);
     
     defn1.CalculateHash(hash1);
     
-    unsigned char hash2[16];
+    rs::scriptobject::ScriptObjectHash hash2;
     std::fill_n(hash2, sizeof(hash2), 0);        
     
     defn2.CalculateHash(hash2);
@@ -152,7 +152,7 @@ TEST_F(ObjectDefnHashTests, test6) {
         { "19", rs::scriptobject::ScriptObjectType::String },
     });
     
-    unsigned char hash[16];
+    rs::scriptobject::ScriptObjectHash hash;
     std::fill_n(hash, sizeof(hash), 0);
     
     defn.CalculateHash(hash);
@@ -189,12 +189,12 @@ TEST_F(ObjectDefnHashTests, test7) {
         { "19", rs::scriptobject::ScriptObjectType::String }
     });
     
-    unsigned char hash1[16];
+    rs::scriptobject::ScriptObjectHash hash1;
     std::fill_n(hash1, sizeof(hash1), 0);
     
     defn1.CalculateHash(hash1);
     
-    unsigned char hash2[16];
+    rs::scriptobject::ScriptObjectHash hash2;
     std::fill_n(hash2, sizeof(hash2), 0);        
     
     defn1.CalculateHash(hash2);
@@ -251,12 +251,12 @@ TEST_F(ObjectDefnHashTests, test8) {
         { "_19", rs::scriptobject::ScriptObjectType::Null }
     });
     
-    unsigned char hash1[16];
+    rs::scriptobject::ScriptObjectHash hash1;
     std::fill_n(hash1, sizeof(hash1), 0);
     
     defn1.CalculateHash(hash1);
     
-    unsigned char hash2[16];
+    rs::scriptobject::ScriptObjectHash hash2;
     std::fill_n(hash2, sizeof(hash2), 0);        
     
     defn2.CalculateHash(hash2);
@@ -280,7 +280,7 @@ TEST_F(ObjectDefnHashTests, test9) {
     
     rs::scriptobject::test::VectorKeysDefn defn(vect);
     
-    unsigned char hash[16];
+    rs::scriptobject::ScriptObjectHash hash;
     std::fill_n(hash, sizeof(hash), 0);
     
     defn.CalculateHash(hash);

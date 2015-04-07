@@ -2,7 +2,7 @@
 
 #include "md5.h"
 
-void rs::scriptobject::ScriptObjectDefinition::CalculateHash(unsigned char digest[16]) const {
+void rs::scriptobject::ScriptObjectDefinition::CalculateHash(ScriptObjectHash digest) const {
     MD5 md5;
     const int fieldCount = count();
         
