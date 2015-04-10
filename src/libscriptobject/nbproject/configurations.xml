@@ -117,7 +117,7 @@
           <linkerLibItems>
             <linkerLibStdlibItem>PosixThreads</linkerLibStdlibItem>
           </linkerLibItems>
-          <commandLine>../../externals/installed/lib/libgtest_main.a ../../externals/installed/lib/libgtest.a ../../externals/installed/lib/libjsoncpp_debug.a --coverage</commandLine>
+          <commandLine>../../externals/installed/lib/libgtest_main.a ../../externals/installed/lib/libgtest.a --coverage</commandLine>
         </linkerTool>
       </folder>
       <folder path="TestFiles/f1">
@@ -295,7 +295,7 @@
           </incDir>
         </ccTool>
         <linkerTool>
-          <commandLine>../../externals/installed/lib/libgtest_main.a ../../externals/installed/lib/libgtest.a ../../externals/installed/lib/libjsoncpp.a</commandLine>
+          <commandLine>../../externals/installed/lib/libgtest_main.a ../../externals/installed/lib/libgtest.a</commandLine>
         </linkerTool>
       </folder>
       <folder path="TestFiles/f1">
