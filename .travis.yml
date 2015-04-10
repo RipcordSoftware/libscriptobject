@@ -20,6 +20,7 @@ install:
 - sudo make -C lcov-1.11/ install
 - popd
 - gem install coveralls-lcov
+- sudo pip install json_tools
 - sudo rm -f /usr/bin/g++
 - sudo rm -f /usr/bin/gcc
 - sudo rm -f /usr/bin/gcov

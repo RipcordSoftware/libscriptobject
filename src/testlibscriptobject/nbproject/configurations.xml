@@ -4,17 +4,27 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>script_array_json_source.h</itemPath>
       <itemPath>script_object_json_source.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
                    projectFiles="true">
       <itemPath>test1.json</itemPath>
+      <itemPath>test2.json</itemPath>
+      <itemPath>test3.json</itemPath>
+      <itemPath>test4.json</itemPath>
+      <itemPath>test5.json</itemPath>
+      <itemPath>test6.json</itemPath>
+      <itemPath>test7.json</itemPath>
+      <itemPath>test8.json</itemPath>
     </logicalFolder>
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
+      <itemPath>../../externals/gason/src/gason.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
+      <itemPath>script_array_json_source.cpp</itemPath>
       <itemPath>script_object_json_source.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -41,23 +51,58 @@
         <ccTool>
           <standard>8</standard>
           <incDir>
-            <pElem>../../externals/installed/include</pElem>
+            <pElem>../../externals/gason/src</pElem>
             <pElem>../libscriptobject</pElem>
           </incDir>
+          <commandLine>--coverage</commandLine>
         </ccTool>
         <linkerTool>
           <linkerLibItems>
-            <linkerLibFileItem>../../externals/installed/lib/libjsoncpp_debug.a</linkerLibFileItem>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../libscriptobject"
+                            CT="3"
+                            CN="Debug"
+                            AC="true"
+                            BL="true"
+                            WD="../libscriptobject"
+                            BC="${MAKE}  -f Makefile CONF=Debug"
+                            CC="${MAKE}  -f Makefile CONF=Debug clean"
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libscriptobject.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
+      <item path="../../externals/gason/src/gason.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="script_array_json_source.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="script_array_json_source.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="script_object_json_source.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="script_object_json_source.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="test1.json" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="test2.json" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="test3.json" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="test4.json" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="test5.json" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="test6.json" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="test7.json" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="test8.json" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
     <conf name="Release" type="1">
@@ -74,7 +119,7 @@
           <developmentMode>5</developmentMode>
           <standard>8</standard>
           <incDir>
-            <pElem>../../externals/installed/include</pElem>
+            <pElem>../../externals/gason/src</pElem>
             <pElem>../libscriptobject</pElem>
           </incDir>
         </ccTool>
@@ -86,17 +131,51 @@
         </asmTool>
         <linkerTool>
           <linkerLibItems>
-            <linkerLibFileItem>../../externals/installed/lib/libjsoncpp.a</linkerLibFileItem>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../libscriptobject"
+                            CT="3"
+                            CN="Release"
+                            AC="false"
+                            BL="true"
+                            WD="../libscriptobject"
+                            BC="${MAKE}  -f Makefile CONF=Release"
+                            CC="${MAKE}  -f Makefile CONF=Release clean"
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libscriptobject.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
+      <item path="../../externals/gason/src/gason.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="script_array_json_source.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="script_array_json_source.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="script_object_json_source.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="script_object_json_source.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="test1.json" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="test2.json" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="test3.json" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="test4.json" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="test5.json" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="test6.json" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="test7.json" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="test8.json" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
   </confs>

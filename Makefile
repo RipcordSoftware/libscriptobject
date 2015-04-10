@@ -1,16 +1,20 @@
 GTEST_VER=1.7.0
 
-build: force_true .googletest .jsoncpp
+build: force_true .googletest .jsoncpp .gason
 	cd src/libscriptobject && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) build
+	cd src/testlibscriptobject && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) build
 
-all: force_true .googletest .jsoncpp
+all: force_true .googletest .jsoncpp .gason
 	cd src/libscriptobject && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) all
+	cd src/testlibscriptobject && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) all
 
-test: force_true .googletest .jsoncpp
+test: force_true .googletest .jsoncpp .gason
 	cd src/libscriptobject && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) test
+	cd src/testlibscriptobject && ./test.sh
 
 clean: force_true
 	cd src/libscriptobject && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) clean
+	cd src/testlibscriptobject && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) clean
 
 .googletest: force_true
 	if [ ! -d externals/gtest-${GTEST_VER}/lib/.libs ]; then \
@@ -54,6 +58,14 @@ clean: force_true
 		mkdir -p externals/installed/include/json && \
 		cp -Rf externals/jsoncpp/include/json/* externals/installed/include/json/; \
 	fi
+
+.gason: force_true
+	if ! `grep -q '\[submodule' .git/config`; then \
+                git submodule init; \
+        fi; \
+        if [ ! -d externals/gason/.git ]; then \
+                git submodule update; \
+        fi
 
 force_true:
 	true

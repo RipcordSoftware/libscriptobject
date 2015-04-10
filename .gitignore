@@ -28,7 +28,7 @@
 *.app
 
 # ignore the coverage output files
-coverage.info
+*coverage.info
 coverage/*
 
 # ignore NetBeans related stuff
