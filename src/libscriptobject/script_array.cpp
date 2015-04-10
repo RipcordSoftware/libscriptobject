@@ -32,16 +32,14 @@ void rs::scriptobject::ScriptArray::ScriptArrayDeleter(ScriptArray* ptr) {
     auto valueStart = getValueStart(*ptr);
     auto types = ptr->getTypeStart();
     for (int i = 0; i < ptr->count; ++i) {
-        auto index = ptr->offsets[i];
-
         switch (static_cast<rs::scriptobject::ScriptObjectType>(types[i])) {
             case ScriptObjectType::Object: {
-                auto child = reinterpret_cast<ScriptObjectPtr*>(valueStart + ptr->offsets[index]);
+                auto child = reinterpret_cast<ScriptObjectPtr*>(valueStart + ptr->offsets[i]);
                 child->~ScriptObjectPtr();
                 break;
             }
             case ScriptObjectType::Array: {
-                auto child = reinterpret_cast<ScriptArrayPtr*>(valueStart + ptr->offsets[index]);
+                auto child = reinterpret_cast<ScriptArrayPtr*>(valueStart + ptr->offsets[i]);
                 child->~ScriptArrayPtr();
                 break;
             }
