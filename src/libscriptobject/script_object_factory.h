@@ -21,6 +21,8 @@
 #include "script_object_source.h"
 #include "script_object.h"
 
+#include <atomic>
+
 namespace rs {
 namespace scriptobject {
 
@@ -30,6 +32,13 @@ public:
     ScriptObjectFactory(const ScriptObjectFactory& orig) = delete;
     
     static ScriptObjectPtr CreateObject(const ScriptObjectSource& source);
+    
+    static unsigned getCount();
+    static unsigned long getTotalBytesAllocated();
+    
+private:
+    static std::atomic<unsigned> count_;
+    static std::atomic<unsigned long> totalBytes_;
 };
 
 }}

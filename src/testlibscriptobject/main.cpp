@@ -17,8 +17,11 @@
 
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <iomanip>
-#include <vector>
+#include <array>
+
+#include <unistd.h>
 
 #include "gason.h"
 
@@ -26,6 +29,7 @@
 #include "script_array_json_source.h"
 #include "script_object_factory.h"
 #include "script_array_factory.h"
+#include "script_object_keys_cache.h"
 
 void ShowObject(const rs::scriptobject::ScriptObjectPtr object, int depth);
 void ShowArray(const rs::scriptobject::ScriptArrayPtr array, int depth);
@@ -129,43 +133,109 @@ void ShowObject(const rs::scriptobject::ScriptObjectPtr object, int depth = 0) {
     std::cout << std::endl << padding << '}';
 }
 
+void ShowMemoryState() {
+    auto pid = ::getpid();
+        
+    std::stringstream filename;
+    filename << "/proc/" << pid << "/status";
+
+    std::ifstream statstream;
+    statstream.open(filename.str(), std::ios::in);
+    
+    if (statstream) {
+        std::cerr << std::endl;
+
+        std::string line;
+        while (getline(statstream, line)) {
+            if (line.length() > 2 && line[0] == 'V' && line[1] == 'm') {
+                std::cerr << line << std::endl;
+            }
+        }
+    }
+}
+
+bool IsObject(const char* json, int length) {
+    int front = 0;
+    while (front < (length - 1) && (json[front] == ' ' || json[front] == '\t' || json[front] == '\n')) {
+        front++;
+    }
+    
+    int back =  length - 1;
+    while (back > 0 && json[back] == ' ' || json[back] == '\t' || json[back] == '\n') {
+        back--;
+    }
+    
+    return json[front] == '{' && json[back] == '}';
+}
+
+bool IsArray(const char* json, int length) {
+    int front = 0;
+    while (front < (length - 1) && (json[front] == ' ' || json[front] == '\t' || json[front] == '\n')) {
+        front++;
+    }
+    
+    int back = length - 1;
+    while (back > 0 && json[back] == ' ' || json[back] == '\t' || json[back] == '\n') {
+        back--;
+    }
+    
+    return json[front] == '[' && json[back] == ']';
+}
+
+
 int main(int argc, char** argv) {
     
     if (argc != 2) {
         std::cout << "command line: [json file]" << std::endl;
         return 1;
-    } else {    
-        std::ifstream istream;
-        istream.open(argv[1], std::ios::in | std::ios::binary);
-
-        std::string json;
-
-        char buffer[1024];
-        auto readChars = 0;
-        while ((readChars = istream.readsome(buffer, sizeof(buffer))) > 0) {
-            if (readChars > 0) {
-                json.append(buffer, readChars);
-            }
-        }
-
+    } else {
         try {
-            if (json.front() == '{' && json.back() == '}') {
+            std::ifstream istream;
+            istream.open(argv[1], std::ios::in | std::ios::binary);
+            if (!istream) {
+                throw "Unable to open input file";
+            }
+            
+            std::cerr << "Reading... ";
+            istream.seekg(0, std::ios::end);
+            auto fileLength = istream.tellg();
+            istream.seekg(0, std::ios::beg);
+
+            char* json = new char[fileLength];
+            istream.read(json, fileLength);        
+            std::cerr << "done" << std::endl;
+
+            ShowMemoryState();
+        
+            std::cerr << "Parsing... ";
+            
+            if (IsObject(json, fileLength)) {
                 ScriptObjectJsonSource source(&json[0]);
                 auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(source);
                 ShowObject(object);
-            } else if (json.front() == '[' && json.back() == ']') {
+            } else if (IsArray(json, fileLength)) {
                 ScriptArrayJsonSource source(&json[0]);
                 auto object = rs::scriptobject::ScriptArrayFactory::CreateArray(source);
                 ShowArray(object);
             } else {
                 throw "Error: the input file was not recognised as JSON";
             }
+            
+            std::cerr << "done, found: " << std::endl << 
+                rs::scriptobject::ScriptObjectKeysCache::getCount() << " keys" << std::endl <<
+                rs::scriptobject::ScriptObjectFactory::getCount() << " objects" << std::endl <<
+                (rs::scriptobject::ScriptObjectFactory::getTotalBytesAllocated() / 1024) << " total objects KB" << std::endl <<
+                rs::scriptobject::ScriptArrayFactory::getCount() << " arrays" << std::endl <<
+                (rs::scriptobject::ScriptArrayFactory::getTotalBytesAllocated() / 1024) << " total array KB" << std::endl;
+            
+            delete[] json;
+            
+            ShowMemoryState();
 
             return 0;
         } catch (const char* msg) {
-            std::cout << msg << std::endl;
+            std::cerr << "Error: " << msg << std::endl;
             return 2;
         }
     }
 }
-

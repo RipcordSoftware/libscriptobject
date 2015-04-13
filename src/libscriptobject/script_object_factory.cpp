@@ -20,8 +20,11 @@
 
 #include <algorithm>
 
+std::atomic<unsigned> rs::scriptobject::ScriptObjectFactory::count_;
+std::atomic<unsigned long> rs::scriptobject::ScriptObjectFactory::totalBytes_;
+
 rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptObjectFactory::CreateObject(const ScriptObjectSource& source) {
-    int size = ScriptObject::CalculateSize(source);
+    auto size = ScriptObject::CalculateSize(source);
     
     // allocate the memory we need
     auto objectPtr = new unsigned char[size];
@@ -82,5 +85,16 @@ rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptObjectFactory::CreateO
         }
     }
     
+    ++ScriptObjectFactory::count_;
+    ScriptObjectFactory::totalBytes_ += size;
+    
     return ScriptObjectPtr(object, ScriptObject::ScriptObjectDeleter);
+}
+
+unsigned rs::scriptobject::ScriptObjectFactory::getCount() {
+    return count_;
+}
+
+unsigned long rs::scriptobject::ScriptObjectFactory::getTotalBytesAllocated() {
+    return totalBytes_;
 }

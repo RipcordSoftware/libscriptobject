@@ -19,8 +19,11 @@
 
 #include <algorithm>
 
+std::atomic<unsigned> rs::scriptobject::ScriptArrayFactory::count_;
+std::atomic<unsigned long> rs::scriptobject::ScriptArrayFactory::totalBytes_;
+
 rs::scriptobject::ScriptArrayPtr rs::scriptobject::ScriptArrayFactory::CreateArray(const rs::scriptobject::ScriptArraySource& source) {
-    int size = ScriptArray::CalculateSize(source);
+    auto size = ScriptArray::CalculateSize(source);
     
     // allocate the memory we need
     auto arrayPtr = new unsigned char[size];
@@ -82,5 +85,16 @@ rs::scriptobject::ScriptArrayPtr rs::scriptobject::ScriptArrayFactory::CreateArr
         types[i] = type;
     }
     
+    ++ScriptArrayFactory::count_;
+    ScriptArrayFactory::totalBytes_ += size;
+    
     return ScriptArrayPtr(array, ScriptArray::ScriptArrayDeleter);
+}
+
+unsigned rs::scriptobject::ScriptArrayFactory::getCount() {
+    return count_;
+}
+
+unsigned long rs::scriptobject::ScriptArrayFactory::getTotalBytesAllocated() {
+    return totalBytes_;
 }

@@ -21,6 +21,8 @@
 #include "script_array.h"
 #include "script_array_source.h"
 
+#include <atomic>
+
 namespace rs {
 namespace scriptobject {
 
@@ -31,8 +33,12 @@ public:
     
     static ScriptArrayPtr CreateArray(const ScriptArraySource& source);
     
+    static unsigned getCount();
+    static unsigned long getTotalBytesAllocated();
+    
 private:
-
+    static std::atomic<unsigned> count_;
+    static std::atomic<unsigned long> totalBytes_;
 };
 
 }}
