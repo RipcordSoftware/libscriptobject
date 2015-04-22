@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/RipcordSoftware/libscriptobject.svg?branch=master)](https://travis-ci.org/RipcordSoftware/libscriptobject)
 [![Coverage Status](https://coveralls.io/repos/RipcordSoftware/libscriptobject/badge.svg)](https://coveralls.io/r/RipcordSoftware/libscriptobject)
+[![License](http://img.shields.io/:license-gpl2-blue.svg)](http://doge.gpl2-license.org)
 
 # libscriptobject
 A C++ 11 library implementing scriptable/serializable objects for big-data map-reduce data stores.
