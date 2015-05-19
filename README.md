@@ -36,7 +36,7 @@ acceptable.
 Requires:
 * GCC 4.8.1+
 * GNU Make
-* lcov and Ruby (for test coverage)
+* lcov, Ruby, python, python-pip (for test coverage)
 * valgrind (for memory analysis)
 
 To build type:
