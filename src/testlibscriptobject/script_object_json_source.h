@@ -15,12 +15,12 @@
  *  along with libscriptobject.  If not, see <http://www.gnu.org/licenses/>.
 **/
 
+#ifndef RS_LIBSCRIPTOBJECT_SCRIPT_OBJECT_JSON_SOURCE_H
+#define	RS_LIBSCRIPTOBJECT_SCRIPT_OBJECT_JSON_SOURCE_H
+
 #include <vector>
 
 #include "gason.h"
-
-#ifndef RS_LIBSCRIPTOBJECT_SCRIPT_OBJECT_JSON_SOURCE_H
-#define	RS_LIBSCRIPTOBJECT_SCRIPT_OBJECT_JSON_SOURCE_H
 
 #include "script_object_source.h"
 
