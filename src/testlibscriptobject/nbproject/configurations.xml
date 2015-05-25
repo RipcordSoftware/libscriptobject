@@ -4,8 +4,6 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>script_array_json_source.h</itemPath>
-      <itemPath>script_object_json_source.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -22,10 +20,7 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <itemPath>../../externals/gason/src/gason.cpp</itemPath>
       <itemPath>main.cpp</itemPath>
-      <itemPath>script_array_json_source.cpp</itemPath>
-      <itemPath>script_object_json_source.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -53,6 +48,7 @@
           <incDir>
             <pElem>../../externals/gason/src</pElem>
             <pElem>../libscriptobject</pElem>
+            <pElem>../libscriptobject_gason</pElem>
           </incDir>
           <commandLine>--coverage</commandLine>
         </ccTool>
@@ -70,23 +66,22 @@
                             OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libscriptobject.a">
               </makeArtifact>
             </linkerLibProjectItem>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../libscriptobject_gason"
+                            CT="3"
+                            CN="Debug"
+                            AC="true"
+                            BL="true"
+                            WD="../libscriptobject_gason"
+                            BC="${MAKE}  -f Makefile CONF=Debug"
+                            CC="${MAKE}  -f Makefile CONF=Debug clean"
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/liblibscriptobject_gason.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
-      <item path="../../externals/gason/src/gason.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="script_array_json_source.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="script_array_json_source.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="script_object_json_source.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="script_object_json_source.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="test1.json" ex="false" tool="3" flavor2="0">
       </item>
@@ -121,6 +116,7 @@
           <incDir>
             <pElem>../../externals/gason/src</pElem>
             <pElem>../libscriptobject</pElem>
+            <pElem>../libscriptobject_gason</pElem>
           </incDir>
         </ccTool>
         <fortranCompilerTool>
@@ -143,23 +139,22 @@
                             OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libscriptobject.a">
               </makeArtifact>
             </linkerLibProjectItem>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../libscriptobject_gason"
+                            CT="3"
+                            CN="Release"
+                            AC="false"
+                            BL="true"
+                            WD="../libscriptobject_gason"
+                            BC="${MAKE}  -f Makefile CONF=Release"
+                            CC="${MAKE}  -f Makefile CONF=Release clean"
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/liblibscriptobject_gason.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
           </linkerLibItems>
         </linkerTool>
       </compileType>
-      <item path="../../externals/gason/src/gason.cpp"
-            ex="false"
-            tool="1"
-            flavor2="0">
-      </item>
       <item path="main.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="script_array_json_source.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="script_array_json_source.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="script_object_json_source.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="script_object_json_source.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="test1.json" ex="false" tool="3" flavor2="0">
       </item>

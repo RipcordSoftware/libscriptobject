@@ -35,10 +35,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/_ext/1762787558/gason.o \
-	${OBJECTDIR}/main.o \
-	${OBJECTDIR}/script_array_json_source.o \
-	${OBJECTDIR}/script_object_json_source.o
+	${OBJECTDIR}/main.o
 
 
 # C Compiler Flags
@@ -55,7 +52,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=../libscriptobject/dist/Release/GNU-Linux-x86/libscriptobject.a
+LDLIBSOPTIONS=../libscriptobject/dist/Release/GNU-Linux-x86/libscriptobject.a ../libscriptobject_gason/dist/Release/GNU-Linux-x86/liblibscriptobject_gason.a
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
@@ -63,33 +60,21 @@ LDLIBSOPTIONS=../libscriptobject/dist/Release/GNU-Linux-x86/libscriptobject.a
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibscriptobject: ../libscriptobject/dist/Release/GNU-Linux-x86/libscriptobject.a
 
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibscriptobject: ../libscriptobject_gason/dist/Release/GNU-Linux-x86/liblibscriptobject_gason.a
+
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibscriptobject: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibscriptobject ${OBJECTFILES} ${LDLIBSOPTIONS}
 
-${OBJECTDIR}/_ext/1762787558/gason.o: ../../externals/gason/src/gason.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/1762787558
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../../externals/gason/src -I../libscriptobject -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1762787558/gason.o ../../externals/gason/src/gason.cpp
-
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../../externals/gason/src -I../libscriptobject -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
-
-${OBJECTDIR}/script_array_json_source.o: script_array_json_source.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../../externals/gason/src -I../libscriptobject -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_array_json_source.o script_array_json_source.cpp
-
-${OBJECTDIR}/script_object_json_source.o: script_object_json_source.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../../externals/gason/src -I../libscriptobject -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_json_source.o script_object_json_source.cpp
+	$(COMPILE.cc) -O2 -I../../externals/gason/src -I../libscriptobject -I../libscriptobject_gason -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
 
 # Subprojects
 .build-subprojects:
 	cd ../libscriptobject && ${MAKE}  -f Makefile CONF=Release
+	cd ../libscriptobject_gason && ${MAKE}  -f Makefile CONF=Release
 
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
@@ -99,6 +84,7 @@ ${OBJECTDIR}/script_object_json_source.o: script_object_json_source.cpp
 # Subprojects
 .clean-subprojects:
 	cd ../libscriptobject && ${MAKE}  -f Makefile CONF=Release clean
+	cd ../libscriptobject_gason && ${MAKE}  -f Makefile CONF=Release clean
 
 # Enable dependency checking
 .dep.inc: .depcheck-impl

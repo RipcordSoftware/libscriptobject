@@ -23,8 +23,6 @@
 
 #include <unistd.h>
 
-#include "gason.h"
-
 #include "script_object_json_source.h"
 #include "script_array_json_source.h"
 #include "script_object_factory.h"

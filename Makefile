@@ -2,10 +2,12 @@ GTEST_VER=1.7.0
 
 build: force_true .googletest .gason
 	cd src/libscriptobject && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) build
+	cd src/libscriptobject_gason && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) build
 	cd src/testlibscriptobject && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) build
 
 all: force_true .googletest .gason
 	cd src/libscriptobject && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) all
+	cd src/libscriptobject_gason && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) all
 	cd src/testlibscriptobject && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) all
 
 test: force_true .googletest .gason
@@ -14,6 +16,7 @@ test: force_true .googletest .gason
 
 clean: force_true
 	cd src/libscriptobject && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) clean
+	cd src/libscriptobject_gason && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) clean
 	cd src/testlibscriptobject && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) clean
 
 .googletest: force_true

@@ -15,8 +15,8 @@
  *  along with libscriptobject.  If not, see <http://www.gnu.org/licenses/>.
 **/
 
-#ifndef SCRIPT_ARRAY_JSON_SOURCE_H
-#define	SCRIPT_ARRAY_JSON_SOURCE_H
+#ifndef RS_LIBSCRIPTOBJECT_SCRIPT_ARRAY_JSON_SOURCE_H
+#define	RS_LIBSCRIPTOBJECT_SCRIPT_ARRAY_JSON_SOURCE_H
 
 #include <vector>
 
@@ -51,5 +51,5 @@ private:
     static std::vector<JsonNode*> GetMembers(JsonValue& value);
 };
 
-#endif	/* SCRIPT_ARRAY_JSON_SOURCE_H */
+#endif	/* RS_LIBSCRIPTOBJECT_SCRIPT_ARRAY_JSON_SOURCE_H */
 
