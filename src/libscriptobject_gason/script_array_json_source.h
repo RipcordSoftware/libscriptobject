@@ -24,6 +24,9 @@
 
 #include "gason.h"
 
+namespace rs {
+namespace scriptobject {
+
 class ScriptArrayJsonSource : public rs::scriptobject::ScriptArraySource {
 public:
     ScriptArrayJsonSource(char* json);    
@@ -50,6 +53,8 @@ private:
     
     static std::vector<JsonNode*> GetMembers(JsonValue& value);
 };
+
+}}
 
 #endif	/* RS_LIBSCRIPTOBJECT_SCRIPT_ARRAY_JSON_SOURCE_H */
 

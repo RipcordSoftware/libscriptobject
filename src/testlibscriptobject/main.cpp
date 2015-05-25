@@ -208,11 +208,11 @@ int main(int argc, char** argv) {
             std::cerr << "Parsing... ";
             
             if (IsObject(json, fileLength)) {
-                ScriptObjectJsonSource source(&json[0]);
+                rs::scriptobject::ScriptObjectJsonSource source(&json[0]);
                 auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(source);
                 ShowObject(object);
             } else if (IsArray(json, fileLength)) {
-                ScriptArrayJsonSource source(&json[0]);
+                rs::scriptobject::ScriptArrayJsonSource source(&json[0]);
                 auto object = rs::scriptobject::ScriptArrayFactory::CreateArray(source);
                 ShowArray(object);
             } else {

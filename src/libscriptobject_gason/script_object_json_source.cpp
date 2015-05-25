@@ -25,7 +25,7 @@
 
 #include "script_array_json_source.h"
 
-ScriptObjectJsonSource::ScriptObjectJsonSource(char* json) {
+rs::scriptobject::ScriptObjectJsonSource::ScriptObjectJsonSource(char* json) {
     char* endPtr;
     JsonValue value;
     auto status = jsonParse(json, &endPtr, &value, allocator_);
@@ -36,105 +36,105 @@ ScriptObjectJsonSource::ScriptObjectJsonSource(char* json) {
     members_ = GetMembers(value);
 }
 
-ScriptObjectJsonSource::ScriptObjectJsonSource(JsonValue value) : members_(GetMembers(value)) {
+rs::scriptobject::ScriptObjectJsonSource::ScriptObjectJsonSource(JsonValue value) : members_(GetMembers(value)) {
    
 }
 
-unsigned ScriptObjectJsonSource::count() const {
+unsigned rs::scriptobject::ScriptObjectJsonSource::count() const {
     return members_.size();
 }
 
-rs::scriptobject::ScriptObjectType ScriptObjectJsonSource::type(int index) const {
+rs::scriptobject::ScriptObjectType rs::scriptobject::ScriptObjectJsonSource::type(int index) const {
     if (index < 0 && index >= count()) {
-        throw rs::scriptobject::UnknownScriptObjectFieldException();
+        throw UnknownScriptObjectFieldException();
     }    
         
     return getType(members_[index]->value.getTag());
 }
 
-const char* ScriptObjectJsonSource::name(int index) const {
+const char* rs::scriptobject::ScriptObjectJsonSource::name(int index) const {
     if (index < 0 && index >= count()) {
-        throw rs::scriptobject::UnknownScriptObjectFieldException();
+        throw UnknownScriptObjectFieldException();
     }
 
     return members_[index]->key;
 }
 
-unsigned ScriptObjectJsonSource::length(int index) const {
+unsigned rs::scriptobject::ScriptObjectJsonSource::length(int index) const {
     return std::strlen(name(index));
 }
 
-bool ScriptObjectJsonSource::getBoolean(int index) const {
-    if (type(index) != rs::scriptobject::ScriptObjectType::Boolean) {
-        throw rs::scriptobject::TypeCastException();
+bool rs::scriptobject::ScriptObjectJsonSource::getBoolean(int index) const {
+    if (type(index) != ScriptObjectType::Boolean) {
+        throw TypeCastException();
     }
     
     return members_[index]->value.getTag() == JSON_TRUE;
 }
 
-std::int32_t ScriptObjectJsonSource::getInt32(int index) const {
-    throw rs::scriptobject::UnknownScriptObjectFieldException();
+std::int32_t rs::scriptobject::ScriptObjectJsonSource::getInt32(int index) const {
+    throw UnknownScriptObjectFieldException();
 }
 
-double ScriptObjectJsonSource::getDouble(int index) const {
-    if (type(index) != rs::scriptobject::ScriptObjectType::Double) {
-        throw rs::scriptobject::TypeCastException();
+double rs::scriptobject::ScriptObjectJsonSource::getDouble(int index) const {
+    if (type(index) != ScriptObjectType::Double) {
+        throw TypeCastException();
     }
     
     return members_[index]->value.fval;
 }
 
-const char* ScriptObjectJsonSource::getString(int index) const {
-    if (type(index) != rs::scriptobject::ScriptObjectType::String) {
-        throw rs::scriptobject::TypeCastException();
+const char* rs::scriptobject::ScriptObjectJsonSource::getString(int index) const {
+    if (type(index) != ScriptObjectType::String) {
+        throw TypeCastException();
     }
     
     return members_[index]->value.toString();
 }
 
-int ScriptObjectJsonSource::getStringLength(int index) const {
+int rs::scriptobject::ScriptObjectJsonSource::getStringLength(int index) const {
     return std::strlen(getString(index));
 }
 
-const rs::scriptobject::ScriptObjectPtr ScriptObjectJsonSource::getObject(int index) const {
-    if (type(index) != rs::scriptobject::ScriptObjectType::Object) {
-        throw rs::scriptobject::TypeCastException();
+const rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptObjectJsonSource::getObject(int index) const {
+    if (type(index) != ScriptObjectType::Object) {
+        throw TypeCastException();
     }
     
     ScriptObjectJsonSource objectSource(members_[index]->value);
-    return rs::scriptobject::ScriptObjectFactory::CreateObject(objectSource);
+    return ScriptObjectFactory::CreateObject(objectSource);
 }
 
-const rs::scriptobject::ScriptArrayPtr ScriptObjectJsonSource::getArray(int index) const {
-    if (type(index) != rs::scriptobject::ScriptObjectType::Array) {
-        throw rs::scriptobject::TypeCastException();
+const rs::scriptobject::ScriptArrayPtr rs::scriptobject::ScriptObjectJsonSource::getArray(int index) const {
+    if (type(index) != ScriptObjectType::Array) {
+        throw TypeCastException();
     }
     
     ScriptArrayJsonSource arraySource(members_[index]->value);
-    return rs::scriptobject::ScriptArrayFactory::CreateArray(arraySource);
+    return ScriptArrayFactory::CreateArray(arraySource);
 }
 
-rs::scriptobject::ScriptObjectType ScriptObjectJsonSource::getType(JsonTag tag) {
+rs::scriptobject::ScriptObjectType rs::scriptobject::ScriptObjectJsonSource::getType(JsonTag tag) {
     switch (tag) {
         case JSON_NULL:
-            return rs::scriptobject::ScriptObjectType::Null;
+            return ScriptObjectType::Null;
         case JSON_NUMBER:
-            return rs::scriptobject::ScriptObjectType::Double;
+            return ScriptObjectType::Double;
         case JSON_TRUE:
         case JSON_FALSE:
-            return rs::scriptobject::ScriptObjectType::Boolean;
+            return ScriptObjectType::Boolean;
         case JSON_OBJECT:
-            return rs::scriptobject::ScriptObjectType::Object;
+            return ScriptObjectType::Object;
         case JSON_ARRAY:
-            return rs::scriptobject::ScriptObjectType::Array;
+            return ScriptObjectType::Array;
         case JSON_STRING:
-            return rs::scriptobject::ScriptObjectType::String;
+            return ScriptObjectType::String;
         default:
-            return rs::scriptobject::ScriptObjectType::Unknown;
+            return ScriptObjectType::Unknown;
     }
 }
 
-std::vector<JsonNode*> ScriptObjectJsonSource::GetMembers(JsonValue& value) {
+std::vector<JsonNode*> rs::scriptobject::ScriptObjectJsonSource::GetMembers(JsonValue& value) {
     std::vector<JsonNode*> members;
     for (auto i : value) {
         members.push_back(i);

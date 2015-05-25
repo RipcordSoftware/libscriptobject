@@ -24,6 +24,9 @@
 
 #include "script_object_source.h"
 
+namespace rs {
+namespace scriptobject {
+
 class ScriptObjectJsonSource : public rs::scriptobject::ScriptObjectSource {
 public:
     ScriptObjectJsonSource(char* json);
@@ -53,6 +56,8 @@ private:
     
     static std::vector<JsonNode*> GetMembers(JsonValue& value);
 };
+
+}}
 
 #endif	/* RS_LIBSCRIPTOBJECT_SCRIPT_OBJECT_JSON_SOURCE_H */
 
