@@ -36,14 +36,14 @@ protected:
 };
 
 TEST_F(SimpleArrayTests, test0) {
-    rs::scriptobject::test::ScriptArrayVectorSource defn({});
+    rs::scriptobject::utils::ScriptArrayVectorSource defn({});
     auto array = rs::scriptobject::ScriptArrayFactory::CreateArray(defn);
     ASSERT_EQ(0, array->getCount());
 }
 
 TEST_F(SimpleArrayTests, test1) {
-    rs::scriptobject::test::ScriptArrayVectorSource defn({
-        rs::scriptobject::test::VectorValue("world")
+    rs::scriptobject::utils::ScriptArrayVectorSource defn({
+        rs::scriptobject::utils::VectorValue("world")
     });
     
     auto array = rs::scriptobject::ScriptArrayFactory::CreateArray(defn);
@@ -53,9 +53,9 @@ TEST_F(SimpleArrayTests, test1) {
 }
 
 TEST_F(SimpleArrayTests, test2) {
-    rs::scriptobject::test::ScriptArrayVectorSource defn({
-        rs::scriptobject::test::VectorValue("world"),
-        rs::scriptobject::test::VectorValue("ipsum")
+    rs::scriptobject::utils::ScriptArrayVectorSource defn({
+        rs::scriptobject::utils::VectorValue("world"),
+        rs::scriptobject::utils::VectorValue("ipsum")
     });
     
     auto array = rs::scriptobject::ScriptArrayFactory::CreateArray(defn);
@@ -67,9 +67,9 @@ TEST_F(SimpleArrayTests, test2) {
 }
 
 TEST_F(SimpleArrayTests, test3) {
-    rs::scriptobject::test::ScriptArrayVectorSource defn({
-        rs::scriptobject::test::VectorValue("world"),
-        rs::scriptobject::test::VectorValue(3.14159)
+    rs::scriptobject::utils::ScriptArrayVectorSource defn({
+        rs::scriptobject::utils::VectorValue("world"),
+        rs::scriptobject::utils::VectorValue(3.14159)
     });
     
     auto array = rs::scriptobject::ScriptArrayFactory::CreateArray(defn);
@@ -81,10 +81,10 @@ TEST_F(SimpleArrayTests, test3) {
 }
 
 TEST_F(SimpleArrayTests, test4) {
-    rs::scriptobject::test::ScriptArrayVectorSource defn({
-        rs::scriptobject::test::VectorValue(false),
-        rs::scriptobject::test::VectorValue("world"),
-        rs::scriptobject::test::VectorValue(true)
+    rs::scriptobject::utils::ScriptArrayVectorSource defn({
+        rs::scriptobject::utils::VectorValue(false),
+        rs::scriptobject::utils::VectorValue("world"),
+        rs::scriptobject::utils::VectorValue(true)
     });
     
     auto array = rs::scriptobject::ScriptArrayFactory::CreateArray(defn);
@@ -98,11 +98,11 @@ TEST_F(SimpleArrayTests, test4) {
 }
 
 TEST_F(SimpleArrayTests, test5) {
-    rs::scriptobject::test::ScriptArrayVectorSource defn({
-        rs::scriptobject::test::VectorValue(false),
-        rs::scriptobject::test::VectorValue("world"),
-        rs::scriptobject::test::VectorValue(true),
-        rs::scriptobject::test::VectorValue(42)
+    rs::scriptobject::utils::ScriptArrayVectorSource defn({
+        rs::scriptobject::utils::VectorValue(false),
+        rs::scriptobject::utils::VectorValue("world"),
+        rs::scriptobject::utils::VectorValue(true),
+        rs::scriptobject::utils::VectorValue(42)
     });
     
     auto array = rs::scriptobject::ScriptArrayFactory::CreateArray(defn);
@@ -118,11 +118,11 @@ TEST_F(SimpleArrayTests, test5) {
 }
 
 TEST_F(SimpleArrayTests, test6) {
-    rs::scriptobject::test::ScriptArrayVectorSource defn({
-        rs::scriptobject::test::VectorValue(false),        
-        rs::scriptobject::test::VectorValue(true),
-        rs::scriptobject::test::VectorValue("world"),
-        rs::scriptobject::test::VectorValue(42)
+    rs::scriptobject::utils::ScriptArrayVectorSource defn({
+        rs::scriptobject::utils::VectorValue(false),        
+        rs::scriptobject::utils::VectorValue(true),
+        rs::scriptobject::utils::VectorValue("world"),
+        rs::scriptobject::utils::VectorValue(42)
     });
     
     auto array = rs::scriptobject::ScriptArrayFactory::CreateArray(defn);
@@ -138,11 +138,11 @@ TEST_F(SimpleArrayTests, test6) {
 }
 
 TEST_F(SimpleArrayTests, test7) {
-    rs::scriptobject::test::ScriptArrayVectorSource defn({
-        rs::scriptobject::test::VectorValue(false),
-        rs::scriptobject::test::VectorValue(true),
-        rs::scriptobject::test::VectorValue("world"),
-        rs::scriptobject::test::VectorValue(42)
+    rs::scriptobject::utils::ScriptArrayVectorSource defn({
+        rs::scriptobject::utils::VectorValue(false),
+        rs::scriptobject::utils::VectorValue(true),
+        rs::scriptobject::utils::VectorValue("world"),
+        rs::scriptobject::utils::VectorValue(42)
     });
     
     auto array = rs::scriptobject::ScriptArrayFactory::CreateArray(defn);
@@ -177,11 +177,11 @@ TEST_F(SimpleArrayTests, test7) {
 }
 
 TEST_F(SimpleArrayTests, test8) {
-    rs::scriptobject::test::ScriptArrayVectorSource defn({
-        rs::scriptobject::test::VectorValue(false),        
-        rs::scriptobject::test::VectorValue(true),
-        rs::scriptobject::test::VectorValue("world"),
-        rs::scriptobject::test::VectorValue(42)
+    rs::scriptobject::utils::ScriptArrayVectorSource defn({
+        rs::scriptobject::utils::VectorValue(false),        
+        rs::scriptobject::utils::VectorValue(true),
+        rs::scriptobject::utils::VectorValue("world"),
+        rs::scriptobject::utils::VectorValue(42)
     });
     
     auto array = rs::scriptobject::ScriptArrayFactory::CreateArray(defn);
@@ -268,9 +268,9 @@ TEST_F(SimpleArrayTests, test8) {
 }
 
 TEST_F(SimpleArrayTests, test9) {
-    rs::scriptobject::test::ScriptArrayVectorSource defn({
-        rs::scriptobject::test::VectorValue(),
-        rs::scriptobject::test::VectorValue("world")
+    rs::scriptobject::utils::ScriptArrayVectorSource defn({
+        rs::scriptobject::utils::VectorValue(),
+        rs::scriptobject::utils::VectorValue("world")
     });
     
     auto array = rs::scriptobject::ScriptArrayFactory::CreateArray(defn);
@@ -281,9 +281,9 @@ TEST_F(SimpleArrayTests, test9) {
 }
 
 TEST_F(SimpleArrayTests, test10) {
-    rs::scriptobject::test::ScriptArrayVectorSource defn({
-        rs::scriptobject::test::VectorValue(rs::scriptobject::ScriptObjectType::MAX),
-        rs::scriptobject::test::VectorValue("world")
+    rs::scriptobject::utils::ScriptArrayVectorSource defn({
+        rs::scriptobject::utils::VectorValue(rs::scriptobject::ScriptObjectType::MAX),
+        rs::scriptobject::utils::VectorValue("world")
     });
     
     ASSERT_THROW({
@@ -292,7 +292,7 @@ TEST_F(SimpleArrayTests, test10) {
 }
 
 TEST_F(SimpleArrayTests, test11) {
-    rs::scriptobject::test::ArrayVector vect;
+    rs::scriptobject::utils::ArrayVector vect;
     rs::scriptobject::ScriptObjectType types[] = { rs::scriptobject::ScriptObjectType::String, rs::scriptobject::ScriptObjectType::Double, rs::scriptobject::ScriptObjectType::Int32 };
     
     for (int i = 0; i < 1024; ++i) {
@@ -310,7 +310,7 @@ TEST_F(SimpleArrayTests, test11) {
         }                
     }
     
-    rs::scriptobject::test::ScriptArrayVectorSource source(vect);        
+    rs::scriptobject::utils::ScriptArrayVectorSource source(vect);        
     
     auto array = rs::scriptobject::ScriptArrayFactory::CreateArray(source);
     
@@ -334,14 +334,14 @@ TEST_F(SimpleArrayTests, test11) {
 }
 
 TEST_F(SimpleArrayTests, test12) {
-    rs::scriptobject::test::ScriptArrayVectorSource childDefn({
-        rs::scriptobject::test::VectorValue("world")
+    rs::scriptobject::utils::ScriptArrayVectorSource childDefn({
+        rs::scriptobject::utils::VectorValue("world")
     });
     
     auto childArray = rs::scriptobject::ScriptArrayFactory::CreateArray(childDefn);
     
-    rs::scriptobject::test::ScriptArrayVectorSource defn({
-        rs::scriptobject::test::VectorValue(childArray)
+    rs::scriptobject::utils::ScriptArrayVectorSource defn({
+        rs::scriptobject::utils::VectorValue(childArray)
     });
     
     auto array = rs::scriptobject::ScriptArrayFactory::CreateArray(defn);
@@ -358,13 +358,13 @@ TEST_F(SimpleArrayTests, test12) {
 }
 
 TEST_F(SimpleArrayTests, test13) {
-    rs::scriptobject::test::ScriptArrayVectorSource childDefn({
-        rs::scriptobject::test::VectorValue(3.14159)
+    rs::scriptobject::utils::ScriptArrayVectorSource childDefn({
+        rs::scriptobject::utils::VectorValue(3.14159)
     });
     
     auto childArray = rs::scriptobject::ScriptArrayFactory::CreateArray(childDefn);
     
-    rs::scriptobject::test::ScriptArrayVectorSource defn({
+    rs::scriptobject::utils::ScriptArrayVectorSource defn({
         childArray
     });
     
@@ -375,13 +375,13 @@ TEST_F(SimpleArrayTests, test13) {
 }
 
 TEST_F(SimpleArrayTests, test14) {
-    rs::scriptobject::test::ScriptObjectVectorSource childDefn({
-        std::make_pair("pi", rs::scriptobject::test::VectorValue(3.14159))
+    rs::scriptobject::utils::ScriptObjectVectorSource childDefn({
+        std::make_pair("pi", rs::scriptobject::utils::VectorValue(3.14159))
     });
     
     auto childObject = rs::scriptobject::ScriptObjectFactory::CreateObject(childDefn);
     
-    rs::scriptobject::test::ScriptArrayVectorSource defn({
+    rs::scriptobject::utils::ScriptArrayVectorSource defn({
         childObject
     });
     

@@ -37,14 +37,14 @@ protected:
 };
 
 TEST_F(SimpleObjectTests, test0) {
-    rs::scriptobject::test::ScriptObjectVectorSource defn({});
+    rs::scriptobject::utils::ScriptObjectVectorSource defn({});
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
     ASSERT_EQ(0, object->getCount());
 }
 
 TEST_F(SimpleObjectTests, test1) {
-    rs::scriptobject::test::ScriptObjectVectorSource defn({
-        std::make_pair("hello", rs::scriptobject::test::VectorValue("world"))
+    rs::scriptobject::utils::ScriptObjectVectorSource defn({
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world"))
     });
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
@@ -58,9 +58,9 @@ TEST_F(SimpleObjectTests, test1) {
 }
 
 TEST_F(SimpleObjectTests, test2) {
-    rs::scriptobject::test::ScriptObjectVectorSource defn({
-        std::make_pair("hello", rs::scriptobject::test::VectorValue("world")),
-        std::make_pair("lorem", rs::scriptobject::test::VectorValue("ipsum"))
+    rs::scriptobject::utils::ScriptObjectVectorSource defn({
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),
+        std::make_pair("lorem", rs::scriptobject::utils::VectorValue("ipsum"))
     });
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
@@ -78,9 +78,9 @@ TEST_F(SimpleObjectTests, test2) {
 }
 
 TEST_F(SimpleObjectTests, test3) {
-    rs::scriptobject::test::ScriptObjectVectorSource defn({
-        std::make_pair("hello", rs::scriptobject::test::VectorValue("world")),
-        std::make_pair("pi", rs::scriptobject::test::VectorValue(3.14159))
+    rs::scriptobject::utils::ScriptObjectVectorSource defn({
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),
+        std::make_pair("pi", rs::scriptobject::utils::VectorValue(3.14159))
     });
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
@@ -98,10 +98,10 @@ TEST_F(SimpleObjectTests, test3) {
 }
 
 TEST_F(SimpleObjectTests, test4) {
-    rs::scriptobject::test::ScriptObjectVectorSource defn({
-        std::make_pair("wet", rs::scriptobject::test::VectorValue(false)),
-        std::make_pair("hello", rs::scriptobject::test::VectorValue("world")),
-        std::make_pair("sunny", rs::scriptobject::test::VectorValue(true))
+    rs::scriptobject::utils::ScriptObjectVectorSource defn({
+        std::make_pair("wet", rs::scriptobject::utils::VectorValue(false)),
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),
+        std::make_pair("sunny", rs::scriptobject::utils::VectorValue(true))
     });
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
@@ -121,11 +121,11 @@ TEST_F(SimpleObjectTests, test4) {
 }
 
 TEST_F(SimpleObjectTests, test5) {
-    rs::scriptobject::test::ScriptObjectVectorSource defn({
-        std::make_pair("wet", rs::scriptobject::test::VectorValue(false)),
-        std::make_pair("hello", rs::scriptobject::test::VectorValue("world")),
-        std::make_pair("sunny", rs::scriptobject::test::VectorValue(true)),
-        std::make_pair("the_answer", rs::scriptobject::test::VectorValue(42))
+    rs::scriptobject::utils::ScriptObjectVectorSource defn({
+        std::make_pair("wet", rs::scriptobject::utils::VectorValue(false)),
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),
+        std::make_pair("sunny", rs::scriptobject::utils::VectorValue(true)),
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42))
     });
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
@@ -149,11 +149,11 @@ TEST_F(SimpleObjectTests, test5) {
 }
 
 TEST_F(SimpleObjectTests, test6) {
-    rs::scriptobject::test::ScriptObjectVectorSource defn({
-        std::make_pair("wet", rs::scriptobject::test::VectorValue(false)),        
-        std::make_pair("sunny", rs::scriptobject::test::VectorValue(true)),
-        std::make_pair("hello", rs::scriptobject::test::VectorValue("world")),
-        std::make_pair("the_answer", rs::scriptobject::test::VectorValue(42))
+    rs::scriptobject::utils::ScriptObjectVectorSource defn({
+        std::make_pair("wet", rs::scriptobject::utils::VectorValue(false)),        
+        std::make_pair("sunny", rs::scriptobject::utils::VectorValue(true)),
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42))
     });
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
@@ -177,11 +177,11 @@ TEST_F(SimpleObjectTests, test6) {
 }
 
 TEST_F(SimpleObjectTests, test7) {
-    rs::scriptobject::test::ScriptObjectVectorSource defn({
-        std::make_pair("wet", rs::scriptobject::test::VectorValue(false)),        
-        std::make_pair("sunny", rs::scriptobject::test::VectorValue(true)),
-        std::make_pair("hello", rs::scriptobject::test::VectorValue("world")),
-        std::make_pair("the_answer", rs::scriptobject::test::VectorValue(42))
+    rs::scriptobject::utils::ScriptObjectVectorSource defn({
+        std::make_pair("wet", rs::scriptobject::utils::VectorValue(false)),        
+        std::make_pair("sunny", rs::scriptobject::utils::VectorValue(true)),
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42))
     });
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
@@ -240,11 +240,11 @@ TEST_F(SimpleObjectTests, test7) {
 }
 
 TEST_F(SimpleObjectTests, test8) {
-    rs::scriptobject::test::ScriptObjectVectorSource defn({
-        std::make_pair("wet", rs::scriptobject::test::VectorValue(false)),        
-        std::make_pair("sunny", rs::scriptobject::test::VectorValue(true)),
-        std::make_pair("hello", rs::scriptobject::test::VectorValue("world")),
-        std::make_pair("the_answer", rs::scriptobject::test::VectorValue(42))
+    rs::scriptobject::utils::ScriptObjectVectorSource defn({
+        std::make_pair("wet", rs::scriptobject::utils::VectorValue(false)),        
+        std::make_pair("sunny", rs::scriptobject::utils::VectorValue(true)),
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42))
     });
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
@@ -411,9 +411,9 @@ TEST_F(SimpleObjectTests, test8) {
 }
 
 TEST_F(SimpleObjectTests, test9) {
-    rs::scriptobject::test::ScriptObjectVectorSource defn({
-        std::make_pair("nil", rs::scriptobject::test::VectorValue()),
-        std::make_pair("hello", rs::scriptobject::test::VectorValue("world"))        
+    rs::scriptobject::utils::ScriptObjectVectorSource defn({
+        std::make_pair("nil", rs::scriptobject::utils::VectorValue()),
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world"))        
     });
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
@@ -427,9 +427,9 @@ TEST_F(SimpleObjectTests, test9) {
 }
 
 TEST_F(SimpleObjectTests, test10) {
-    rs::scriptobject::test::ScriptObjectVectorSource defn({
-        std::make_pair("bad", rs::scriptobject::test::VectorValue(rs::scriptobject::ScriptObjectType::MAX)),
-        std::make_pair("hello", rs::scriptobject::test::VectorValue("world"))        
+    rs::scriptobject::utils::ScriptObjectVectorSource defn({
+        std::make_pair("bad", rs::scriptobject::utils::VectorValue(rs::scriptobject::ScriptObjectType::MAX)),
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world"))        
     });
     
     ASSERT_THROW({
@@ -438,7 +438,7 @@ TEST_F(SimpleObjectTests, test10) {
 }
 
 TEST_F(SimpleObjectTests, test11) {
-    rs::scriptobject::test::ObjectVector vect;
+    rs::scriptobject::utils::ObjectVector vect;
     rs::scriptobject::ScriptObjectType types[] = { rs::scriptobject::ScriptObjectType::String, rs::scriptobject::ScriptObjectType::Double, rs::scriptobject::ScriptObjectType::Int32 };
     
     for (int i = 0; i < 1024; ++i) {
@@ -446,18 +446,18 @@ TEST_F(SimpleObjectTests, test11) {
         
         switch (type) {
             case rs::scriptobject::ScriptObjectType::String:
-                vect.push_back(std::make_pair(std::to_string(i), rs::scriptobject::test::VectorValue(std::to_string(i).c_str())));
+                vect.push_back(std::make_pair(std::to_string(i), rs::scriptobject::utils::VectorValue(std::to_string(i).c_str())));
                 break;
             case rs::scriptobject::ScriptObjectType::Double:
-                vect.push_back(std::make_pair(std::to_string(i), rs::scriptobject::test::VectorValue(((double)i) / 1000)));
+                vect.push_back(std::make_pair(std::to_string(i), rs::scriptobject::utils::VectorValue(((double)i) / 1000)));
                 break;
             case rs::scriptobject::ScriptObjectType::Int32:
-                vect.push_back(std::make_pair(std::to_string(i), rs::scriptobject::test::VectorValue(i)));
+                vect.push_back(std::make_pair(std::to_string(i), rs::scriptobject::utils::VectorValue(i)));
                 break;
         }
     }
     
-    rs::scriptobject::test::ScriptObjectVectorSource source(vect);        
+    rs::scriptobject::utils::ScriptObjectVectorSource source(vect);        
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(source);
     
@@ -501,13 +501,13 @@ TEST_F(SimpleObjectTests, test11) {
 }
 
 TEST_F(SimpleObjectTests, test12) {
-    rs::scriptobject::test::ScriptObjectVectorSource child({
-        std::make_pair("hello", rs::scriptobject::test::VectorValue("world"))
+    rs::scriptobject::utils::ScriptObjectVectorSource child({
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world"))
     });
     
     auto childObject = rs::scriptobject::ScriptObjectFactory::CreateObject(child);
     
-    rs::scriptobject::test::ScriptObjectVectorSource defn({
+    rs::scriptobject::utils::ScriptObjectVectorSource defn({
         std::make_pair("child", childObject)
     });
     
@@ -539,13 +539,13 @@ TEST_F(SimpleObjectTests, test12) {
 }
 
 TEST_F(SimpleObjectTests, test13) {
-    rs::scriptobject::test::ScriptArrayVectorSource arrayDefn({
-        rs::scriptobject::test::VectorValue(3.14159)
+    rs::scriptobject::utils::ScriptArrayVectorSource arrayDefn({
+        rs::scriptobject::utils::VectorValue(3.14159)
     });
     
     auto array = rs::scriptobject::ScriptArrayFactory::CreateArray(arrayDefn);
     
-    rs::scriptobject::test::ScriptObjectVectorSource defn({
+    rs::scriptobject::utils::ScriptObjectVectorSource defn({
         std::make_pair("array", array)
     });
     
@@ -558,8 +558,8 @@ TEST_F(SimpleObjectTests, test13) {
 }
 
 TEST_F(SimpleObjectTests, test14) {
-     rs::scriptobject::test::ScriptObjectVectorSource defn({
-        std::make_pair("hello", rs::scriptobject::test::VectorValue("world"))
+     rs::scriptobject::utils::ScriptObjectVectorSource defn({
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world"))
     });        
     
     rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
@@ -572,13 +572,13 @@ TEST_F(SimpleObjectTests, test14) {
 }
 
 TEST_F(SimpleObjectTests, test15) {
-     rs::scriptobject::test::ScriptObjectVectorSource defn1({
-        std::make_pair("hello", rs::scriptobject::test::VectorValue("world"))
+     rs::scriptobject::utils::ScriptObjectVectorSource defn1({
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world"))
     });        
     
-    rs::scriptobject::test::ScriptObjectVectorSource defn2({
-        std::make_pair("hello", rs::scriptobject::test::VectorValue("world")),
-        std::make_pair("lorem", rs::scriptobject::test::VectorValue("ipsum"))
+    rs::scriptobject::utils::ScriptObjectVectorSource defn2({
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),
+        std::make_pair("lorem", rs::scriptobject::utils::VectorValue("ipsum"))
     });
     
     rs::scriptobject::ScriptObjectFactory::CreateObject(defn1);
@@ -589,4 +589,239 @@ TEST_F(SimpleObjectTests, test15) {
     rs::scriptobject::ScriptObjectFactory::CreateObject(defn2);
     
     ASSERT_EQ(2, rs::scriptobject::ScriptObjectKeysCache::getCount());
+}
+
+TEST_F(SimpleObjectTests, test16) {
+    rs::scriptobject::utils::ScriptObjectVectorSource defn1({
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world"))
+    });
+    
+    rs::scriptobject::utils::ScriptObjectVectorSource defn2({
+        std::make_pair("pi", rs::scriptobject::utils::VectorValue(3.14159))
+    });
+    
+    auto object1 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn1);
+    auto object2 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn2);
+    
+    auto targetObject = rs::scriptobject::ScriptObject::merge(object1, object2);
+    
+    ASSERT_EQ(2, targetObject->getCount());
+    
+    rs::scriptobject::ScriptObjectKey key1;
+    ASSERT_TRUE(targetObject->keys->getKey("hello", key1));
+    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::String, key1.type);
+    
+    rs::scriptobject::ScriptObjectKey key2;
+    ASSERT_TRUE(targetObject->keys->getKey("pi", key2));
+    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Double, key2.type);
+}
+
+TEST_F(SimpleObjectTests, test17) {
+    rs::scriptobject::utils::ScriptObjectVectorSource defn1({
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),
+        std::make_pair("lorem", rs::scriptobject::utils::VectorValue("ipsum")),
+        std::make_pair("wet", rs::scriptobject::utils::VectorValue(false))
+    });
+    
+    rs::scriptobject::utils::ScriptObjectVectorSource defn2({
+        std::make_pair("pi", rs::scriptobject::utils::VectorValue(3.14159)),
+        std::make_pair("nil", rs::scriptobject::utils::VectorValue()),
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42))
+    });
+    
+    auto object1 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn1);
+    auto object2 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn2);
+    
+    auto targetObject = rs::scriptobject::ScriptObject::merge(object1, object2);
+    
+    ASSERT_EQ(6, targetObject->getCount());
+    
+    rs::scriptobject::ScriptObjectKey key1;
+    ASSERT_TRUE(targetObject->keys->getKey("hello", key1));
+    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::String, key1.type);
+    
+    rs::scriptobject::ScriptObjectKey key2;
+    ASSERT_TRUE(targetObject->keys->getKey("pi", key2));
+    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Double, key2.type);
+    
+    rs::scriptobject::ScriptObjectKey key3;
+    ASSERT_TRUE(targetObject->keys->getKey("nil", key3));
+    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Null, key3.type);
+    
+    rs::scriptobject::ScriptObjectKey key4;
+    ASSERT_TRUE(targetObject->keys->getKey("lorem", key4));
+    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::String, key4.type);
+    
+    rs::scriptobject::ScriptObjectKey key5;
+    ASSERT_TRUE(targetObject->keys->getKey("wet", key5));
+    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Boolean, key5.type);
+    
+    rs::scriptobject::ScriptObjectKey key6;
+    ASSERT_TRUE(targetObject->keys->getKey("the_answer", key6));
+    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Int32, key6.type);
+}
+
+TEST_F(SimpleObjectTests, test18) {
+    rs::scriptobject::utils::ScriptObjectVectorSource defn1({
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world"))
+    });    
+    
+    auto object1 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn1);
+    
+    auto targetObject = rs::scriptobject::ScriptObject::merge(object1, object1);
+    
+    ASSERT_EQ(object1.get(), targetObject.get());   
+}
+
+TEST_F(SimpleObjectTests, test19) {
+    rs::scriptobject::utils::ScriptObjectVectorSource defn1({
+        std::make_pair("pi", rs::scriptobject::utils::VectorValue(0.0f)),
+        std::make_pair("nil", rs::scriptobject::utils::VectorValue()),
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(0)),
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("")),
+        std::make_pair("lorem", rs::scriptobject::utils::VectorValue("")),
+        std::make_pair("wet", rs::scriptobject::utils::VectorValue(true))    
+    });
+    
+    rs::scriptobject::utils::ScriptObjectVectorSource defn2({
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),
+        std::make_pair("lorem", rs::scriptobject::utils::VectorValue("ipsum")),
+        std::make_pair("wet", rs::scriptobject::utils::VectorValue(false)),
+        std::make_pair("pi", rs::scriptobject::utils::VectorValue(3.14159)),
+        std::make_pair("nil", rs::scriptobject::utils::VectorValue()),
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42))
+    });
+    
+    auto object1 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn1);
+    auto object2 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn2);
+    
+    auto targetObject = rs::scriptobject::ScriptObject::merge(object1, object2);
+    
+    ASSERT_EQ(6, targetObject->getCount());
+    
+    rs::scriptobject::ScriptObjectKey key1;
+    ASSERT_TRUE(targetObject->keys->getKey("hello", key1));
+    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::String, key1.type);
+    ASSERT_STREQ("world", targetObject->getString(key1.index));
+    
+    rs::scriptobject::ScriptObjectKey key2;
+    ASSERT_TRUE(targetObject->keys->getKey("pi", key2));
+    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Double, key2.type);
+    ASSERT_FLOAT_EQ(3.14159f, targetObject->getDouble(key2.index));
+    
+    rs::scriptobject::ScriptObjectKey key3;
+    ASSERT_TRUE(targetObject->keys->getKey("nil", key3));
+    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Null, key3.type);
+    
+    rs::scriptobject::ScriptObjectKey key4;
+    ASSERT_TRUE(targetObject->keys->getKey("lorem", key4));
+    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::String, key4.type);
+    ASSERT_STREQ("ipsum", targetObject->getString(key4.index));
+    
+    rs::scriptobject::ScriptObjectKey key5;
+    ASSERT_TRUE(targetObject->keys->getKey("wet", key5));
+    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Boolean, key5.type);
+    ASSERT_FALSE(targetObject->getBoolean(key5.index));
+    
+    rs::scriptobject::ScriptObjectKey key6;
+    ASSERT_TRUE(targetObject->keys->getKey("the_answer", key6));
+    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Int32, key6.type);
+    ASSERT_EQ(42, targetObject->getInt32(key6.index));
+}
+
+TEST_F(SimpleObjectTests, test20) {
+    rs::scriptobject::utils::ScriptObjectVectorSource defn1({
+    });
+    
+    rs::scriptobject::utils::ScriptObjectVectorSource defn2({
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),
+        std::make_pair("lorem", rs::scriptobject::utils::VectorValue("ipsum")),
+        std::make_pair("wet", rs::scriptobject::utils::VectorValue(false)),
+        std::make_pair("pi", rs::scriptobject::utils::VectorValue(3.14159)),
+        std::make_pair("nil", rs::scriptobject::utils::VectorValue()),
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42))
+    });
+    
+    auto object1 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn1);
+    auto object2 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn2);
+    
+    auto targetObject = rs::scriptobject::ScriptObject::merge(object1, object2);
+    
+    ASSERT_EQ(6, targetObject->getCount());
+    
+    rs::scriptobject::ScriptObjectKey key1;
+    ASSERT_TRUE(targetObject->keys->getKey("hello", key1));
+    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::String, key1.type);
+    ASSERT_STREQ("world", targetObject->getString(key1.index));
+    
+    rs::scriptobject::ScriptObjectKey key2;
+    ASSERT_TRUE(targetObject->keys->getKey("pi", key2));
+    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Double, key2.type);
+    ASSERT_FLOAT_EQ(3.14159f, targetObject->getDouble(key2.index));
+    
+    rs::scriptobject::ScriptObjectKey key3;
+    ASSERT_TRUE(targetObject->keys->getKey("nil", key3));
+    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Null, key3.type);
+    
+    rs::scriptobject::ScriptObjectKey key4;
+    ASSERT_TRUE(targetObject->keys->getKey("lorem", key4));
+    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::String, key4.type);
+    ASSERT_STREQ("ipsum", targetObject->getString(key4.index));
+    
+    rs::scriptobject::ScriptObjectKey key5;
+    ASSERT_TRUE(targetObject->keys->getKey("wet", key5));
+    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Boolean, key5.type);
+    ASSERT_FALSE(targetObject->getBoolean(key5.index));
+    
+    rs::scriptobject::ScriptObjectKey key6;
+    ASSERT_TRUE(targetObject->keys->getKey("the_answer", key6));
+    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Int32, key6.type);
+    ASSERT_EQ(42, targetObject->getInt32(key6.index));
+}
+
+TEST_F(SimpleObjectTests, test21) {
+    rs::scriptobject::utils::ScriptObjectVectorSource child({
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world"))
+    });
+    
+    auto childObject = rs::scriptobject::ScriptObjectFactory::CreateObject(child);        
+    
+    rs::scriptobject::utils::ScriptObjectVectorSource defn1({
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),
+        std::make_pair("child", childObject)
+    });
+    
+    rs::scriptobject::utils::ScriptArrayVectorSource arrayDefn({
+        rs::scriptobject::utils::VectorValue(3.14159)
+    });
+    
+    auto array = rs::scriptobject::ScriptArrayFactory::CreateArray(arrayDefn);
+    
+    rs::scriptobject::utils::ScriptObjectVectorSource defn2({
+        std::make_pair("pi", rs::scriptobject::utils::VectorValue(3.14159)),
+        std::make_pair("array", array)
+    });
+    
+    auto object1 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn1);
+    auto object2 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn2);
+    
+    auto targetObject = rs::scriptobject::ScriptObject::merge(object1, object2);
+    
+    ASSERT_EQ(4, targetObject->getCount());
+    
+    rs::scriptobject::ScriptObjectKey key1;
+    ASSERT_TRUE(targetObject->keys->getKey("hello", key1));
+    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::String, key1.type);
+    
+    rs::scriptobject::ScriptObjectKey key2;
+    ASSERT_TRUE(targetObject->keys->getKey("pi", key2));
+    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Double, key2.type);
+    
+    rs::scriptobject::ScriptObjectKey key3;
+    ASSERT_TRUE(targetObject->keys->getKey("child", key3));
+    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Object, key3.type);
+    
+    rs::scriptobject::ScriptObjectKey key4;
+    ASSERT_TRUE(targetObject->keys->getKey("array", key4));
+    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Array, key4.type);
 }

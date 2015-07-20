@@ -20,7 +20,7 @@
 #include <cstring>
 #include <algorithm>
 
-rs::scriptobject::test::VectorValue::VectorValue(const VectorValue& other) : type_(other.type_) {
+rs::scriptobject::utils::VectorValue::VectorValue(const VectorValue& other) : type_(other.type_) {
     switch (type_) {
         case rs::scriptobject::ScriptObjectType::String:
             value_.s_ = CopyString(other.value_.s_);
@@ -37,51 +37,51 @@ rs::scriptobject::test::VectorValue::VectorValue(const VectorValue& other) : typ
     }
 }
 
-rs::scriptobject::test::VectorValue::VectorValue(VectorValue&& other) {
+rs::scriptobject::utils::VectorValue::VectorValue(VectorValue&& other) {
     type_ = other.type_;
     value_ = other.value_;
     other.type_ = rs::scriptobject::ScriptObjectType::Null;
 }
 
-rs::scriptobject::test::VectorValue::VectorValue() :
+rs::scriptobject::utils::VectorValue::VectorValue() :
     type_(rs::scriptobject::ScriptObjectType::Null) {
 }
 
-rs::scriptobject::test::VectorValue::VectorValue(rs::scriptobject::ScriptObjectType type) :
+rs::scriptobject::utils::VectorValue::VectorValue(rs::scriptobject::ScriptObjectType type) :
     type_(type) {
 }
 
-rs::scriptobject::test::VectorValue::VectorValue(double value) :
+rs::scriptobject::utils::VectorValue::VectorValue(double value) :
     type_(rs::scriptobject::ScriptObjectType::Double) {
     value_.d_ = value;
     }
 
-rs::scriptobject::test::VectorValue::VectorValue(std::int32_t value) :
+rs::scriptobject::utils::VectorValue::VectorValue(std::int32_t value) :
     type_(rs::scriptobject::ScriptObjectType::Int32) {
     value_.i_ = value;
 }
 
-rs::scriptobject::test::VectorValue::VectorValue(bool value) :
+rs::scriptobject::utils::VectorValue::VectorValue(bool value) :
     type_(rs::scriptobject::ScriptObjectType::Boolean) {
     value_.b_ = value;
 }
     
-rs::scriptobject::test::VectorValue::VectorValue(const char* value) :
+rs::scriptobject::utils::VectorValue::VectorValue(const char* value) :
     type_(rs::scriptobject::ScriptObjectType::String) {
     value_.s_ = CopyString(value);
 }
 
-rs::scriptobject::test::VectorValue::VectorValue(const ScriptObjectPtr value) :
+rs::scriptobject::utils::VectorValue::VectorValue(const ScriptObjectPtr value) :
     type_(rs::scriptobject::ScriptObjectType::Object) {
     value_.obj_ = new ScriptObjectPtr(value);
 }
 
-rs::scriptobject::test::VectorValue::VectorValue(const ScriptArrayPtr value) :
+rs::scriptobject::utils::VectorValue::VectorValue(const ScriptArrayPtr value) :
     type_(rs::scriptobject::ScriptObjectType::Array) {
     value_.arr_ = new ScriptArrayPtr(value);
 }
 
-rs::scriptobject::test::VectorValue::~VectorValue() {
+rs::scriptobject::utils::VectorValue::~VectorValue() {
     switch (type_) {
         case rs::scriptobject::ScriptObjectType::String:
             delete[] value_.s_;
@@ -95,35 +95,35 @@ rs::scriptobject::test::VectorValue::~VectorValue() {
     }
 }
 
-rs::scriptobject::ScriptObjectType rs::scriptobject::test::VectorValue::getType() const {
+rs::scriptobject::ScriptObjectType rs::scriptobject::utils::VectorValue::getType() const {
     return type_;
 }
 
-double rs::scriptobject::test::VectorValue::getDouble() const {
+double rs::scriptobject::utils::VectorValue::getDouble() const {
     return value_.d_;
 }
 
-std::int32_t rs::scriptobject::test::VectorValue::getInt32() const {
+std::int32_t rs::scriptobject::utils::VectorValue::getInt32() const {
     return value_.i_;
 }
 
-bool rs::scriptobject::test::VectorValue::getBoolean() const {
+bool rs::scriptobject::utils::VectorValue::getBoolean() const {
     return value_.b_;
 }
 
-const char* rs::scriptobject::test::VectorValue::getString() const {
+const char* rs::scriptobject::utils::VectorValue::getString() const {
     return value_.s_;
 }
 
-const rs::scriptobject::ScriptObjectPtr rs::scriptobject::test::VectorValue::getObject() const {
+const rs::scriptobject::ScriptObjectPtr rs::scriptobject::utils::VectorValue::getObject() const {
     return *value_.obj_;
 }
 
-const rs::scriptobject::ScriptArrayPtr rs::scriptobject::test::VectorValue::getArray() const {
+const rs::scriptobject::ScriptArrayPtr rs::scriptobject::utils::VectorValue::getArray() const {
     return *value_.arr_;
 }
 
-char* rs::scriptobject::test::VectorValue::CopyString(const char* source) {
+char* rs::scriptobject::utils::VectorValue::CopyString(const char* source) {
     auto length = ::strlen(source);
     auto value = new char[length + 1];
     std::copy_n(source, length, value);
@@ -131,49 +131,49 @@ char* rs::scriptobject::test::VectorValue::CopyString(const char* source) {
     return value;
 }
 
-rs::scriptobject::test::ScriptObjectVectorSource::ScriptObjectVectorSource(const ObjectVector& source) : source_(source) {
+rs::scriptobject::utils::ScriptObjectVectorSource::ScriptObjectVectorSource(const ObjectVector& source) : source_(source) {
 }
     
-unsigned rs::scriptobject::test::ScriptObjectVectorSource::count() const { 
+unsigned rs::scriptobject::utils::ScriptObjectVectorSource::count() const { 
     return source_.size(); 
 }
 
-const char* rs::scriptobject::test::ScriptObjectVectorSource::name(int index) const { 
+const char* rs::scriptobject::utils::ScriptObjectVectorSource::name(int index) const { 
     return std::get<0>(source_[index]).c_str(); 
 }
 
-unsigned rs::scriptobject::test::ScriptObjectVectorSource::length(int index) const { 
+unsigned rs::scriptobject::utils::ScriptObjectVectorSource::length(int index) const { 
     return std::get<0>(source_[index]).length(); 
 }
 
-rs::scriptobject::ScriptObjectType rs::scriptobject::test::ScriptObjectVectorSource::type(int index) const { 
+rs::scriptobject::ScriptObjectType rs::scriptobject::utils::ScriptObjectVectorSource::type(int index) const { 
     return std::get<1>(source_[index]).getType(); 
 }
 
-bool rs::scriptobject::test::ScriptObjectVectorSource::getBoolean(int index) const { 
+bool rs::scriptobject::utils::ScriptObjectVectorSource::getBoolean(int index) const { 
     return std::get<1>(source_[index]).getBoolean(); 
 }
 
-int32_t rs::scriptobject::test::ScriptObjectVectorSource::getInt32(int index) const { 
+int32_t rs::scriptobject::utils::ScriptObjectVectorSource::getInt32(int index) const { 
     return std::get<1>(source_[index]).getInt32(); 
 }
 
-double rs::scriptobject::test::ScriptObjectVectorSource::getDouble(int index) const { 
+double rs::scriptobject::utils::ScriptObjectVectorSource::getDouble(int index) const { 
     return std::get<1>(source_[index]).getDouble(); 
 }
 
-const char* rs::scriptobject::test::ScriptObjectVectorSource::getString(int index) const { 
+const char* rs::scriptobject::utils::ScriptObjectVectorSource::getString(int index) const { 
     return std::get<1>(source_[index]).getString(); 
 }
 
-int rs::scriptobject::test::ScriptObjectVectorSource::getStringLength(int index) const { 
+int rs::scriptobject::utils::ScriptObjectVectorSource::getStringLength(int index) const { 
     return ::strlen(getString(index));
 }
 
-const rs::scriptobject::ScriptObjectPtr rs::scriptobject::test::ScriptObjectVectorSource::getObject(int index) const { 
+const rs::scriptobject::ScriptObjectPtr rs::scriptobject::utils::ScriptObjectVectorSource::getObject(int index) const { 
     return std::get<1>(source_[index]).getObject();
 }
 
-const rs::scriptobject::ScriptArrayPtr rs::scriptobject::test::ScriptObjectVectorSource::getArray(int index) const {
+const rs::scriptobject::ScriptArrayPtr rs::scriptobject::utils::ScriptObjectVectorSource::getArray(int index) const {
     return std::get<1>(source_[index]).getArray();
 }

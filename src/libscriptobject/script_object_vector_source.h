@@ -25,9 +25,9 @@
 
 namespace rs {
 namespace scriptobject {
-namespace test {
+namespace utils {
 
-class VectorValue {
+class VectorValue final {
 public: 
     VectorValue();
     VectorValue(const VectorValue& other);    
@@ -65,7 +65,7 @@ private:
     
 typedef std::vector<std::pair<std::string, VectorValue>> ObjectVector;
 
-class ScriptObjectVectorSource : public rs::scriptobject::ScriptObjectSource {
+class ScriptObjectVectorSource final : public rs::scriptobject::ScriptObjectSource {
 public:
     ScriptObjectVectorSource(const ObjectVector& source);
     

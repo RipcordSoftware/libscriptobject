@@ -57,6 +57,8 @@ struct ScriptObject {
     const ScriptArrayPtr getArray(int index) const;
     const ScriptArrayPtr getArray(const char* name) const;
     
+    static const ScriptObjectPtr merge(const ScriptObjectPtr, const ScriptObjectPtr);
+    
 private:
     static unsigned CalculateSize(const ScriptObjectSource& source);
     const unsigned char* getValueStart() const;

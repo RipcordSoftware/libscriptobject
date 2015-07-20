@@ -19,6 +19,10 @@
 
 #include "exceptions.h"
 #include "script_object_source.h"
+#include "script_object_vector_source.h"
+#include "script_object_factory.h"
+
+#include <cstring>
 
 void rs::scriptobject::ScriptObject::ScriptObjectDeleter(ScriptObject* ptr) {
     // destroy all child object/array references
@@ -289,4 +293,87 @@ const rs::scriptobject::ScriptArrayPtr rs::scriptobject::ScriptObject::getArray(
     
     auto ptr = reinterpret_cast<const ScriptArrayPtr*>(getValueStart() + valueOffsets[key.index]);
     return *ptr;
+}
+
+static void appendValue(rs::scriptobject::utils::ObjectVector& objVector, const rs::scriptobject::ScriptObjectPtr obj, const char* name, int index) {    
+    auto type = obj->getType(index);
+    switch (type) {
+        case rs::scriptobject::ScriptObjectType::Array: {
+            rs::scriptobject::utils::VectorValue v{obj->getArray(index)};
+            objVector.push_back(std::make_pair(name, v));
+            break;
+        }
+        case rs::scriptobject::ScriptObjectType::Boolean: {
+            rs::scriptobject::utils::VectorValue v{obj->getBoolean(index)};
+            objVector.push_back(std::make_pair(name, v));
+            break;
+        }
+        case rs::scriptobject::ScriptObjectType::Double: {
+            rs::scriptobject::utils::VectorValue v{obj->getDouble(index)};
+            objVector.push_back(std::make_pair(name, v));
+            break;
+        }
+        case rs::scriptobject::ScriptObjectType::Int32: {
+            rs::scriptobject::utils::VectorValue v{obj->getInt32(index)};
+            objVector.push_back(std::make_pair(name, v));
+            break;
+        }
+        case rs::scriptobject::ScriptObjectType::Null: {
+            rs::scriptobject::utils::VectorValue v{rs::scriptobject::ScriptObjectType::Null};
+            objVector.push_back(std::make_pair(name, v));
+            break;
+        }
+        case rs::scriptobject::ScriptObjectType::Object: {
+            rs::scriptobject::utils::VectorValue v{obj->getObject(index)};
+            objVector.push_back(std::make_pair(name, v));
+            break;
+        }
+        case rs::scriptobject::ScriptObjectType::String: {
+            rs::scriptobject::utils::VectorValue v{obj->getString(index)};
+            objVector.push_back(std::make_pair(name, v));
+            break;
+        }
+    }
+}
+
+const rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptObject::merge(const ScriptObjectPtr left, const ScriptObjectPtr right) {
+    if (left.get() == right.get()) {
+        return left;
+    } else {
+        utils::ObjectVector mergedObject;
+        
+        auto l = 0, r = 0;
+        auto lMax = left->getCount();
+        auto rMax = right->getCount();
+        while (l < lMax && r < rMax) {
+            auto leftName = left->getName(~l);
+            auto rightName = right->getName(~r);
+            auto diff = std::strcmp(leftName, rightName);
+            
+            if (diff < 0) {
+                appendValue(mergedObject, left, leftName, ~l);
+                ++l;
+            } else if (diff > 0) {
+                appendValue(mergedObject, right, rightName, ~r);
+                ++r;
+            } else {
+                appendValue(mergedObject, right, rightName, ~r);
+                ++l;
+                ++r;
+            }            
+        }
+        
+        for (; l < lMax; ++l) {
+            auto name = left->getName(~l);
+            appendValue(mergedObject, left, name, ~l);
+        }
+        
+        for (; r < rMax; ++r) {
+            auto name = right->getName(~r);
+            appendValue(mergedObject, right, name, ~r);
+        }
+        
+        utils::ScriptObjectVectorSource mergedSource{mergedObject};
+        return ScriptObjectFactory::CreateObject(mergedSource);        
+    }
 }

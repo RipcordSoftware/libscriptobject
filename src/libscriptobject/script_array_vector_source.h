@@ -25,11 +25,11 @@
 
 namespace rs {
 namespace scriptobject {
-namespace test {
+namespace utils {
     
 typedef std::vector<VectorValue> ArrayVector;
 
-class ScriptArrayVectorSource : public ScriptArraySource {
+class ScriptArrayVectorSource final : public ScriptArraySource {
 public:
     ScriptArrayVectorSource(const ArrayVector&);
     
