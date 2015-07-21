@@ -336,44 +336,84 @@ static void appendValue(rs::scriptobject::utils::ObjectVector& objVector, const 
     }
 }
 
-const rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptObject::merge(const ScriptObjectPtr left, const ScriptObjectPtr right) {
+rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptObject::merge(const ScriptObjectPtr left, const ScriptObjectPtr right, MergeStrategy strategy) {
     if (left.get() == right.get()) {
         return left;
     } else {
-        utils::ObjectVector mergedObject;
-        
-        auto l = 0, r = 0;
-        auto lMax = left->getCount();
-        auto rMax = right->getCount();
-        while (l < lMax && r < rMax) {
-            auto leftName = left->getName(~l);
-            auto rightName = right->getName(~r);
-            auto diff = std::strcmp(leftName, rightName);
-            
-            if (diff < 0) {
-                appendValue(mergedObject, left, leftName, ~l);
-                ++l;
-            } else if (diff > 0) {
-                appendValue(mergedObject, right, rightName, ~r);
-                ++r;
-            } else {
-                appendValue(mergedObject, right, rightName, ~r);
-                ++l;
-                ++r;
-            }            
+        switch (strategy) {
+            case MergeStrategy::Fast: return mergeFast(left, right);
+            default: return mergePosition(left, right, strategy);
         }
-        
-        for (; l < lMax; ++l) {
-            auto name = left->getName(~l);
-            appendValue(mergedObject, left, name, ~l);
-        }
-        
-        for (; r < rMax; ++r) {
-            auto name = right->getName(~r);
-            appendValue(mergedObject, right, name, ~r);
-        }
-        
-        utils::ScriptObjectVectorSource mergedSource{mergedObject};
-        return ScriptObjectFactory::CreateObject(mergedSource);        
     }
+}
+
+rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptObject::mergeFast(const ScriptObjectPtr left, const ScriptObjectPtr right) {
+    utils::ObjectVector mergedObject;
+
+    auto l = 0, r = 0;
+    auto lMax = left->getCount();
+    auto rMax = right->getCount();
+    while (l < lMax && r < rMax) {
+        auto leftName = left->getName(~l);
+        auto rightName = right->getName(~r);
+        auto diff = std::strcmp(leftName, rightName);
+
+        if (diff < 0) {
+            appendValue(mergedObject, left, leftName, ~l);
+            ++l;
+        } else if (diff > 0) {
+            appendValue(mergedObject, right, rightName, ~r);
+            ++r;
+        } else {
+            appendValue(mergedObject, right, rightName, ~r);
+            ++l;
+            ++r;
+        }
+    }
+
+    for (; l < lMax; ++l) {
+        auto name = left->getName(~l);
+        appendValue(mergedObject, left, name, ~l);
+    }
+
+    for (; r < rMax; ++r) {
+        auto name = right->getName(~r);
+        appendValue(mergedObject, right, name, ~r);
+    }
+
+    utils::ScriptObjectVectorSource mergedSource{mergedObject};
+    return ScriptObjectFactory::CreateObject(mergedSource);
+}
+
+rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptObject::mergePosition(const ScriptObjectPtr left, const ScriptObjectPtr right, MergeStrategy strategy) {
+    utils::ObjectVector mergedObject;
+
+    const auto leftCount = left->getCount();
+    const auto rightCount = right->getCount();
+
+    if (strategy == MergeStrategy::Front) {
+        for (int i = 0; i < rightCount; ++i) {
+            auto name = right->getName(i);
+            appendValue(mergedObject, right, name, i);
+        }
+    }
+
+    for (int i = 0; i < leftCount; ++i) {
+        auto name = left->getName(i);
+
+        ScriptObjectKey key;
+        if (!right->keys->getKey(name, key)) {
+            appendValue(mergedObject, left, name, i);
+        }
+    }
+
+    if (strategy == MergeStrategy::Back) {
+        for (int i = 0; i < rightCount; ++i) {
+            auto name = right->getName(i);
+            appendValue(mergedObject, right, name, i);
+        }        
+    }
+
+    utils::ScriptObjectVectorSource mergedSource{mergedObject};
+    return ScriptObjectFactory::CreateObject(mergedSource);
 }

@@ -57,12 +57,21 @@ struct ScriptObject {
     const ScriptArrayPtr getArray(int index) const;
     const ScriptArrayPtr getArray(const char* name) const;
     
-    static const ScriptObjectPtr merge(const ScriptObjectPtr, const ScriptObjectPtr);
+    enum class MergeStrategy : unsigned {
+        Fast = 0,
+        Front = 1,
+        Back = 2
+    };
+
+    static ScriptObjectPtr merge(const ScriptObjectPtr, const ScriptObjectPtr, MergeStrategy = MergeStrategy::Fast);
     
 private:
     static unsigned CalculateSize(const ScriptObjectSource& source);
     const unsigned char* getValueStart() const;
     static unsigned char* getValueStart(ScriptObject&);
+    
+    static ScriptObjectPtr mergeFast(const ScriptObjectPtr, const ScriptObjectPtr);
+    static ScriptObjectPtr mergePosition(const ScriptObjectPtr, const ScriptObjectPtr, MergeStrategy);
     
     static void ScriptObjectDeleter(ScriptObject* ptr);
     
