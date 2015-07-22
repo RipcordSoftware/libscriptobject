@@ -204,6 +204,40 @@ const char* rs::scriptobject::ScriptObject::getString(const char* name) const {
     return str;
 }
 
+bool rs::scriptobject::ScriptObject::setString(int index, const char* value) {
+    ScriptObjectKey key;
+    if (!keys->getKey(index, key)) {
+        throw UnknownScriptObjectFieldException();
+    }
+    
+    return setString(key, value);
+}
+
+bool rs::scriptobject::ScriptObject::setString(const char* name, const char* value) {
+    ScriptObjectKey key;
+    if (!keys->getKey(name, key)) {
+        throw UnknownScriptObjectFieldException();
+    }
+    
+    return setString(key, value);
+}
+
+bool rs::scriptobject::ScriptObject::setString(const ScriptObjectKey& key, const char* value) {
+    if (key.type != (unsigned)ScriptObjectType::String) {
+        throw TypeCastException();
+    }
+    
+    auto fieldLength = getStringFieldLength(key);
+    if (std::strlen(value) + 1 > fieldLength) {
+        return false;
+    } else {                        
+        auto str = const_cast<char*>(reinterpret_cast<const char*>(getValueStart()));
+        str += valueOffsets[key.index];
+        std::strcpy(str, value);
+        return true;
+    }
+}
+
 double rs::scriptobject::ScriptObject::getDouble(int index) const {
     ScriptObjectKey key;
     if (!keys->getKey(index, key)) {

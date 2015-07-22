@@ -1219,3 +1219,33 @@ TEST_F(SimpleObjectTests, test34) {
         object->getStringFieldLength("xyz");
     }, rs::scriptobject::UnknownScriptObjectFieldException);
 }
+
+TEST_F(SimpleObjectTests, test35) {
+    rs::scriptobject::utils::ScriptObjectVectorSource defn({
+        std::make_pair("pi", rs::scriptobject::utils::VectorValue(3.14159)),
+        std::make_pair("text", rs::scriptobject::utils::VectorValue("lorem ipsum")),
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42))
+    });
+    
+    auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
+    
+    ASSERT_TRUE(object->setString(1, "hello world"));
+    ASSERT_STREQ("hello world", object->getString(1));
+    
+    ASSERT_FALSE(object->setString(1, "hello world from mars"));
+    ASSERT_STREQ("hello world", object->getString(1));
+    
+    ASSERT_TRUE(object->setString("text", "welcome"));
+    ASSERT_STREQ("welcome", object->getString("text"));
+    
+    ASSERT_FALSE(object->setString("text", "hello world from mars"));
+    ASSERT_STREQ("welcome", object->getString("text"));
+    
+    ASSERT_THROW({
+        object->setString("the_answer", "once more into the ....");
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
+        object->setString("xyz", "the bomb");
+    }, rs::scriptobject::UnknownScriptObjectFieldException);
+}

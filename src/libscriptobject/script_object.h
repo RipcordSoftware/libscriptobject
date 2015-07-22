@@ -49,6 +49,8 @@ struct ScriptObject {
     
     const char* getString(int index) const;
     const char* getString(const char* name) const;
+    bool setString(int index, const char* value);
+    bool setString(const char* name, const char* value);
     
     std::int32_t getInt32(int index) const;
     std::int32_t getInt32(const char* name) const;
@@ -85,6 +87,8 @@ private:
     static ScriptObjectPtr mergePosition(const ScriptObjectPtr, const ScriptObjectPtr, MergeStrategy);
     
     unsigned getStringFieldLength(const ScriptObjectKey&) const;
+    
+    bool setString(const ScriptObjectKey&, const char*);
     
     static void ScriptObjectDeleter(ScriptObject* ptr);
     
