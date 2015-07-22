@@ -1105,3 +1105,117 @@ TEST_F(SimpleObjectTests, test27) {
     ASSERT_EQ(42, targetObject->getInt32(key6.index));
     ASSERT_EQ(5, key6.index);
 }
+
+TEST_F(SimpleObjectTests, test28) {
+    rs::scriptobject::utils::ScriptObjectVectorSource defn({
+        std::make_pair("abc", rs::scriptobject::utils::VectorValue("xyz")),
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),
+        std::make_pair("text", rs::scriptobject::utils::VectorValue("lorem ipsum"))        
+    });
+    
+    auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
+    
+    ASSERT_EQ(4, object->getStringFieldLength(0));
+    ASSERT_EQ(6, object->getStringFieldLength(1));
+    ASSERT_EQ(12, object->getStringFieldLength(2));
+}
+
+TEST_F(SimpleObjectTests, test29) {
+    rs::scriptobject::utils::ScriptObjectVectorSource defn({        
+        std::make_pair("text", rs::scriptobject::utils::VectorValue("lorem ipsum")),
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),        
+        std::make_pair("abc", rs::scriptobject::utils::VectorValue("xyz"))
+    });
+    
+    auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
+    
+    ASSERT_EQ(12, object->getStringFieldLength(0));
+    ASSERT_EQ(6, object->getStringFieldLength(1));
+    ASSERT_EQ(4, object->getStringFieldLength(2));
+}
+
+TEST_F(SimpleObjectTests, test30) {
+    rs::scriptobject::utils::ScriptObjectVectorSource defn({        
+        std::make_pair("wet", rs::scriptobject::utils::VectorValue(true)),
+        std::make_pair("text", rs::scriptobject::utils::VectorValue("lorem ipsum")),
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42)),
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),        
+        std::make_pair("pi", rs::scriptobject::utils::VectorValue(3.14159)),
+        std::make_pair("abc", rs::scriptobject::utils::VectorValue("xyz"))
+    });
+    
+    auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
+    
+    ASSERT_EQ(12, object->getStringFieldLength(1));
+    ASSERT_EQ(6, object->getStringFieldLength(3));
+    ASSERT_EQ(4, object->getStringFieldLength(5));
+}
+
+TEST_F(SimpleObjectTests, test31) {
+    rs::scriptobject::utils::ScriptObjectVectorSource defn({
+        std::make_pair("abc", rs::scriptobject::utils::VectorValue("xyz")),
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42))
+    });
+    
+    auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
+    
+    ASSERT_EQ(4, object->getStringFieldLength(0));
+    
+    ASSERT_THROW({
+        object->getStringFieldLength(1);
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
+        object->getStringFieldLength(10);
+    }, rs::scriptobject::UnknownScriptObjectFieldException);
+}
+
+TEST_F(SimpleObjectTests, test32) {
+    rs::scriptobject::utils::ScriptObjectVectorSource defn({
+        std::make_pair("abc", rs::scriptobject::utils::VectorValue("xyz")),
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),
+        std::make_pair("text", rs::scriptobject::utils::VectorValue("lorem ipsum"))        
+    });
+    
+    auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
+    
+    ASSERT_EQ(4, object->getStringFieldLength("abc"));
+    ASSERT_EQ(6, object->getStringFieldLength("hello"));
+    ASSERT_EQ(12, object->getStringFieldLength("text"));
+}
+
+TEST_F(SimpleObjectTests, test33) {
+    rs::scriptobject::utils::ScriptObjectVectorSource defn({        
+        std::make_pair("wet", rs::scriptobject::utils::VectorValue(true)),
+        std::make_pair("text", rs::scriptobject::utils::VectorValue("lorem ipsum")),
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42)),
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),        
+        std::make_pair("pi", rs::scriptobject::utils::VectorValue(3.14159)),
+        std::make_pair("abc", rs::scriptobject::utils::VectorValue("xyz"))
+    });
+    
+    auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
+    
+    ASSERT_EQ(4, object->getStringFieldLength("abc"));
+    ASSERT_EQ(6, object->getStringFieldLength("hello"));
+    ASSERT_EQ(12, object->getStringFieldLength("text"));
+}
+
+TEST_F(SimpleObjectTests, test34) {
+    rs::scriptobject::utils::ScriptObjectVectorSource defn({
+        std::make_pair("abc", rs::scriptobject::utils::VectorValue("xyz")),
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42))
+    });
+    
+    auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
+    
+    ASSERT_EQ(4, object->getStringFieldLength(0));
+    
+    ASSERT_THROW({
+        object->getStringFieldLength("the_answer");
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
+        object->getStringFieldLength("xyz");
+    }, rs::scriptobject::UnknownScriptObjectFieldException);
+}

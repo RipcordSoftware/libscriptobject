@@ -41,21 +41,32 @@ struct ScriptObject {
     unsigned valueOffsets[];
 
     unsigned getCount() const;
+    
     ScriptObjectType getType(int index) const;
     ScriptObjectType getType(const char* name) const;
+    
     const char* getName(int index) const;
+    
     const char* getString(int index) const;
     const char* getString(const char* name) const;
+    
     std::int32_t getInt32(int index) const;
     std::int32_t getInt32(const char* name) const;
+    
     double getDouble(int index) const;
     double getDouble(const char* name) const;
+    
     bool getBoolean(int index) const;
     bool getBoolean(const char* name) const;
+    
     const ScriptObjectPtr getObject(int index) const;
     const ScriptObjectPtr getObject(const char* name) const;
+    
     const ScriptArrayPtr getArray(int index) const;
     const ScriptArrayPtr getArray(const char* name) const;
+    
+    unsigned getStringFieldLength(int index) const;
+    unsigned getStringFieldLength(const char* name) const;
     
     enum class MergeStrategy : unsigned {
         Fast = 0,
@@ -72,6 +83,8 @@ private:
     
     static ScriptObjectPtr mergeFast(const ScriptObjectPtr, const ScriptObjectPtr);
     static ScriptObjectPtr mergePosition(const ScriptObjectPtr, const ScriptObjectPtr, MergeStrategy);
+    
+    unsigned getStringFieldLength(const ScriptObjectKey&) const;
     
     static void ScriptObjectDeleter(ScriptObject* ptr);
     

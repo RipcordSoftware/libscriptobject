@@ -101,6 +101,53 @@ unsigned rs::scriptobject::ScriptObject::CalculateSize(const ScriptObjectSource&
     return size;
 }
 
+unsigned rs::scriptobject::ScriptObject::getStringFieldLength(const char* name) const {
+    ScriptObjectKey key;
+    if (!keys->getKey(name, key)) {
+        throw UnknownScriptObjectFieldException();
+    }
+    
+    return getStringFieldLength(key);
+}
+
+unsigned rs::scriptobject::ScriptObject::getStringFieldLength(int index) const {
+    ScriptObjectKey key;
+    if (!keys->getKey(index, key)) {
+        throw UnknownScriptObjectFieldException();
+    }
+    
+    return getStringFieldLength(key);
+}
+
+unsigned rs::scriptobject::ScriptObject::getStringFieldLength(const ScriptObjectKey& key) const {
+    if (key.type != (unsigned)ScriptObjectType::String) {
+        throw TypeCastException();
+    }
+    
+    unsigned nextIndex = key.index;    
+    for (int i = key.index - 1; i >= 0; --i) {
+        ScriptObjectKey nextKey;
+        if (keys->getKey(i, nextKey) && nextKey.type == (unsigned)ScriptObjectType::String) {
+            nextIndex = nextKey.index;
+            break;
+        }
+    }
+
+    unsigned length = 0;
+    if (nextIndex < key.index) {
+        length = valueOffsets[nextIndex] - valueOffsets[key.index];
+    } else {
+        auto end = reinterpret_cast<const unsigned char*>(this) + size;
+        
+        auto start = reinterpret_cast<const unsigned char*>(getValueStart());
+        start += valueOffsets[key.index];
+        
+        length = end - start;
+    }
+    
+    return length;
+}
+
 unsigned rs::scriptobject::ScriptObject::getCount() const { 
     return keys->count; 
 }

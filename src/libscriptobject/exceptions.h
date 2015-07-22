@@ -54,7 +54,7 @@ public:
 class UnknownScriptArrayIndexException : public ScriptObjectException {
 public:
     virtual const char* what() const noexcept override {
-        return "Unknown ScriptObject field index";
+        return "Unknown ScriptArray index";
     }
 };
     
