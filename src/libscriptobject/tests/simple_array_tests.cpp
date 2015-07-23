@@ -544,3 +544,122 @@ TEST_F(SimpleArrayTests, test22) {
     
     ASSERT_TRUE(rs::scriptobject::CompareScriptObjectHash(digest1, digest2) == 0);
 }
+
+TEST_F(SimpleArrayTests, test23) {
+    rs::scriptobject::utils::ScriptObjectVectorSource child({
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),
+        std::make_pair("lorem", rs::scriptobject::utils::VectorValue("ipsum"))
+    });
+    
+    auto childObject = rs::scriptobject::ScriptObjectFactory::CreateObject(child);
+    
+    rs::scriptobject::utils::ScriptArrayVectorSource defn1({
+        rs::scriptobject::utils::VectorValue(childObject)
+    });
+    
+    rs::scriptobject::utils::ScriptArrayVectorSource defn2({
+        rs::scriptobject::utils::VectorValue(childObject)
+    });
+    
+    auto array1 = rs::scriptobject::ScriptArrayFactory::CreateArray(defn1);    
+    rs::scriptobject::ScriptObjectHash digest1;
+    array1->CalculateHash(digest1);
+    
+    auto array2 = rs::scriptobject::ScriptArrayFactory::CreateArray(defn2);
+    rs::scriptobject::ScriptObjectHash digest2;
+    array2->CalculateHash(digest2);
+    
+    ASSERT_TRUE(rs::scriptobject::CompareScriptObjectHash(digest1, digest2) == 0);
+}
+
+TEST_F(SimpleArrayTests, test24) {
+    rs::scriptobject::utils::ScriptObjectVectorSource child1({
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),
+        std::make_pair("lorem", rs::scriptobject::utils::VectorValue("ipsum"))
+    });
+    
+    auto childObject1 = rs::scriptobject::ScriptObjectFactory::CreateObject(child1);
+    
+    rs::scriptobject::utils::ScriptObjectVectorSource child2({
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),
+        std::make_pair("lorem", rs::scriptobject::utils::VectorValue("ipsum!!"))
+    });
+    
+    auto childObject2 = rs::scriptobject::ScriptObjectFactory::CreateObject(child2);
+    
+    rs::scriptobject::utils::ScriptArrayVectorSource defn1({
+        rs::scriptobject::utils::VectorValue(childObject1)
+    });
+    
+    rs::scriptobject::utils::ScriptArrayVectorSource defn2({
+        rs::scriptobject::utils::VectorValue(childObject2)
+    });
+    
+    auto array1 = rs::scriptobject::ScriptArrayFactory::CreateArray(defn1);    
+    rs::scriptobject::ScriptObjectHash digest1;
+    array1->CalculateHash(digest1);
+    
+    auto array2 = rs::scriptobject::ScriptArrayFactory::CreateArray(defn2);
+    rs::scriptobject::ScriptObjectHash digest2;
+    array2->CalculateHash(digest2);
+    
+    ASSERT_TRUE(rs::scriptobject::CompareScriptObjectHash(digest1, digest2) != 0);
+}
+
+TEST_F(SimpleArrayTests, test25) {
+    rs::scriptobject::utils::ScriptArrayVectorSource child({
+        rs::scriptobject::utils::VectorValue("world")
+    });
+    
+    auto childArray = rs::scriptobject::ScriptArrayFactory::CreateArray(child);
+        
+    rs::scriptobject::utils::ScriptArrayVectorSource defn1({
+        rs::scriptobject::utils::VectorValue(childArray)
+    });
+    
+    rs::scriptobject::utils::ScriptArrayVectorSource defn2({
+        rs::scriptobject::utils::VectorValue(childArray)
+    });
+    
+    auto array1 = rs::scriptobject::ScriptArrayFactory::CreateArray(defn1);    
+    rs::scriptobject::ScriptObjectHash digest1;
+    array1->CalculateHash(digest1);
+    
+    auto array2 = rs::scriptobject::ScriptArrayFactory::CreateArray(defn2);
+    rs::scriptobject::ScriptObjectHash digest2;
+    array2->CalculateHash(digest2);
+    
+    ASSERT_TRUE(rs::scriptobject::CompareScriptObjectHash(digest1, digest2) == 0);
+}
+
+TEST_F(SimpleArrayTests, test26) {
+    rs::scriptobject::utils::ScriptArrayVectorSource child1({
+        rs::scriptobject::utils::VectorValue("world")
+    });
+    
+    auto childArray1 = rs::scriptobject::ScriptArrayFactory::CreateArray(child1);
+    
+    rs::scriptobject::utils::ScriptArrayVectorSource child2({
+        rs::scriptobject::utils::VectorValue("world!!!")
+    });
+    
+    auto childArray2 = rs::scriptobject::ScriptArrayFactory::CreateArray(child2);
+    
+    rs::scriptobject::utils::ScriptArrayVectorSource defn1({
+        rs::scriptobject::utils::VectorValue(childArray1)
+    });
+    
+    rs::scriptobject::utils::ScriptArrayVectorSource defn2({
+        rs::scriptobject::utils::VectorValue(childArray2)
+    });
+    
+    auto array1 = rs::scriptobject::ScriptArrayFactory::CreateArray(defn1);    
+    rs::scriptobject::ScriptObjectHash digest1;
+    array1->CalculateHash(digest1);
+    
+    auto array2 = rs::scriptobject::ScriptArrayFactory::CreateArray(defn2);
+    rs::scriptobject::ScriptObjectHash digest2;
+    array2->CalculateHash(digest2);
+    
+    ASSERT_TRUE(rs::scriptobject::CompareScriptObjectHash(digest1, digest2) != 0);
+}
