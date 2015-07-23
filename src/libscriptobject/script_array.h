@@ -21,6 +21,7 @@
 #include <memory>
 
 #include "script_object_type.h"
+#include "script_object_hash.h"
 
 namespace rs {
 namespace scriptobject {
@@ -54,6 +55,8 @@ struct ScriptArray {
     bool getBoolean(int index) const;
     const ScriptObjectPtr getObject(int index) const;
     const ScriptArrayPtr getArray(int index) const;
+    
+    void CalculateHash(ScriptObjectHash&, bool (*)(const char*) = nullptr);
     
 private:    
     friend class ScriptArrayFactory;

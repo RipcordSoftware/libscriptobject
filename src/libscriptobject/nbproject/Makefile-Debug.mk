@@ -42,6 +42,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/script_object.o \
 	${OBJECTDIR}/script_object_definition.o \
 	${OBJECTDIR}/script_object_factory.o \
+	${OBJECTDIR}/script_object_hash.o \
 	${OBJECTDIR}/script_object_keys.o \
 	${OBJECTDIR}/script_object_keys_cache.o \
 	${OBJECTDIR}/script_object_keys_factory.o \
@@ -118,6 +119,11 @@ ${OBJECTDIR}/script_object_factory.o: script_object_factory.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT=1 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_factory.o script_object_factory.cpp
+
+${OBJECTDIR}/script_object_hash.o: script_object_hash.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT=1 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_hash.o script_object_hash.cpp
 
 ${OBJECTDIR}/script_object_keys.o: script_object_keys.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -284,6 +290,19 @@ ${OBJECTDIR}/script_object_factory_nomain.o: ${OBJECTDIR}/script_object_factory.
 	    $(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT=1 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_factory_nomain.o script_object_factory.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/script_object_factory.o ${OBJECTDIR}/script_object_factory_nomain.o;\
+	fi
+
+${OBJECTDIR}/script_object_hash_nomain.o: ${OBJECTDIR}/script_object_hash.o script_object_hash.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/script_object_hash.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT=1 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_hash_nomain.o script_object_hash.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/script_object_hash.o ${OBJECTDIR}/script_object_hash_nomain.o;\
 	fi
 
 ${OBJECTDIR}/script_object_keys_nomain.o: ${OBJECTDIR}/script_object_keys.o script_object_keys.cpp 

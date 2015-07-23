@@ -17,12 +17,14 @@
 
 #include "script_object.h"
 
+#include <cstring>
+
+#include "md5.h"
+
 #include "exceptions.h"
 #include "script_object_source.h"
 #include "script_object_vector_source.h"
 #include "script_object_factory.h"
-
-#include <cstring>
 
 void rs::scriptobject::ScriptObject::ScriptObjectDeleter(ScriptObject* ptr) {
     // destroy all child object/array references
@@ -91,6 +93,9 @@ unsigned rs::scriptobject::ScriptObject::CalculateSize(const ScriptObjectSource&
                 break;
             case ScriptObjectType::Array:
                 size += sizeof(ScriptArrayPtr);
+                break;
+            case ScriptObjectType::Undefined:
+                size += 0;
                 break;
             default:
                 throw UnknownSourceFieldTypeException();
@@ -417,18 +422,18 @@ static void appendValue(rs::scriptobject::utils::ObjectVector& objVector, const 
     }
 }
 
-rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptObject::merge(const ScriptObjectPtr left, const ScriptObjectPtr right, MergeStrategy strategy) {
+rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptObject::Merge(const ScriptObjectPtr left, const ScriptObjectPtr right, MergeStrategy strategy) {
     if (left.get() == right.get()) {
         return left;
     } else {
         switch (strategy) {
-            case MergeStrategy::Fast: return mergeFast(left, right);
-            default: return mergePosition(left, right, strategy);
+            case MergeStrategy::Fast: return MergeFast(left, right);
+            default: return MergePosition(left, right, strategy);
         }
     }
 }
 
-rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptObject::mergeFast(const ScriptObjectPtr left, const ScriptObjectPtr right) {
+rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptObject::MergeFast(const ScriptObjectPtr left, const ScriptObjectPtr right) {
     utils::ObjectVector mergedObject;
 
     auto l = 0, r = 0;
@@ -466,7 +471,7 @@ rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptObject::mergeFast(cons
     return ScriptObjectFactory::CreateObject(mergedSource);
 }
 
-rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptObject::mergePosition(const ScriptObjectPtr left, const ScriptObjectPtr right, MergeStrategy strategy) {
+rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptObject::MergePosition(const ScriptObjectPtr left, const ScriptObjectPtr right, MergeStrategy strategy) {
     utils::ObjectVector mergedObject;
 
     const auto leftCount = left->getCount();
@@ -497,4 +502,71 @@ rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptObject::mergePosition(
 
     utils::ScriptObjectVectorSource mergedSource{mergedObject};
     return ScriptObjectFactory::CreateObject(mergedSource);
+}
+
+void rs::scriptobject::ScriptObject::CalculateHash(ScriptObjectHash& digest, bool (*validateFieldFunc)(const char* name)) {    
+    MD5 md5;
+    const auto count = getCount();
+    
+    for (int i = 0; i < count; ++i) {
+        const auto name = getName(i);
+        
+        if (validateFieldFunc == nullptr || validateFieldFunc(name)) {
+            md5.update(name, std::strlen(name));
+            
+            const auto type = getType(i);
+            
+            switch (type) {
+                case ScriptObjectType::Array: {
+                    ScriptObjectHash childDigest;
+                    auto value = getArray(i);
+                    if (!!value) {
+                        value->CalculateHash(childDigest, validateFieldFunc);
+                        md5.update(reinterpret_cast<const unsigned char*>(&childDigest), sizeof(childDigest));
+                    }
+                    break;
+                }
+                case ScriptObjectType::Boolean: {
+                    auto value = getBoolean(i);
+                    md5.update(reinterpret_cast<const unsigned char*>(&value), sizeof(value));
+                    break;
+                }
+                case ScriptObjectType::Double: {
+                    auto value = getDouble(i);
+                    md5.update(reinterpret_cast<const unsigned char*>(&value), sizeof(value));
+                    break;
+                }
+                case ScriptObjectType::Int32: {
+                    auto value = getInt32(i);
+                    md5.update(reinterpret_cast<const unsigned char*>(&value), sizeof(value));
+                    break;
+                }
+                case ScriptObjectType::Null: {
+                    md5.update("null", 4);
+                    break;
+                }
+                case ScriptObjectType::String: {
+                    auto value = getString(i);
+                    md5.update(value, std::strlen(value));
+                    break;
+                }
+                case ScriptObjectType::Object: {
+                    ScriptObjectHash childDigest;
+                    auto value = getObject(i);
+                    if (!!value) {
+                        value->CalculateHash(childDigest, validateFieldFunc);
+                        md5.update(reinterpret_cast<const unsigned char*>(&childDigest), sizeof(childDigest));
+                    }
+                    break;
+                }
+                case ScriptObjectType::Undefined: {
+                    md5.update("undefined", 9);
+                    break;
+                }
+            }
+        }
+    }
+    
+    md5.finalize();
+    md5.bindigest(digest);
 }

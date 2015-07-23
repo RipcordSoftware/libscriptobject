@@ -19,11 +19,10 @@
 #define RS_LIBSCRIPTOBJECT_SCRIPT_OBJECT_DEFINITION_H
 
 #include "script_object_type.h"
+#include "script_object_hash.h"
 
 namespace rs {
-namespace scriptobject {
-    
-typedef unsigned char ScriptObjectHash[16];
+namespace scriptobject {   
 
 class ScriptObjectDefinition {
 public:

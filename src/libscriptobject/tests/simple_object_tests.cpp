@@ -153,7 +153,9 @@ TEST_F(SimpleObjectTests, test6) {
         std::make_pair("wet", rs::scriptobject::utils::VectorValue(false)),        
         std::make_pair("sunny", rs::scriptobject::utils::VectorValue(true)),
         std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),
-        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42))
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42)),
+        std::make_pair("nil", rs::scriptobject::utils::VectorValue()),
+        std::make_pair("divByZero", rs::scriptobject::utils::VectorValue(rs::scriptobject::ScriptObjectType::Undefined))
     });
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
@@ -174,6 +176,10 @@ TEST_F(SimpleObjectTests, test6) {
     ASSERT_EQ(rs::scriptobject::ScriptObjectType::Int32, object->getType("the_answer"));
     ASSERT_EQ(42, object->getInt32(3));
     ASSERT_EQ(42, object->getInt32("the_answer"));
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::Null, object->getType(4));
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::Null, object->getType("nil"));
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::Undefined, object->getType(5));
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::Undefined, object->getType("divByZero"));
 }
 
 TEST_F(SimpleObjectTests, test7) {
@@ -603,7 +609,7 @@ TEST_F(SimpleObjectTests, test16) {
     auto object1 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn1);
     auto object2 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn2);
     
-    auto targetObject = rs::scriptobject::ScriptObject::merge(object1, object2);
+    auto targetObject = rs::scriptobject::ScriptObject::Merge(object1, object2);
     
     ASSERT_EQ(2, targetObject->getCount());
     
@@ -632,7 +638,7 @@ TEST_F(SimpleObjectTests, test17) {
     auto object1 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn1);
     auto object2 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn2);
     
-    auto targetObject = rs::scriptobject::ScriptObject::merge(object1, object2);
+    auto targetObject = rs::scriptobject::ScriptObject::Merge(object1, object2);
     
     ASSERT_EQ(6, targetObject->getCount());
     
@@ -668,7 +674,7 @@ TEST_F(SimpleObjectTests, test18) {
     
     auto object1 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn1);
     
-    auto targetObject = rs::scriptobject::ScriptObject::merge(object1, object1);
+    auto targetObject = rs::scriptobject::ScriptObject::Merge(object1, object1);
     
     ASSERT_EQ(object1.get(), targetObject.get());   
 }
@@ -695,7 +701,7 @@ TEST_F(SimpleObjectTests, test19) {
     auto object1 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn1);
     auto object2 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn2);
     
-    auto targetObject = rs::scriptobject::ScriptObject::merge(object1, object2);
+    auto targetObject = rs::scriptobject::ScriptObject::Merge(object1, object2);
     
     ASSERT_EQ(6, targetObject->getCount());
     
@@ -745,7 +751,7 @@ TEST_F(SimpleObjectTests, test20) {
     auto object1 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn1);
     auto object2 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn2);
     
-    auto targetObject = rs::scriptobject::ScriptObject::merge(object1, object2);
+    auto targetObject = rs::scriptobject::ScriptObject::Merge(object1, object2);
     
     ASSERT_EQ(6, targetObject->getCount());
     
@@ -805,7 +811,7 @@ TEST_F(SimpleObjectTests, test21) {
     auto object1 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn1);
     auto object2 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn2);
     
-    auto targetObject = rs::scriptobject::ScriptObject::merge(object1, object2);
+    auto targetObject = rs::scriptobject::ScriptObject::Merge(object1, object2);
     
     ASSERT_EQ(4, targetObject->getCount());
     
@@ -838,7 +844,7 @@ TEST_F(SimpleObjectTests, test22) {
     auto object1 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn1);
     auto object2 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn2);
     
-    auto targetObject = rs::scriptobject::ScriptObject::merge(object1, object2, rs::scriptobject::ScriptObject::MergeStrategy::Front);
+    auto targetObject = rs::scriptobject::ScriptObject::Merge(object1, object2, rs::scriptobject::ScriptObject::MergeStrategy::Front);
     
     ASSERT_EQ(2, targetObject->getCount());
     
@@ -865,7 +871,7 @@ TEST_F(SimpleObjectTests, test23) {
     auto object1 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn1);
     auto object2 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn2);
     
-    auto targetObject = rs::scriptobject::ScriptObject::merge(object1, object2, rs::scriptobject::ScriptObject::MergeStrategy::Back);
+    auto targetObject = rs::scriptobject::ScriptObject::Merge(object1, object2, rs::scriptobject::ScriptObject::MergeStrategy::Back);
     
     ASSERT_EQ(2, targetObject->getCount());
     
@@ -896,7 +902,7 @@ TEST_F(SimpleObjectTests, test24) {
     auto object1 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn1);
     auto object2 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn2);
     
-    auto targetObject = rs::scriptobject::ScriptObject::merge(object1, object2, rs::scriptobject::ScriptObject::MergeStrategy::Front);
+    auto targetObject = rs::scriptobject::ScriptObject::Merge(object1, object2, rs::scriptobject::ScriptObject::MergeStrategy::Front);
     
     ASSERT_EQ(6, targetObject->getCount());
     
@@ -947,7 +953,7 @@ TEST_F(SimpleObjectTests, test25) {
     auto object1 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn1);
     auto object2 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn2);
     
-    auto targetObject = rs::scriptobject::ScriptObject::merge(object1, object2, rs::scriptobject::ScriptObject::MergeStrategy::Back);
+    auto targetObject = rs::scriptobject::ScriptObject::Merge(object1, object2, rs::scriptobject::ScriptObject::MergeStrategy::Back);
     
     ASSERT_EQ(6, targetObject->getCount());
     
@@ -1004,7 +1010,7 @@ TEST_F(SimpleObjectTests, test26) {
     auto object1 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn1);
     auto object2 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn2);
     
-    auto targetObject = rs::scriptobject::ScriptObject::merge(object1, object2, rs::scriptobject::ScriptObject::MergeStrategy::Front);
+    auto targetObject = rs::scriptobject::ScriptObject::Merge(object1, object2, rs::scriptobject::ScriptObject::MergeStrategy::Front);
     
     ASSERT_EQ(6, targetObject->getCount());
     
@@ -1066,7 +1072,7 @@ TEST_F(SimpleObjectTests, test27) {
     auto object1 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn1);
     auto object2 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn2);
     
-    auto targetObject = rs::scriptobject::ScriptObject::merge(object1, object2, rs::scriptobject::ScriptObject::MergeStrategy::Back);
+    auto targetObject = rs::scriptobject::ScriptObject::Merge(object1, object2, rs::scriptobject::ScriptObject::MergeStrategy::Back);
     
     ASSERT_EQ(6, targetObject->getCount());
     
@@ -1248,4 +1254,333 @@ TEST_F(SimpleObjectTests, test35) {
     ASSERT_THROW({
         object->setString("xyz", "the bomb");
     }, rs::scriptobject::UnknownScriptObjectFieldException);
+}
+
+TEST_F(SimpleObjectTests, test36) {
+    rs::scriptobject::utils::ScriptObjectVectorSource defn({        
+        std::make_pair("wet", rs::scriptobject::utils::VectorValue(true)),
+        std::make_pair("text", rs::scriptobject::utils::VectorValue("lorem ipsum")),
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42)),
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),        
+        std::make_pair("pi", rs::scriptobject::utils::VectorValue(3.14159)),
+        std::make_pair("abc", rs::scriptobject::utils::VectorValue("xyz")),
+        std::make_pair("items", rs::scriptobject::utils::VectorValue()),
+        std::make_pair("divByZero", rs::scriptobject::utils::VectorValue(rs::scriptobject::ScriptObjectType::Undefined))
+    });
+    
+    auto object1 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
+    auto object2 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
+    
+    ASSERT_EQ(8, object1->getCount());
+    ASSERT_EQ(8, object2->getCount());
+    
+    rs::scriptobject::ScriptObjectHash digest1;
+    object1->CalculateHash(digest1);
+    
+    rs::scriptobject::ScriptObjectHash digest2;
+    object2->CalculateHash(digest2);
+    
+    ASSERT_TRUE(rs::scriptobject::CompareScriptObjectHash(digest1, digest2) == 0);
+}
+
+TEST_F(SimpleObjectTests, test37) {
+    rs::scriptobject::utils::ScriptObjectVectorSource defn1({        
+        std::make_pair("wet", rs::scriptobject::utils::VectorValue(true)),
+        std::make_pair("text", rs::scriptobject::utils::VectorValue("lorem ipsum")),
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42)),
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),        
+        std::make_pair("pi", rs::scriptobject::utils::VectorValue(3.14159)),
+        std::make_pair("abc", rs::scriptobject::utils::VectorValue("xyz"))
+    });
+    
+    rs::scriptobject::utils::ScriptObjectVectorSource defn2({        
+        std::make_pair("wet", rs::scriptobject::utils::VectorValue(true)),
+        std::make_pair("text", rs::scriptobject::utils::VectorValue("lorem ipsum")),
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42)),
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),        
+        std::make_pair("pi", rs::scriptobject::utils::VectorValue(3.14159)),
+        std::make_pair("abc", rs::scriptobject::utils::VectorValue("xyzxyz"))
+    });
+    
+    auto object1 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn1);
+    auto object2 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn2);
+    
+    ASSERT_EQ(6, object1->getCount());
+    ASSERT_EQ(6, object2->getCount());
+    
+    rs::scriptobject::ScriptObjectHash digest1;
+    object1->CalculateHash(digest1);
+    
+    rs::scriptobject::ScriptObjectHash digest2;
+    object2->CalculateHash(digest2);
+    
+    ASSERT_TRUE(rs::scriptobject::CompareScriptObjectHash(digest1, digest2) != 0);
+}
+
+TEST_F(SimpleObjectTests, test38) {
+    rs::scriptobject::utils::ScriptObjectVectorSource defn1({        
+        std::make_pair("wet", rs::scriptobject::utils::VectorValue(true)),
+        std::make_pair("text", rs::scriptobject::utils::VectorValue("lorem ipsum")),
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42)),
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),        
+        std::make_pair("pi", rs::scriptobject::utils::VectorValue(3.14159)),
+        std::make_pair("abc", rs::scriptobject::utils::VectorValue("xyz"))
+    });
+    
+    rs::scriptobject::utils::ScriptObjectVectorSource defn2({
+        std::make_pair("abc", rs::scriptobject::utils::VectorValue("xyz")),
+        std::make_pair("wet", rs::scriptobject::utils::VectorValue(true)),
+        std::make_pair("text", rs::scriptobject::utils::VectorValue("lorem ipsum")),
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42)),
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),        
+        std::make_pair("pi", rs::scriptobject::utils::VectorValue(3.14159))        
+    });
+    
+    auto object1 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn1);
+    auto object2 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn2);
+    
+    ASSERT_EQ(6, object1->getCount());
+    ASSERT_EQ(6, object2->getCount());
+    
+    rs::scriptobject::ScriptObjectHash digest1;
+    object1->CalculateHash(digest1);
+    
+    rs::scriptobject::ScriptObjectHash digest2;
+    object2->CalculateHash(digest2);
+    
+    ASSERT_TRUE(rs::scriptobject::CompareScriptObjectHash(digest1, digest2) != 0);
+}
+
+TEST_F(SimpleObjectTests, test39) {
+    rs::scriptobject::utils::ScriptObjectVectorSource child({
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world"))
+    });
+    
+    auto childObject = rs::scriptobject::ScriptObjectFactory::CreateObject(child);
+    
+    rs::scriptobject::utils::ScriptObjectVectorSource defn({        
+        std::make_pair("wet", rs::scriptobject::utils::VectorValue(true)),
+        std::make_pair("text", rs::scriptobject::utils::VectorValue("lorem ipsum")),
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42)),        
+        std::make_pair("pi", rs::scriptobject::utils::VectorValue(3.14159)),
+        std::make_pair("abc", rs::scriptobject::utils::VectorValue("xyz")),
+        std::make_pair("child", rs::scriptobject::utils::VectorValue(childObject))
+    });
+    
+    auto object1 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
+    auto object2 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
+    
+    ASSERT_EQ(6, object1->getCount());
+    ASSERT_EQ(6, object2->getCount());
+    
+    rs::scriptobject::ScriptObjectHash digest1;
+    object1->CalculateHash(digest1);
+    
+    rs::scriptobject::ScriptObjectHash digest2;
+    object2->CalculateHash(digest2);
+    
+    ASSERT_TRUE(rs::scriptobject::CompareScriptObjectHash(digest1, digest2) == 0);
+}
+
+TEST_F(SimpleObjectTests, test40) {
+    rs::scriptobject::utils::ScriptObjectVectorSource child1({
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world"))
+    });
+    
+    auto childObject1 = rs::scriptobject::ScriptObjectFactory::CreateObject(child1);
+    
+    rs::scriptobject::utils::ScriptObjectVectorSource child2({
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world!!!"))
+    });
+    
+    auto childObject2 = rs::scriptobject::ScriptObjectFactory::CreateObject(child2);
+    
+    rs::scriptobject::utils::ScriptObjectVectorSource defn1({        
+        std::make_pair("wet", rs::scriptobject::utils::VectorValue(true)),
+        std::make_pair("text", rs::scriptobject::utils::VectorValue("lorem ipsum")),
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42)),
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),        
+        std::make_pair("pi", rs::scriptobject::utils::VectorValue(3.14159)),
+        std::make_pair("abc", rs::scriptobject::utils::VectorValue("xyz")),
+        std::make_pair("child", rs::scriptobject::utils::VectorValue(childObject1))
+    });
+    
+    rs::scriptobject::utils::ScriptObjectVectorSource defn2({        
+        std::make_pair("wet", rs::scriptobject::utils::VectorValue(true)),
+        std::make_pair("text", rs::scriptobject::utils::VectorValue("lorem ipsum")),
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42)),
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),        
+        std::make_pair("pi", rs::scriptobject::utils::VectorValue(3.14159)),
+        std::make_pair("abc", rs::scriptobject::utils::VectorValue("xyz")),
+        std::make_pair("child", rs::scriptobject::utils::VectorValue(childObject2))
+    });
+    
+    auto object1 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn1);
+    auto object2 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn2);
+    
+    ASSERT_EQ(7, object1->getCount());
+    ASSERT_EQ(7, object2->getCount());
+    
+    rs::scriptobject::ScriptObjectHash digest1;
+    object1->CalculateHash(digest1);
+    
+    rs::scriptobject::ScriptObjectHash digest2;
+    object2->CalculateHash(digest2);
+    
+    ASSERT_TRUE(rs::scriptobject::CompareScriptObjectHash(digest1, digest2) != 0);
+}
+
+TEST_F(SimpleObjectTests, test41) {
+    rs::scriptobject::utils::ScriptObjectVectorSource defn({
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world"))
+    });
+    
+    auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
+    
+    rs::scriptobject::ScriptObjectHash digest1;
+    object->CalculateHash(digest1);
+    
+    rs::scriptobject::ScriptObjectHash digest2 = { 0xFC, 0x5E, 0x03, 0x8D, 0x38, 0xA5, 0x70, 0x32, 0x08, 0x54, 0x41, 0xE7, 0xFE, 0x70, 0x10, 0xB0 };
+    
+    ASSERT_TRUE(rs::scriptobject::CompareScriptObjectHash(digest1, digest2) == 0);
+}
+
+TEST_F(SimpleObjectTests, test42) {
+    rs::scriptobject::utils::ScriptObjectVectorSource defn({
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),
+        std::make_pair("lorem", rs::scriptobject::utils::VectorValue("ipsum"))
+    });
+    
+    auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
+    
+    rs::scriptobject::ScriptObjectHash digest1;
+    object->CalculateHash(digest1);
+    
+    rs::scriptobject::ScriptObjectHash digest2 = { 0x86, 0x33, 0x29, 0x4C, 0x72, 0xBD, 0x07, 0x80, 0x83, 0xA3, 0x36, 0xBC, 0x9E, 0x6E, 0xFA, 0x5E };
+    
+    ASSERT_TRUE(rs::scriptobject::CompareScriptObjectHash(digest1, digest2) == 0);
+}
+
+TEST_F(SimpleObjectTests, test43) {
+    rs::scriptobject::utils::ScriptObjectVectorSource defn1({
+        std::make_pair("_id", rs::scriptobject::utils::VectorValue("6CA0F225-47A1-4DF4-9F2E-70D72276E2BC")),
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),
+        std::make_pair("_deleted", rs::scriptobject::utils::VectorValue(true))
+    });
+    
+    rs::scriptobject::utils::ScriptObjectVectorSource defn2({        
+        std::make_pair("_id", rs::scriptobject::utils::VectorValue("DF02BC9B-5D80-4D3E-935C-5E66BE3806B2")),
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),
+        std::make_pair("_deleted", rs::scriptobject::utils::VectorValue(false))
+    });
+    
+    auto object1 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn1);
+    auto object2 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn2);
+    
+    ASSERT_EQ(3, object1->getCount());
+    ASSERT_EQ(3, object2->getCount());
+    
+    rs::scriptobject::ScriptObjectHash digest1;
+    object1->CalculateHash(digest1, [](const char* name) { return name[0] != '_'; });
+    
+    rs::scriptobject::ScriptObjectHash digest2;
+    object2->CalculateHash(digest2, [](const char* name) { return name[0] != '_'; });
+    
+    ASSERT_TRUE(rs::scriptobject::CompareScriptObjectHash(digest1, digest2) == 0);
+}
+
+TEST_F(SimpleObjectTests, test44) {
+    rs::scriptobject::utils::ScriptArrayVectorSource child1({
+        rs::scriptobject::utils::VectorValue("world")
+    });
+    
+    auto childArray1 = rs::scriptobject::ScriptArrayFactory::CreateArray(child1);
+    
+    rs::scriptobject::utils::ScriptArrayVectorSource child2({
+        rs::scriptobject::utils::VectorValue("world")
+    });
+    
+    auto childArray2 = rs::scriptobject::ScriptArrayFactory::CreateArray(child2);
+    
+    rs::scriptobject::utils::ScriptObjectVectorSource defn1({        
+        std::make_pair("wet", rs::scriptobject::utils::VectorValue(true)),
+        std::make_pair("text", rs::scriptobject::utils::VectorValue("lorem ipsum")),
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42)),
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),        
+        std::make_pair("pi", rs::scriptobject::utils::VectorValue(3.14159)),
+        std::make_pair("abc", rs::scriptobject::utils::VectorValue("xyz")),
+        std::make_pair("child", rs::scriptobject::utils::VectorValue(childArray1))
+    });
+    
+    rs::scriptobject::utils::ScriptObjectVectorSource defn2({        
+        std::make_pair("wet", rs::scriptobject::utils::VectorValue(true)),
+        std::make_pair("text", rs::scriptobject::utils::VectorValue("lorem ipsum")),
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42)),
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),        
+        std::make_pair("pi", rs::scriptobject::utils::VectorValue(3.14159)),
+        std::make_pair("abc", rs::scriptobject::utils::VectorValue("xyz")),
+        std::make_pair("child", rs::scriptobject::utils::VectorValue(childArray2))
+    });
+    
+    auto object1 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn1);
+    auto object2 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn2);
+    
+    ASSERT_EQ(7, object1->getCount());
+    ASSERT_EQ(7, object2->getCount());
+    
+    rs::scriptobject::ScriptObjectHash digest1;
+    object1->CalculateHash(digest1);
+    
+    rs::scriptobject::ScriptObjectHash digest2;
+    object2->CalculateHash(digest2);
+    
+    ASSERT_TRUE(rs::scriptobject::CompareScriptObjectHash(digest1, digest2) == 0);
+}
+
+TEST_F(SimpleObjectTests, test45) {
+    rs::scriptobject::utils::ScriptArrayVectorSource child1({
+        rs::scriptobject::utils::VectorValue("world")
+    });
+    
+    auto childArray1 = rs::scriptobject::ScriptArrayFactory::CreateArray(child1);
+    
+    rs::scriptobject::utils::ScriptArrayVectorSource child2({
+        rs::scriptobject::utils::VectorValue("world!!!")
+    });
+    
+    auto childArray2 = rs::scriptobject::ScriptArrayFactory::CreateArray(child2);
+    
+    rs::scriptobject::utils::ScriptObjectVectorSource defn1({        
+        std::make_pair("wet", rs::scriptobject::utils::VectorValue(true)),
+        std::make_pair("text", rs::scriptobject::utils::VectorValue("lorem ipsum")),
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42)),
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),        
+        std::make_pair("pi", rs::scriptobject::utils::VectorValue(3.14159)),
+        std::make_pair("abc", rs::scriptobject::utils::VectorValue("xyz")),
+        std::make_pair("child", rs::scriptobject::utils::VectorValue(childArray1))
+    });
+    
+    rs::scriptobject::utils::ScriptObjectVectorSource defn2({        
+        std::make_pair("wet", rs::scriptobject::utils::VectorValue(true)),
+        std::make_pair("text", rs::scriptobject::utils::VectorValue("lorem ipsum")),
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42)),
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),        
+        std::make_pair("pi", rs::scriptobject::utils::VectorValue(3.14159)),
+        std::make_pair("abc", rs::scriptobject::utils::VectorValue("xyz")),
+        std::make_pair("child", rs::scriptobject::utils::VectorValue(childArray2))
+    });
+    
+    auto object1 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn1);
+    auto object2 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn2);
+    
+    ASSERT_EQ(7, object1->getCount());
+    ASSERT_EQ(7, object2->getCount());
+    
+    rs::scriptobject::ScriptObjectHash digest1;
+    object1->CalculateHash(digest1);
+    
+    rs::scriptobject::ScriptObjectHash digest2;
+    object2->CalculateHash(digest2);
+    
+    ASSERT_TRUE(rs::scriptobject::CompareScriptObjectHash(digest1, digest2) != 0);
 }

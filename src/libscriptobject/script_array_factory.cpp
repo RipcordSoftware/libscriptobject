@@ -80,6 +80,9 @@ rs::scriptobject::ScriptArrayPtr rs::scriptobject::ScriptArrayFactory::CreateArr
             case ScriptObjectType::Null:
                 array->offsets[i] = 0;
                 break;
+            case ScriptObjectType::Undefined:
+                array->offsets[i] = 0;
+                break;
         }
         
         types[i] = type;

@@ -19,6 +19,8 @@
 #include "script_array_source.h"
 #include "exceptions.h"
 
+#include "md5.h"
+
 rs::scriptobject::ScriptArray::ScriptArray(unsigned size, unsigned count) :
     size(size), count(count) {
     singleTypeFlag = 0;
@@ -103,6 +105,9 @@ unsigned rs::scriptobject::ScriptArray::CalculateSize(const ScriptArraySource& s
                 break;
             case ScriptObjectType::Array:
                 size += sizeof(ScriptArrayPtr);
+                break;
+            case ScriptObjectType::Undefined:
+                size += 0;
                 break;
             default:
                 throw UnknownSourceFieldTypeException();
@@ -207,4 +212,65 @@ const rs::scriptobject::ScriptArrayPtr rs::scriptobject::ScriptArray::getArray(i
     
     auto ptr = reinterpret_cast<const ScriptArrayPtr*>(getValueStart() + offsets[index]);
     return *ptr;
+}
+
+void rs::scriptobject::ScriptArray::CalculateHash(ScriptObjectHash& digest, bool (*validateFieldFunc)(const char* name)) {    
+    MD5 md5;
+    const auto count = getCount();
+    
+    for (int i = 0; i < count; ++i) {
+        const auto type = getType(i);
+
+        switch (type) {
+            case ScriptObjectType::Array: {
+                ScriptObjectHash childDigest;
+                auto value = getArray(i);
+                if (!!value) {
+                    value->CalculateHash(childDigest, validateFieldFunc);
+                    md5.update(reinterpret_cast<const unsigned char*>(&childDigest), sizeof(childDigest));
+                }
+                break;
+            }
+            case ScriptObjectType::Boolean: {
+                auto value = getBoolean(i);
+                md5.update(reinterpret_cast<const unsigned char*>(&value), sizeof(value));
+                break;
+            }
+            case ScriptObjectType::Double: {
+                auto value = getDouble(i);
+                md5.update(reinterpret_cast<const unsigned char*>(&value), sizeof(value));
+                break;
+            }
+            case ScriptObjectType::Int32: {
+                auto value = getInt32(i);
+                md5.update(reinterpret_cast<const unsigned char*>(&value), sizeof(value));
+                break;
+            }
+            case ScriptObjectType::Null: {
+                md5.update("null", 4);
+                break;
+            }
+            case ScriptObjectType::String: {
+                auto value = getString(i);
+                md5.update(value, std::strlen(value));
+                break;
+            }
+            case ScriptObjectType::Object: {
+                ScriptObjectHash childDigest;
+                auto value = getObject(i);
+                if (!!value) {
+                    value->CalculateHash(childDigest, validateFieldFunc);
+                    md5.update(reinterpret_cast<const unsigned char*>(&childDigest), sizeof(childDigest));
+                }
+                break;
+            }
+            case ScriptObjectType::Undefined: {
+                md5.update("undefined", 9);
+                break;
+            }
+        }
+    }
+    
+    md5.finalize();
+    md5.bindigest(digest);
 }

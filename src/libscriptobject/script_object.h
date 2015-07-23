@@ -21,6 +21,7 @@
 #include <memory>
 
 #include "script_object_keys.h"
+#include "script_object_hash.h"
 
 namespace rs {
 namespace scriptobject {
@@ -70,21 +71,23 @@ struct ScriptObject {
     unsigned getStringFieldLength(int index) const;
     unsigned getStringFieldLength(const char* name) const;
     
+    void CalculateHash(ScriptObjectHash&, bool (*)(const char*) = nullptr);
+    
     enum class MergeStrategy : unsigned {
         Fast = 0,
         Front = 1,
         Back = 2
     };
 
-    static ScriptObjectPtr merge(const ScriptObjectPtr, const ScriptObjectPtr, MergeStrategy = MergeStrategy::Fast);
+    static ScriptObjectPtr Merge(const ScriptObjectPtr, const ScriptObjectPtr, MergeStrategy = MergeStrategy::Fast);
     
 private:
     static unsigned CalculateSize(const ScriptObjectSource& source);
     const unsigned char* getValueStart() const;
     static unsigned char* getValueStart(ScriptObject&);
     
-    static ScriptObjectPtr mergeFast(const ScriptObjectPtr, const ScriptObjectPtr);
-    static ScriptObjectPtr mergePosition(const ScriptObjectPtr, const ScriptObjectPtr, MergeStrategy);
+    static ScriptObjectPtr MergeFast(const ScriptObjectPtr, const ScriptObjectPtr);
+    static ScriptObjectPtr MergePosition(const ScriptObjectPtr, const ScriptObjectPtr, MergeStrategy);
     
     unsigned getStringFieldLength(const ScriptObjectKey&) const;
     

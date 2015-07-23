@@ -122,7 +122,9 @@ TEST_F(SimpleArrayTests, test6) {
         rs::scriptobject::utils::VectorValue(false),        
         rs::scriptobject::utils::VectorValue(true),
         rs::scriptobject::utils::VectorValue("world"),
-        rs::scriptobject::utils::VectorValue(42)
+        rs::scriptobject::utils::VectorValue(42),
+        rs::scriptobject::utils::VectorValue(),
+        rs::scriptobject::utils::VectorValue(rs::scriptobject::ScriptObjectType::Undefined)
     });
     
     auto array = rs::scriptobject::ScriptArrayFactory::CreateArray(defn);
@@ -135,6 +137,8 @@ TEST_F(SimpleArrayTests, test6) {
     ASSERT_STREQ("world", array->getString(2));
     ASSERT_EQ(rs::scriptobject::ScriptObjectType::Int32, array->getType(3));
     ASSERT_EQ(42, array->getInt32(3));
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::Null, array->getType(4));
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::Undefined, array->getType(5));
 }
 
 TEST_F(SimpleArrayTests, test7) {
@@ -389,4 +393,154 @@ TEST_F(SimpleArrayTests, test14) {
     ASSERT_EQ(1, array->getCount());
     ASSERT_EQ(rs::scriptobject::ScriptObjectType::Object, array->getType(0));
     ASSERT_TRUE(!!array->getObject(0));
+}
+
+TEST_F(SimpleArrayTests, test15) {
+    rs::scriptobject::utils::ScriptArrayVectorSource defn({
+        rs::scriptobject::utils::VectorValue("world"),
+        rs::scriptobject::utils::VectorValue(42),
+        rs::scriptobject::utils::VectorValue(true),
+        rs::scriptobject::utils::VectorValue(3.14159)
+    });
+    
+    auto array1 = rs::scriptobject::ScriptArrayFactory::CreateArray(defn);    
+    rs::scriptobject::ScriptObjectHash digest1;
+    array1->CalculateHash(digest1);
+    
+    auto array2 = rs::scriptobject::ScriptArrayFactory::CreateArray(defn);
+    rs::scriptobject::ScriptObjectHash digest2;
+    array2->CalculateHash(digest2);
+    
+    ASSERT_TRUE(rs::scriptobject::CompareScriptObjectHash(digest1, digest2) == 0);
+}
+
+TEST_F(SimpleArrayTests, test16) {
+    rs::scriptobject::utils::ScriptArrayVectorSource defn1({
+        rs::scriptobject::utils::VectorValue("world")
+    });
+    
+    rs::scriptobject::utils::ScriptArrayVectorSource defn2({
+        rs::scriptobject::utils::VectorValue("hello")
+    });
+    
+    auto array1 = rs::scriptobject::ScriptArrayFactory::CreateArray(defn1);    
+    rs::scriptobject::ScriptObjectHash digest1;
+    array1->CalculateHash(digest1);
+    
+    auto array2 = rs::scriptobject::ScriptArrayFactory::CreateArray(defn2);
+    rs::scriptobject::ScriptObjectHash digest2;
+    array2->CalculateHash(digest2);
+    
+    ASSERT_TRUE(rs::scriptobject::CompareScriptObjectHash(digest1, digest2) != 0);
+}
+
+TEST_F(SimpleArrayTests, test17) {
+    rs::scriptobject::utils::ScriptArrayVectorSource defn1({
+        rs::scriptobject::utils::VectorValue(42)
+    });
+    
+    rs::scriptobject::utils::ScriptArrayVectorSource defn2({
+        rs::scriptobject::utils::VectorValue(43)
+    });
+    
+    auto array1 = rs::scriptobject::ScriptArrayFactory::CreateArray(defn1);    
+    rs::scriptobject::ScriptObjectHash digest1;
+    array1->CalculateHash(digest1);
+    
+    auto array2 = rs::scriptobject::ScriptArrayFactory::CreateArray(defn2);
+    rs::scriptobject::ScriptObjectHash digest2;
+    array2->CalculateHash(digest2);
+    
+    ASSERT_TRUE(rs::scriptobject::CompareScriptObjectHash(digest1, digest2) != 0);
+}
+
+TEST_F(SimpleArrayTests, test18) {
+    rs::scriptobject::utils::ScriptArrayVectorSource defn1({
+        rs::scriptobject::utils::VectorValue(true)
+    });
+    
+    rs::scriptobject::utils::ScriptArrayVectorSource defn2({
+        rs::scriptobject::utils::VectorValue(false)
+    });
+    
+    auto array1 = rs::scriptobject::ScriptArrayFactory::CreateArray(defn1);    
+    rs::scriptobject::ScriptObjectHash digest1;
+    array1->CalculateHash(digest1);
+    
+    auto array2 = rs::scriptobject::ScriptArrayFactory::CreateArray(defn2);
+    rs::scriptobject::ScriptObjectHash digest2;
+    array2->CalculateHash(digest2);
+    
+    ASSERT_TRUE(rs::scriptobject::CompareScriptObjectHash(digest1, digest2) != 0);
+}
+
+TEST_F(SimpleArrayTests, test19) {
+    rs::scriptobject::utils::ScriptArrayVectorSource defn1({
+        rs::scriptobject::utils::VectorValue(3.14159)
+    });
+    
+    rs::scriptobject::utils::ScriptArrayVectorSource defn2({
+        rs::scriptobject::utils::VectorValue(99.0f)
+    });
+    
+    auto array1 = rs::scriptobject::ScriptArrayFactory::CreateArray(defn1);    
+    rs::scriptobject::ScriptObjectHash digest1;
+    array1->CalculateHash(digest1);
+    
+    auto array2 = rs::scriptobject::ScriptArrayFactory::CreateArray(defn2);
+    rs::scriptobject::ScriptObjectHash digest2;
+    array2->CalculateHash(digest2);
+    
+    ASSERT_TRUE(rs::scriptobject::CompareScriptObjectHash(digest1, digest2) != 0);
+}
+
+TEST_F(SimpleArrayTests, test20) {
+    rs::scriptobject::utils::ScriptArrayVectorSource defn1({
+        rs::scriptobject::utils::VectorValue()
+    });
+    
+    rs::scriptobject::utils::ScriptArrayVectorSource defn2({
+        rs::scriptobject::utils::VectorValue(rs::scriptobject::ScriptObjectType::Undefined)
+    });
+    
+    auto array1 = rs::scriptobject::ScriptArrayFactory::CreateArray(defn1);    
+    rs::scriptobject::ScriptObjectHash digest1;
+    array1->CalculateHash(digest1);
+    
+    auto array2 = rs::scriptobject::ScriptArrayFactory::CreateArray(defn2);
+    rs::scriptobject::ScriptObjectHash digest2;
+    array2->CalculateHash(digest2);
+    
+    ASSERT_TRUE(rs::scriptobject::CompareScriptObjectHash(digest1, digest2) != 0);
+}
+
+TEST_F(SimpleArrayTests, test21) {
+    rs::scriptobject::utils::ScriptArrayVectorSource defn({
+        rs::scriptobject::utils::VectorValue("world")
+    });
+    
+    auto array = rs::scriptobject::ScriptArrayFactory::CreateArray(defn);
+    
+    rs::scriptobject::ScriptObjectHash digest1;
+    array->CalculateHash(digest1);
+    
+    rs::scriptobject::ScriptObjectHash digest2 = { 0x7D, 0x79, 0x30, 0x37, 0xA0, 0x76, 0x01, 0x86, 0x57, 0x4B, 0x02, 0x82, 0xF2, 0xF4, 0x35, 0xE7 };
+    
+    ASSERT_TRUE(rs::scriptobject::CompareScriptObjectHash(digest1, digest2) == 0);
+}
+
+TEST_F(SimpleArrayTests, test22) {
+    rs::scriptobject::utils::ScriptArrayVectorSource defn({
+        rs::scriptobject::utils::VectorValue("world"),
+        rs::scriptobject::utils::VectorValue("ipsum")
+    });
+    
+    auto array = rs::scriptobject::ScriptArrayFactory::CreateArray(defn);
+    
+    rs::scriptobject::ScriptObjectHash digest1;
+    array->CalculateHash(digest1);
+    
+    rs::scriptobject::ScriptObjectHash digest2 = { 0x38, 0xF4, 0xD8, 0x6A, 0x43, 0xCE, 0xD2, 0x5A, 0xEB, 0x1C, 0xA9, 0x9C, 0xF4, 0x8A, 0xF3, 0x44 };
+    
+    ASSERT_TRUE(rs::scriptobject::CompareScriptObjectHash(digest1, digest2) == 0);
 }

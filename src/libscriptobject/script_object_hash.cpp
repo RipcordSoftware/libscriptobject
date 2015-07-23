@@ -15,25 +15,10 @@
  *  along with libscriptobject.  If not, see <http://www.gnu.org/licenses/>.
 **/
 
-#ifndef RS_LIBSCRIPTOBJECT_SCRIPT_OBJECT_TYPE_H
-#define RS_LIBSCRIPTOBJECT_SCRIPT_OBJECT_TYPE_H
+#include "script_object_hash.h"
 
-namespace rs {
-namespace scriptobject {
-    
-enum class ScriptObjectType : unsigned char {    
-    Unknown = 0,
-    Boolean = 1,
-    Int32 = 2,
-    Double = 3,
-    String = 4,
-    Object = 5,
-    Array = 6,
-    Null = 7,
-    Undefined = 8,
-    MAX = 16
-};
-    
-}}
+#include <cstring>
 
-#endif /* RS_LIBSCRIPTOBJECT_SCRIPT_OBJECT_TYPE_H */
+int rs::scriptobject::CompareScriptObjectHash(const ScriptObjectHash& x, ScriptObjectHash& y) {
+    return std::memcmp(&x, &y, sizeof(x));
+}
