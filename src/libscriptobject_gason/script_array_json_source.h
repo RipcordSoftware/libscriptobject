@@ -20,9 +20,9 @@
 
 #include <vector>
 
-#include "script_array_source.h"
+#include "../../externals/gason/src/gason.h"
 
-#include "gason.h"
+#include "script_array_source.h"
 
 namespace rs {
 namespace scriptobject {

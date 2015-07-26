@@ -30,7 +30,7 @@ rs::scriptobject::ScriptObjectJsonSource::ScriptObjectJsonSource(char* json) {
     JsonValue value;
     auto status = jsonParse(json, &endPtr, &value, allocator_);
     if (status != 0) {
-        throw jsonStrError(status);
+        throw ScriptObjectJsonSourceParseException(jsonStrError(status));
     }
       
     members_ = GetMembers(value);

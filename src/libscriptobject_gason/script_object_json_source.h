@@ -20,12 +20,24 @@
 
 #include <vector>
 
-#include "gason.h"
+#include "../../externals/gason/src/gason.h"
 
 #include "script_object_source.h"
 
 namespace rs {
 namespace scriptobject {
+    
+class ScriptObjectJsonSourceParseException : public std::exception {
+public:    
+    ScriptObjectJsonSourceParseException(const char* msg) : msg_(msg) {}
+            
+    virtual const char* what() const noexcept override {
+        return msg_;
+    }
+    
+private:
+    const char* msg_;
+};
 
 class ScriptObjectJsonSource : public rs::scriptobject::ScriptObjectSource {
 public:

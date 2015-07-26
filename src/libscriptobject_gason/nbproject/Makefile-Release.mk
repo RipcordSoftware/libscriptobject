@@ -69,17 +69,17 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/liblibscriptobject_gason.a: ${OBJECTF
 ${OBJECTDIR}/_ext/1762787558/gason.o: ../../externals/gason/src/gason.cpp 
 	${MKDIR} -p ${OBJECTDIR}/_ext/1762787558
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../libscriptobject -I../../externals/gason/src -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1762787558/gason.o ../../externals/gason/src/gason.cpp
+	$(COMPILE.cc) -O2 -I../libscriptobject -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/1762787558/gason.o ../../externals/gason/src/gason.cpp
 
 ${OBJECTDIR}/script_array_json_source.o: script_array_json_source.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../libscriptobject -I../../externals/gason/src -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_array_json_source.o script_array_json_source.cpp
+	$(COMPILE.cc) -O2 -I../libscriptobject -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_array_json_source.o script_array_json_source.cpp
 
 ${OBJECTDIR}/script_object_json_source.o: script_object_json_source.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -I../libscriptobject -I../../externals/gason/src -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_json_source.o script_object_json_source.cpp
+	$(COMPILE.cc) -O2 -I../libscriptobject -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_object_json_source.o script_object_json_source.cpp
 
 # Subprojects
 .build-subprojects:
