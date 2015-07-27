@@ -41,9 +41,11 @@ struct ScriptObjectKey {
  * This structure is designed to be very efficient with memory. Only a single
  * block is allocated to contain the field names, types and other associated data.
  */
-struct ScriptObjectKeys {        
-    unsigned short size;                /// < The size of the entire key structure
-    unsigned short count;               /// < The number of keys
+struct ScriptObjectKeys {
+    using size_t = unsigned short;
+
+    size_t size;                        /// < The size of the entire key structure
+    size_t count;                       /// < The number of keys
     ScriptObjectHash hash;              /// < The MD5 hash generated from key+type
     ScriptObjectKey keys[/*count*/];    /// < The key definitions
     // Index index[count];              // a map of original index position to sorted position
@@ -57,9 +59,9 @@ struct ScriptObjectKeys {
 private:    
     friend class ScriptObjectKeysFactory;
     
-    ScriptObjectKeys(unsigned short size, unsigned short count, const ScriptObjectHash hash);            
+    ScriptObjectKeys(size_t size, size_t count, const ScriptObjectHash hash);            
     
-    typedef unsigned short Index;
+    using Index = size_t;
     
     static void ScriptObjectKeysDeleter(ScriptObjectKeys* ptr);
     

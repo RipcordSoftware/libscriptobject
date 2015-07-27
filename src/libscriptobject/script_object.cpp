@@ -153,7 +153,7 @@ unsigned rs::scriptobject::ScriptObject::getStringFieldLength(const ScriptObject
     return length;
 }
 
-unsigned rs::scriptobject::ScriptObject::getCount() const { 
+rs::scriptobject::ScriptObjectKeys::size_t rs::scriptobject::ScriptObject::getCount() const { 
     return keys->count; 
 }
 

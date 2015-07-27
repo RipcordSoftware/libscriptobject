@@ -41,7 +41,7 @@ struct ScriptObject {
     ScriptObjectKeysPtr keys;
     unsigned valueOffsets[];
 
-    unsigned getCount() const;
+    ScriptObjectKeys::size_t getCount() const;
     
     ScriptObjectType getType(int index) const;
     ScriptObjectType getType(const char* name) const;
