@@ -182,11 +182,11 @@ rs::scriptobject::ScriptObjectType rs::scriptobject::ScriptObject::getType(const
 const char* rs::scriptobject::ScriptObject::getString(int index) const {
     ScriptObjectKey key;
     if (!keys->getKey(index, key)) {
-        throw UnknownScriptObjectFieldException();
+        throw UnknownScriptObjectFieldException{};
     }
     
     if (key.type != (unsigned)ScriptObjectType::String) {
-        throw TypeCastException();
+        throw TypeCastException{};
     }
     
     auto str = reinterpret_cast<const char*>(getValueStart());
@@ -194,18 +194,21 @@ const char* rs::scriptobject::ScriptObject::getString(int index) const {
     return str;
 }
 
-const char* rs::scriptobject::ScriptObject::getString(const char* name) const {
+const char* rs::scriptobject::ScriptObject::getString(const char* name, bool throwOnError) const {
+    const char* str = nullptr;
+
     ScriptObjectKey key;
-    if (!keys->getKey(name, key)) {
+    if (keys->getKey(name, key)) {            
+        if (key.type == (unsigned)ScriptObjectType::String) {
+            str = reinterpret_cast<const char*>(getValueStart());
+            str += valueOffsets[key.index];
+        } else if (throwOnError) {
+            throw TypeCastException{};
+        }
+    } else if (throwOnError) {
         throw UnknownScriptObjectFieldException();
     }
-    
-    if (key.type != (unsigned)ScriptObjectType::String) {
-        throw TypeCastException();
-    }
-    
-    auto str = reinterpret_cast<const char*>(getValueStart());
-    str += valueOffsets[key.index];
+        
     return str;
 }
 

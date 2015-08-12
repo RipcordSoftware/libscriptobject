@@ -200,6 +200,8 @@ TEST_F(SimpleObjectTests, test7) {
         object->getString("xyz");
     }, rs::scriptobject::UnknownScriptObjectFieldException);
     
+    ASSERT_EQ(nullptr, object->getString("pqr", false));
+    
     ASSERT_THROW({
         object->getInt32("xyz");
     }, rs::scriptobject::UnknownScriptObjectFieldException);

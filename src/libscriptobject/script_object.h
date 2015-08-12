@@ -49,7 +49,7 @@ struct ScriptObject {
     const char* getName(int index) const;
     
     const char* getString(int index) const;
-    const char* getString(const char* name) const;
+    const char* getString(const char* name, bool throwOnError = true) const;
     bool setString(int index, const char* value);
     bool setString(const char* name, const char* value);
     
