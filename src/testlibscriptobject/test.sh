@@ -20,7 +20,7 @@ for f in test*.json
 do
     dist/$CONFIG/GNU-Linux-x86/testlibscriptobject $f > test.out/test.json
     json diff $f test.out/test.json > test.out/diff.out
-    if [ `wc -l test.out/diff.out | grep -o '^[0-9]*'` != "2" ]; then
+    if [ ! `wc -l test.out/diff.out | grep -o '^[0-9]*'` == "2" ]; then
         echo "The file $f is different:"
         cat test.out/diff.out
         exit 2
