@@ -23,7 +23,7 @@
 std::atomic<unsigned> rs::scriptobject::ScriptObjectFactory::count_;
 std::atomic<unsigned long> rs::scriptobject::ScriptObjectFactory::totalBytes_;
 
-rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptObjectFactory::CreateObject(const ScriptObjectSource& source) {
+rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptObjectFactory::CreateObject(const ScriptObjectSource& source, bool useKeyCache) {
     auto size = ScriptObject::CalculateSize(source);
     
     // allocate the memory we need
@@ -38,8 +38,7 @@ rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptObjectFactory::CreateO
     object->size = size;
     
     // construct the keys pointer
-    // TODO: use a cached keys object
-    new (&object->keys) ScriptObjectKeysPtr(ScriptObjectKeysFactory::CreateKeys(source));
+    new (&object->keys) ScriptObjectKeysPtr(ScriptObjectKeysFactory::CreateKeys(source, useKeyCache));
     
     auto valueStart = ScriptObject::getValueStart(*object);
     int fieldCount = source.count();

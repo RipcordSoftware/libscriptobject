@@ -22,7 +22,7 @@
 
 #include "script_object_keys_cache.h"
 
-rs::scriptobject::ScriptObjectKeysPtr rs::scriptobject::ScriptObjectKeysFactory::CreateKeys(const ScriptObjectDefinition& defn) {    
+rs::scriptobject::ScriptObjectKeysPtr rs::scriptobject::ScriptObjectKeysFactory::CreateKeys(const ScriptObjectDefinition& defn, bool useCache) {    
     int fieldCount = defn.count();
     
     ScriptObjectHash hash;
@@ -30,7 +30,7 @@ rs::scriptobject::ScriptObjectKeysPtr rs::scriptobject::ScriptObjectKeysFactory:
     
     // TODO: this lookup is horrible
     ScriptObjectKeys tempKeys(0, fieldCount, hash);
-    auto newKeys = ScriptObjectKeysCache::GetObjectKeys(ScriptObjectKeysPtr(&tempKeys, [](ScriptObjectKeys*){}));
+    auto newKeys = useCache ? ScriptObjectKeysCache::GetObjectKeys(ScriptObjectKeysPtr(&tempKeys, [](ScriptObjectKeys*){})) : nullptr;
     if (!newKeys) {
         // calculate the total size required for the header, indexes and strings
         int size = sizeof(ScriptObjectKeys) + (fieldCount * sizeof(ScriptObjectKey)) + (fieldCount * sizeof(ScriptObjectKeys::Index));    
@@ -84,9 +84,13 @@ rs::scriptobject::ScriptObjectKeysPtr rs::scriptobject::ScriptObjectKeysFactory:
             indexes[objectKeys->keys[i].index] = i;
         }
 
-        // allocate the smart pointer, add it to the cache and return it
+        // allocate the smart pointer
         newKeys = ScriptObjectKeysPtr(objectKeys, ScriptObjectKeys::ScriptObjectKeysDeleter);
-        newKeys = ScriptObjectKeysCache::AddObjectKeys(newKeys);
+        
+        // add the keys to the cache
+        if (useCache) {
+            newKeys = ScriptObjectKeysCache::AddObjectKeys(newKeys);
+        }
     }
     
     return newKeys;

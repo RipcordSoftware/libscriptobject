@@ -31,7 +31,7 @@ public:
     ScriptObjectFactory() = delete;
     ScriptObjectFactory(const ScriptObjectFactory& orig) = delete;
     
-    static ScriptObjectPtr CreateObject(const ScriptObjectSource& source);
+    static ScriptObjectPtr CreateObject(const ScriptObjectSource& source, bool useKeyCache = true);
     
     static unsigned getCount();
     static unsigned long getTotalBytesAllocated();
