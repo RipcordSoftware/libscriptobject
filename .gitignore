@@ -39,6 +39,7 @@ coverage/*
 
 # ignore gtest files
 externals/gtest**
+gtest-*.tar.xz
 
 # ignore externals/installed
 externals/installed
