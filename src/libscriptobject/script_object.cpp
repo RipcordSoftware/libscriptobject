@@ -179,6 +179,16 @@ rs::scriptobject::ScriptObjectType rs::scriptobject::ScriptObject::getType(const
     }
 }
 
+rs::scriptobject::ScriptObjectType rs::scriptobject::ScriptObject::getType(const char* name, int& index) const {
+    ScriptObjectKey key;
+    if (keys->getKey(name, key)) {
+        index = key.index;
+        return static_cast<ScriptObjectType>(key.type);
+    } else {
+        return ScriptObjectType::Unknown;
+    }
+}
+
 const char* rs::scriptobject::ScriptObject::getString(int index) const {
     ScriptObjectKey key;
     if (!keys->getKey(index, key)) {

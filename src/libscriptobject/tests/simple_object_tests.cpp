@@ -1586,3 +1586,35 @@ TEST_F(SimpleObjectTests, test45) {
     
     ASSERT_TRUE(rs::scriptobject::CompareScriptObjectHash(digest1, digest2) != 0);
 }
+
+TEST_F(SimpleObjectTests, test46) {
+    rs::scriptobject::utils::ScriptObjectVectorSource defn({        
+        std::make_pair("wet", rs::scriptobject::utils::VectorValue(true)),
+        std::make_pair("text", rs::scriptobject::utils::VectorValue("lorem ipsum")),
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42)),
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),        
+        std::make_pair("pi", rs::scriptobject::utils::VectorValue(3.14159)),
+        std::make_pair("abc", rs::scriptobject::utils::VectorValue("xyz"))
+    });
+    
+    auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
+    
+    int index = -1;
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::Boolean, object->getType("wet", index));
+    ASSERT_EQ(0, index);
+    
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::String, object->getType("text", index));
+    ASSERT_EQ(1, index);
+    
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::Int32, object->getType("the_answer", index));
+    ASSERT_EQ(2, index);
+    
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::String, object->getType("hello", index));
+    ASSERT_EQ(3, index);
+    
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::Double, object->getType("pi", index));
+    ASSERT_EQ(4, index);
+    
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::String, object->getType("abc", index));
+    ASSERT_EQ(5, index);
+}

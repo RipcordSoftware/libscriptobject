@@ -45,6 +45,7 @@ struct ScriptObject {
     
     ScriptObjectType getType(int index) const;
     ScriptObjectType getType(const char* name) const;
+    ScriptObjectType getType(const char* name, int& index) const;
     
     const char* getName(int index) const;
     
