@@ -39,6 +39,7 @@ TEST_F(SimpleArrayTests, test0) {
     rs::scriptobject::utils::ScriptArrayVectorSource defn({});
     auto array = rs::scriptobject::ScriptArrayFactory::CreateArray(defn);
     ASSERT_EQ(0, array->getCount());
+    ASSERT_EQ(rs::scriptobject::ScriptArray::CalculateSizeOverhead(0), array->getSize());
 }
 
 TEST_F(SimpleArrayTests, test1) {
@@ -50,6 +51,7 @@ TEST_F(SimpleArrayTests, test1) {
     
     ASSERT_EQ(rs::scriptobject::ScriptObjectType::String, array->getType(0));
     ASSERT_STREQ("world", array->getString(0));
+    ASSERT_EQ(rs::scriptobject::ScriptArray::CalculateSizeOverhead(1), array->getSize() - 6);
 }
 
 TEST_F(SimpleArrayTests, test2) {
@@ -64,6 +66,7 @@ TEST_F(SimpleArrayTests, test2) {
     ASSERT_STREQ("world", array->getString(0));
     ASSERT_EQ(rs::scriptobject::ScriptObjectType::String, array->getType(1));
     ASSERT_STREQ("ipsum", array->getString(1));
+    ASSERT_EQ(rs::scriptobject::ScriptArray::CalculateSizeOverhead(2), array->getSize() - 6 - 6);
 }
 
 TEST_F(SimpleArrayTests, test3) {
@@ -78,6 +81,7 @@ TEST_F(SimpleArrayTests, test3) {
     ASSERT_STREQ("world", array->getString(0));
     ASSERT_EQ(rs::scriptobject::ScriptObjectType::Double, array->getType(1));
     ASSERT_FLOAT_EQ(3.14159, array->getDouble(1));
+    ASSERT_EQ(rs::scriptobject::ScriptArray::CalculateSizeOverhead(2), array->getSize() - 6 - sizeof(double));
 }
 
 TEST_F(SimpleArrayTests, test4) {
@@ -95,6 +99,7 @@ TEST_F(SimpleArrayTests, test4) {
     ASSERT_STREQ("world", array->getString(1));
     ASSERT_EQ(rs::scriptobject::ScriptObjectType::Boolean, array->getType(2));
     ASSERT_TRUE(array->getBoolean(2));
+    ASSERT_EQ(rs::scriptobject::ScriptArray::CalculateSizeOverhead(3), array->getSize() - 6);
 }
 
 TEST_F(SimpleArrayTests, test5) {
@@ -115,6 +120,7 @@ TEST_F(SimpleArrayTests, test5) {
     ASSERT_TRUE(array->getBoolean(2));
     ASSERT_EQ(rs::scriptobject::ScriptObjectType::Int32, array->getType(3));
     ASSERT_EQ(42, array->getInt32(3));
+    ASSERT_EQ(rs::scriptobject::ScriptArray::CalculateSizeOverhead(4), array->getSize() - 6 - sizeof(std::int32_t));
 }
 
 TEST_F(SimpleArrayTests, test6) {
@@ -139,6 +145,7 @@ TEST_F(SimpleArrayTests, test6) {
     ASSERT_EQ(42, array->getInt32(3));
     ASSERT_EQ(rs::scriptobject::ScriptObjectType::Null, array->getType(4));
     ASSERT_EQ(rs::scriptobject::ScriptObjectType::Undefined, array->getType(5));
+    ASSERT_EQ(rs::scriptobject::ScriptArray::CalculateSizeOverhead(6), array->getSize() - 6 - sizeof(std::int32_t));
 }
 
 TEST_F(SimpleArrayTests, test7) {
@@ -359,6 +366,11 @@ TEST_F(SimpleArrayTests, test12) {
     ASSERT_EQ(1, child->getCount());
     ASSERT_EQ(rs::scriptobject::ScriptObjectType::String, child->getType(0));
     ASSERT_STREQ("world", child->getString(0));
+    
+    ASSERT_EQ(rs::scriptobject::ScriptArray::CalculateSizeOverhead(1), 
+            array->getSize(false) - sizeof(rs::scriptobject::ScriptArrayPtr));
+    ASSERT_EQ(rs::scriptobject::ScriptArray::CalculateSizeOverhead(1) * 2, 
+            array->getSize(true) - 6 - sizeof(rs::scriptobject::ScriptArrayPtr));
 }
 
 TEST_F(SimpleArrayTests, test13) {
@@ -376,6 +388,11 @@ TEST_F(SimpleArrayTests, test13) {
     ASSERT_EQ(1, array->getCount());
     ASSERT_EQ(rs::scriptobject::ScriptObjectType::Array, array->getType(0));
     ASSERT_TRUE(!!array->getArray(0));
+    
+    ASSERT_EQ(rs::scriptobject::ScriptArray::CalculateSizeOverhead(1), 
+            array->getSize(false) - sizeof(rs::scriptobject::ScriptArrayPtr));
+    ASSERT_EQ(rs::scriptobject::ScriptArray::CalculateSizeOverhead(1) * 2, 
+            array->getSize(true) - sizeof(double) - sizeof(rs::scriptobject::ScriptArrayPtr));
 }
 
 TEST_F(SimpleArrayTests, test14) {

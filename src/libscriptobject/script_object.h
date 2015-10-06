@@ -34,13 +34,17 @@ typedef std::shared_ptr<ScriptObject> ScriptObjectPtr;
 struct ScriptArray;
 typedef std::shared_ptr<ScriptArray> ScriptArrayPtr;
 
-struct ScriptObject {
-    ScriptObject() = delete;
-    
-    unsigned size;
-    ScriptObjectKeysPtr keys;
-    unsigned valueOffsets[];
+struct ScriptObject {    
 
+private:    
+    const unsigned size_;
+    ScriptObjectKeysPtr keys_;
+    unsigned valueOffsets_[];
+
+public:        
+    std::uint64_t getSize(bool includeChildren = false) const;
+    ScriptObjectKeysPtr getKeys() const;
+    
     ScriptObjectKeys::size_t getCount() const;
     
     ScriptObjectType getType(int index) const;
@@ -82,7 +86,13 @@ struct ScriptObject {
 
     static ScriptObjectPtr Merge(const ScriptObjectPtr, const ScriptObjectPtr, MergeStrategy = MergeStrategy::Fast);
     
+    static unsigned CalculateSizeOverhead(unsigned fieldCount);
+    
 private:
+    friend class ScriptObjectFactory;
+    
+    ScriptObject(unsigned size);
+    
     static unsigned CalculateSize(const ScriptObjectSource& source);
     const unsigned char* getValueStart() const;
     static unsigned char* getValueStart(ScriptObject&);
@@ -96,7 +106,6 @@ private:
     
     static void ScriptObjectDeleter(ScriptObject* ptr);
     
-    friend class ScriptObjectFactory;
 } __attribute__ ((aligned (4)));
 
 }}

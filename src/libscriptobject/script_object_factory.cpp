@@ -33,12 +33,11 @@ rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptObjectFactory::CreateO
     std::fill_n(objectPtr, size, '?');
 #endif        
     
-    // cast to the real object
-    auto object = reinterpret_cast<ScriptObject*>(objectPtr);
-    object->size = size;
+    // make the real object
+    auto object = new (objectPtr) ScriptObject(size);
     
     // construct the keys pointer
-    new (&object->keys) ScriptObjectKeysPtr(ScriptObjectKeysFactory::CreateKeys(source, useKeyCache));
+    new (&object->keys_) ScriptObjectKeysPtr(ScriptObjectKeysFactory::CreateKeys(source, useKeyCache));
     
     auto valueStart = ScriptObject::getValueStart(*object);
     int fieldCount = source.count();
@@ -47,29 +46,29 @@ rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptObjectFactory::CreateO
         switch (source.type(i)) {
             case ScriptObjectType::Int32:
                 *reinterpret_cast<std::int32_t*>(valueStart + offset) = source.getInt32(i);
-                object->valueOffsets[i] = offset;
+                object->valueOffsets_[i] = offset;
                 offset += sizeof(std::int32_t);
                 break;
             case ScriptObjectType::Double:
                 *reinterpret_cast<double*>(valueStart + offset) = source.getDouble(i);
-                object->valueOffsets[i] = offset;
+                object->valueOffsets_[i] = offset;
                 offset += sizeof(double);
                 break;
             case ScriptObjectType::Boolean:
-                object->valueOffsets[i] = source.getBoolean(i);
+                object->valueOffsets_[i] = source.getBoolean(i);
                 offset += 0;
                 break;
             case ScriptObjectType::Object: {
                 auto child = source.getObject(i);
                 new (static_cast<void*>(valueStart + offset)) ScriptObjectPtr(child);
-                object->valueOffsets[i] = offset;
+                object->valueOffsets_[i] = offset;
                 offset += sizeof(ScriptObjectPtr);
                 break;
             }
             case ScriptObjectType::Array: {
                 auto child = source.getArray(i);
                 new (static_cast<void*>(valueStart + offset)) ScriptArrayPtr(child);
-                object->valueOffsets[i] = offset;
+                object->valueOffsets_[i] = offset;
                 offset += sizeof(ScriptArrayPtr);
                 break;
             }
@@ -78,7 +77,7 @@ rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptObjectFactory::CreateO
                 stringOffset -= stringLength + 1;
                 std::copy_n(source.getString(i), stringLength, valueStart + stringOffset);
                 *(valueStart + stringOffset + stringLength) = '\0';
-                object->valueOffsets[i] = stringOffset;
+                object->valueOffsets_[i] = stringOffset;
                 break;
             }
         }

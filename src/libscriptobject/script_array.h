@@ -34,19 +34,22 @@ typedef std::shared_ptr<ScriptArray> ScriptArrayPtr;
 struct ScriptObject;
 typedef std::shared_ptr<ScriptObject> ScriptObjectPtr;
 
-struct ScriptArray {        
-    const unsigned size;    
+struct ScriptArray {
+private:
+    const unsigned size_;    
     struct {
-        unsigned singleTypeFlag : 1;
-        unsigned spareFlag1 : 1;
-        unsigned spareFlag2 : 1;
-        unsigned spareFlag3 : 1;
-        unsigned count : 28;
+        unsigned singleTypeFlag_ : 1;
+        unsigned spareFlag1_ : 1;
+        unsigned spareFlag2_ : 1;
+        unsigned spareFlag3_ : 1;
+        unsigned count_ : 28;
     };
-    unsigned offsets[/*count*/];
+    unsigned offsets_[/*count*/];
     //unsigned char values[];
     //ScriptObjectType types[count];
-    
+
+public:
+    std::uint64_t getSize(bool includeChildren = false) const;
     unsigned getCount() const;
     ScriptObjectType getType(int index) const;
     const char* getString(int index) const;
@@ -57,6 +60,8 @@ struct ScriptArray {
     const ScriptArrayPtr getArray(int index) const;
     
     void CalculateHash(ScriptObjectHash&, bool (*)(const char*) = nullptr);
+    
+    static unsigned CalculateSizeOverhead(unsigned fieldCount);
     
 private:    
     friend class ScriptArrayFactory;

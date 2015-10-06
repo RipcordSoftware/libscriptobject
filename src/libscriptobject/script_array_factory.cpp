@@ -38,34 +38,34 @@ rs::scriptobject::ScriptArrayPtr rs::scriptobject::ScriptArrayFactory::CreateArr
     auto valueStart = ScriptArray::getValueStart(*array);
     auto types = ScriptArray::getTypeStart(*array);
     unsigned offset = 0, stringOffset = size - (valueStart - arrayPtr) - ScriptArray::CalculateTypesSize(source.count());
-    for (int i = 0; i < array->count; ++i) {
+    for (int i = 0; i < array->count_; ++i) {
         const auto type = source.type(i);
         switch (type) {
             case ScriptObjectType::Int32:
                 *reinterpret_cast<std::int32_t*>(valueStart + offset) = source.getInt32(i);
-                array->offsets[i] = offset;
+                array->offsets_[i] = offset;
                 offset += sizeof(std::int32_t);                
                 break;
             case ScriptObjectType::Double:
                 *reinterpret_cast<double*>(valueStart + offset) = source.getDouble(i);
-                array->offsets[i] = offset;
+                array->offsets_[i] = offset;
                 offset += sizeof(double);
                 break;
             case ScriptObjectType::Boolean:
-                array->offsets[i] = source.getBoolean(i);
+                array->offsets_[i] = source.getBoolean(i);
                 offset += 0;
                 break;
             case ScriptObjectType::Object: {
                 auto child = source.getObject(i);
                 new (static_cast<void*>(valueStart + offset)) ScriptObjectPtr(child);
-                array->offsets[i] = offset;
+                array->offsets_[i] = offset;
                 offset += sizeof(ScriptObjectPtr);
                 break;
             }
             case ScriptObjectType::Array: {
                 auto child = source.getArray(i);
                 new (static_cast<void*>(valueStart + offset)) ScriptArrayPtr(child);
-                array->offsets[i] = offset;
+                array->offsets_[i] = offset;
                 offset += sizeof(ScriptArrayPtr);
                 break;
             }
@@ -74,14 +74,14 @@ rs::scriptobject::ScriptArrayPtr rs::scriptobject::ScriptArrayFactory::CreateArr
                 stringOffset -= stringLength + 1;
                 std::copy_n(source.getString(i), stringLength, valueStart + stringOffset);
                 *(valueStart + stringOffset + stringLength) = '\0';
-                array->offsets[i] = stringOffset;
+                array->offsets_[i] = stringOffset;
                 break;
             }
             case ScriptObjectType::Null:
-                array->offsets[i] = 0;
+                array->offsets_[i] = 0;
                 break;
             case ScriptObjectType::Undefined:
-                array->offsets[i] = 0;
+                array->offsets_[i] = 0;
                 break;
         }
         

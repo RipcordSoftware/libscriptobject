@@ -22,26 +22,26 @@
 #include "md5.h"
 
 rs::scriptobject::ScriptArray::ScriptArray(unsigned size, unsigned count) :
-    size(size), count(count) {
-    singleTypeFlag = 0;
-    spareFlag1 = 0;
-    spareFlag2 = 0;
-    spareFlag3 = 0;
+    size_(size), count_(count) {
+    singleTypeFlag_ = 0;
+    spareFlag1_ = 0;
+    spareFlag2_ = 0;
+    spareFlag3_ = 0;
 }
 
 void rs::scriptobject::ScriptArray::ScriptArrayDeleter(ScriptArray* ptr) {
     // destroy all child object/array references
     auto valueStart = getValueStart(*ptr);
     auto types = ptr->getTypeStart();
-    for (int i = 0; i < ptr->count; ++i) {
+    for (int i = 0; i < ptr->count_; ++i) {
         switch (static_cast<rs::scriptobject::ScriptObjectType>(types[i])) {
             case ScriptObjectType::Object: {
-                auto child = reinterpret_cast<ScriptObjectPtr*>(valueStart + ptr->offsets[i]);
+                auto child = reinterpret_cast<ScriptObjectPtr*>(valueStart + ptr->offsets_[i]);
                 child->~ScriptObjectPtr();
                 break;
             }
             case ScriptObjectType::Array: {
-                auto child = reinterpret_cast<ScriptArrayPtr*>(valueStart + ptr->offsets[i]);
+                auto child = reinterpret_cast<ScriptArrayPtr*>(valueStart + ptr->offsets_[i]);
                 child->~ScriptArrayPtr();
                 break;
             }
@@ -53,32 +53,37 @@ void rs::scriptobject::ScriptArray::ScriptArrayDeleter(ScriptArray* ptr) {
 }
 
 const unsigned char* rs::scriptobject::ScriptArray::getValueStart() const {
-    auto start = reinterpret_cast<const unsigned char*>(&(offsets[count]));
+    auto start = reinterpret_cast<const unsigned char*>(&(offsets_[count_]));
     return start;
 }
 
 unsigned char* rs::scriptobject::ScriptArray::getValueStart(ScriptArray& array) {
-    auto start = reinterpret_cast<unsigned char*>(&(array.offsets[array.count]));
+    auto start = reinterpret_cast<unsigned char*>(&(array.offsets_[array.count_]));
     return start;
 }
 
 const rs::scriptobject::ScriptObjectType* rs::scriptobject::ScriptArray::getTypeStart() const {
     auto start = reinterpret_cast<const unsigned char*>(this);
-    start += size;
-    start -= CalculateTypesSize(count);
+    start += size_;
+    start -= CalculateTypesSize(count_);
     return reinterpret_cast<const ScriptObjectType*>(start);
 }
 
 rs::scriptobject::ScriptObjectType* rs::scriptobject::ScriptArray::getTypeStart(ScriptArray& array) {
     auto start = reinterpret_cast<unsigned char*>(&array);
-    start += array.size;
-    start -= CalculateTypesSize(array.count);
+    start += array.size_;
+    start -= CalculateTypesSize(array.count_);
     return reinterpret_cast<ScriptObjectType*>(start);
+}
+
+unsigned rs::scriptobject::ScriptArray::CalculateSizeOverhead(unsigned fieldCount) {
+    // TODO: if the types are all the same we will have a fixed types size - revise calculation then
+    return sizeof(ScriptArray) + (fieldCount * sizeof(ScriptArray::offsets_[0])) + CalculateTypesSize(fieldCount);
 }
 
 unsigned rs::scriptobject::ScriptArray::CalculateSize(const ScriptArraySource& source) {
     unsigned fieldCount = source.count();
-    unsigned size = sizeof(ScriptArray) + (fieldCount * sizeof(ScriptArray::offsets[0]));
+    unsigned size = CalculateSizeOverhead(fieldCount);
     
     for (int i = 0; i < fieldCount; ++i) {
         auto type = source.type(i);
@@ -113,10 +118,7 @@ unsigned rs::scriptobject::ScriptArray::CalculateSize(const ScriptArraySource& s
                 throw UnknownSourceFieldTypeException();
                 break;
         }
-    }
-    
-    // TODO: if the types are all the same this isn't required
-    size += CalculateTypesSize(fieldCount);
+    }    
     
     return size;
 }
@@ -125,12 +127,29 @@ unsigned rs::scriptobject::ScriptArray::CalculateTypesSize(unsigned fieldCount) 
     return fieldCount * sizeof(ScriptObjectType);
 }
 
+std::uint64_t rs::scriptobject::ScriptArray::getSize(bool includeChildren) const {
+    if (!includeChildren) {
+        return size_;
+    } else {
+        std::uint64_t size = size_;
+        
+        for (auto count = count_, i = decltype(count_)(0); i < count; ++i) {
+            switch (getType(i)) {
+                case ScriptObjectType::Object: size += getObject(i)->getSize(true); break;
+                case ScriptObjectType::Array: size += getArray(i)->getSize(true); break;
+            }
+        }
+        
+        return size;
+    }    
+}
+
 unsigned rs::scriptobject::ScriptArray::getCount() const { 
-    return count; 
+    return count_; 
 }
 
 rs::scriptobject::ScriptObjectType rs::scriptobject::ScriptArray::getType(int index) const {
-    if (index >= 0 && index < count) {
+    if (index >= 0 && index < count_) {
         return getTypeStart()[index];
     } else {
         throw UnknownScriptArrayIndexException();
@@ -138,7 +157,7 @@ rs::scriptobject::ScriptObjectType rs::scriptobject::ScriptArray::getType(int in
 }
 
 const char* rs::scriptobject::ScriptArray::getString(int index) const {
-    if (index < 0 || index >= count) {
+    if (index < 0 || index >= count_) {
         throw UnknownScriptArrayIndexException();
     }
     
@@ -146,12 +165,12 @@ const char* rs::scriptobject::ScriptArray::getString(int index) const {
         throw TypeCastException();
     }
     
-    auto str = reinterpret_cast<const char*>(getValueStart() + offsets[index]);
+    auto str = reinterpret_cast<const char*>(getValueStart() + offsets_[index]);
     return str;
 }
 
 double rs::scriptobject::ScriptArray::getDouble(int index) const {
-    if (index < 0 || index >= count) {
+    if (index < 0 || index >= count_) {
         throw UnknownScriptArrayIndexException();
     }
     
@@ -159,12 +178,12 @@ double rs::scriptobject::ScriptArray::getDouble(int index) const {
         throw TypeCastException();
     }
     
-    auto ptr = reinterpret_cast<const double*>(getValueStart() + offsets[index]);
+    auto ptr = reinterpret_cast<const double*>(getValueStart() + offsets_[index]);
     return *ptr;
 }
 
 bool rs::scriptobject::ScriptArray::getBoolean(int index) const {
-    if (index < 0 || index >= count) {
+    if (index < 0 || index >= count_) {
         throw UnknownScriptArrayIndexException();
     }
     
@@ -172,11 +191,11 @@ bool rs::scriptobject::ScriptArray::getBoolean(int index) const {
         throw TypeCastException();
     }
     
-    return (bool)offsets[index];
+    return (bool)offsets_[index];
 }
 
 std::int32_t rs::scriptobject::ScriptArray::getInt32(int index) const {
-    if (index < 0 || index >= count) {
+    if (index < 0 || index >= count_) {
         throw UnknownScriptArrayIndexException();
     }
     
@@ -184,12 +203,12 @@ std::int32_t rs::scriptobject::ScriptArray::getInt32(int index) const {
         throw TypeCastException();
     }
     
-    auto ptr = reinterpret_cast<const std::int32_t*>(getValueStart() + offsets[index]);
+    auto ptr = reinterpret_cast<const std::int32_t*>(getValueStart() + offsets_[index]);
     return *ptr;
 }
 
 const rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptArray::getObject(int index) const {
-    if (index < 0 || index >= count) {
+    if (index < 0 || index >= count_) {
         throw UnknownScriptArrayIndexException();
     }
     
@@ -197,12 +216,12 @@ const rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptArray::getObject
         throw TypeCastException();
     }
     
-    auto ptr = reinterpret_cast<const ScriptObjectPtr*>(getValueStart() + offsets[index]);
+    auto ptr = reinterpret_cast<const ScriptObjectPtr*>(getValueStart() + offsets_[index]);
     return *ptr;
 }
 
 const rs::scriptobject::ScriptArrayPtr rs::scriptobject::ScriptArray::getArray(int index) const {
-    if (index < 0 || index >= count) {
+    if (index < 0 || index >= count_) {
         throw UnknownScriptArrayIndexException();
     }
     
@@ -210,7 +229,7 @@ const rs::scriptobject::ScriptArrayPtr rs::scriptobject::ScriptArray::getArray(i
         throw TypeCastException();
     }
     
-    auto ptr = reinterpret_cast<const ScriptArrayPtr*>(getValueStart() + offsets[index]);
+    auto ptr = reinterpret_cast<const ScriptArrayPtr*>(getValueStart() + offsets_[index]);
     return *ptr;
 }
 

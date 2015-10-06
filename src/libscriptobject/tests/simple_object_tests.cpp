@@ -40,6 +40,7 @@ TEST_F(SimpleObjectTests, test0) {
     rs::scriptobject::utils::ScriptObjectVectorSource defn({});
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
     ASSERT_EQ(0, object->getCount());
+    ASSERT_EQ(rs::scriptobject::ScriptObject::CalculateSizeOverhead(0), object->getSize());
 }
 
 TEST_F(SimpleObjectTests, test1) {
@@ -50,11 +51,12 @@ TEST_F(SimpleObjectTests, test1) {
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
     
     rs::scriptobject::ScriptObjectKey key;
-    ASSERT_TRUE(object->keys->getKey("hello", key));
+    ASSERT_TRUE(object->getKeys()->getKey("hello", key));
     ASSERT_EQ(rs::scriptobject::ScriptObjectType::String, object->getType(0));
     ASSERT_EQ(rs::scriptobject::ScriptObjectType::String, object->getType("hello"));
     ASSERT_STREQ("world", object->getString(0));
     ASSERT_STREQ("world", object->getString("hello"));
+    ASSERT_EQ(rs::scriptobject::ScriptObject::CalculateSizeOverhead(1), object->getSize() - 6);
 }
 
 TEST_F(SimpleObjectTests, test2) {
@@ -66,7 +68,7 @@ TEST_F(SimpleObjectTests, test2) {
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
     
     rs::scriptobject::ScriptObjectKey key;
-    ASSERT_TRUE(object->keys->getKey("hello", key));
+    ASSERT_TRUE(object->getKeys()->getKey("hello", key));
     ASSERT_EQ(rs::scriptobject::ScriptObjectType::String, object->getType(0));
     ASSERT_EQ(rs::scriptobject::ScriptObjectType::String, object->getType("hello"));
     ASSERT_STREQ("world", object->getString(0));
@@ -75,6 +77,7 @@ TEST_F(SimpleObjectTests, test2) {
     ASSERT_EQ(rs::scriptobject::ScriptObjectType::String, object->getType("lorem"));
     ASSERT_STREQ("ipsum", object->getString(1));
     ASSERT_STREQ("ipsum", object->getString("lorem"));
+    ASSERT_EQ(rs::scriptobject::ScriptObject::CalculateSizeOverhead(2), object->getSize() - 6 - 6);
 }
 
 TEST_F(SimpleObjectTests, test3) {
@@ -86,7 +89,7 @@ TEST_F(SimpleObjectTests, test3) {
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
     
     rs::scriptobject::ScriptObjectKey key;
-    ASSERT_TRUE(object->keys->getKey("hello", key));
+    ASSERT_TRUE(object->getKeys()->getKey("hello", key));
     ASSERT_EQ(rs::scriptobject::ScriptObjectType::String, object->getType(0));
     ASSERT_EQ(rs::scriptobject::ScriptObjectType::String, object->getType("hello"));
     ASSERT_STREQ("world", object->getString(0));
@@ -95,6 +98,7 @@ TEST_F(SimpleObjectTests, test3) {
     ASSERT_EQ(rs::scriptobject::ScriptObjectType::Double, object->getType("pi"));
     ASSERT_FLOAT_EQ(3.14159, object->getDouble(1));
     ASSERT_FLOAT_EQ(3.14159, object->getDouble("pi"));
+    ASSERT_EQ(rs::scriptobject::ScriptObject::CalculateSizeOverhead(2), object->getSize() - 6 - sizeof(double));
 }
 
 TEST_F(SimpleObjectTests, test4) {
@@ -117,7 +121,8 @@ TEST_F(SimpleObjectTests, test4) {
     ASSERT_EQ(rs::scriptobject::ScriptObjectType::Boolean, object->getType(2));
     ASSERT_EQ(rs::scriptobject::ScriptObjectType::Boolean, object->getType("sunny"));
     ASSERT_TRUE(object->getBoolean(2));
-    ASSERT_TRUE(object->getBoolean("sunny"));    
+    ASSERT_TRUE(object->getBoolean("sunny"));
+    ASSERT_EQ(rs::scriptobject::ScriptObject::CalculateSizeOverhead(3), object->getSize() - 6);
 }
 
 TEST_F(SimpleObjectTests, test5) {
@@ -146,6 +151,7 @@ TEST_F(SimpleObjectTests, test5) {
     ASSERT_EQ(rs::scriptobject::ScriptObjectType::Int32, object->getType("the_answer"));
     ASSERT_EQ(42, object->getInt32(3));
     ASSERT_EQ(42, object->getInt32("the_answer"));
+    ASSERT_EQ(rs::scriptobject::ScriptObject::CalculateSizeOverhead(4), object->getSize() - 6 - sizeof(std::int32_t));
 }
 
 TEST_F(SimpleObjectTests, test6) {
@@ -180,6 +186,7 @@ TEST_F(SimpleObjectTests, test6) {
     ASSERT_EQ(rs::scriptobject::ScriptObjectType::Null, object->getType("nil"));
     ASSERT_EQ(rs::scriptobject::ScriptObjectType::Undefined, object->getType(5));
     ASSERT_EQ(rs::scriptobject::ScriptObjectType::Undefined, object->getType("divByZero"));
+    ASSERT_EQ(rs::scriptobject::ScriptObject::CalculateSizeOverhead(6), object->getSize() - 6 - sizeof(std::int32_t));
 }
 
 TEST_F(SimpleObjectTests, test7) {
@@ -544,6 +551,11 @@ TEST_F(SimpleObjectTests, test12) {
         ASSERT_EQ(rs::scriptobject::ScriptObjectType::String, childObj->getType("hello"));
         ASSERT_STREQ("world", childObj->getString("hello"));        
     }
+    
+    ASSERT_EQ(rs::scriptobject::ScriptObject::CalculateSizeOverhead(1), 
+        object->getSize(false) - sizeof(rs::scriptobject::ScriptObjectPtr));
+    ASSERT_EQ(rs::scriptobject::ScriptObject::CalculateSizeOverhead(1) * 2, 
+        object->getSize(true) - 6 - sizeof(rs::scriptobject::ScriptObjectPtr));
 }
 
 TEST_F(SimpleObjectTests, test13) {
@@ -563,6 +575,9 @@ TEST_F(SimpleObjectTests, test13) {
     ASSERT_EQ(rs::scriptobject::ScriptObjectType::Array, object->getType("array"));    
     ASSERT_TRUE(!!object->getArray(0));
     ASSERT_TRUE(!!object->getArray("array"));
+    
+    ASSERT_EQ(rs::scriptobject::ScriptObject::CalculateSizeOverhead(1) + rs::scriptobject::ScriptArray::CalculateSizeOverhead(1), 
+            object->getSize(true) - sizeof(rs::scriptobject::ScriptArrayPtr) - sizeof(double));
 }
 
 TEST_F(SimpleObjectTests, test14) {
@@ -616,12 +631,15 @@ TEST_F(SimpleObjectTests, test16) {
     ASSERT_EQ(2, targetObject->getCount());
     
     rs::scriptobject::ScriptObjectKey key1;
-    ASSERT_TRUE(targetObject->keys->getKey("hello", key1));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("hello", key1));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::String, key1.type);
     
     rs::scriptobject::ScriptObjectKey key2;
-    ASSERT_TRUE(targetObject->keys->getKey("pi", key2));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("pi", key2));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Double, key2.type);
+    
+    ASSERT_EQ(rs::scriptobject::ScriptObject::CalculateSizeOverhead(2), 
+            targetObject->getSize(true) - 6 - sizeof(double));
 }
 
 TEST_F(SimpleObjectTests, test17) {
@@ -645,28 +663,31 @@ TEST_F(SimpleObjectTests, test17) {
     ASSERT_EQ(6, targetObject->getCount());
     
     rs::scriptobject::ScriptObjectKey key1;
-    ASSERT_TRUE(targetObject->keys->getKey("hello", key1));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("hello", key1));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::String, key1.type);
     
     rs::scriptobject::ScriptObjectKey key2;
-    ASSERT_TRUE(targetObject->keys->getKey("pi", key2));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("pi", key2));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Double, key2.type);
     
     rs::scriptobject::ScriptObjectKey key3;
-    ASSERT_TRUE(targetObject->keys->getKey("nil", key3));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("nil", key3));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Null, key3.type);
     
     rs::scriptobject::ScriptObjectKey key4;
-    ASSERT_TRUE(targetObject->keys->getKey("lorem", key4));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("lorem", key4));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::String, key4.type);
     
     rs::scriptobject::ScriptObjectKey key5;
-    ASSERT_TRUE(targetObject->keys->getKey("wet", key5));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("wet", key5));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Boolean, key5.type);
     
     rs::scriptobject::ScriptObjectKey key6;
-    ASSERT_TRUE(targetObject->keys->getKey("the_answer", key6));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("the_answer", key6));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Int32, key6.type);
+        
+    ASSERT_EQ(rs::scriptobject::ScriptObject::CalculateSizeOverhead(6), 
+            targetObject->getSize(true) - 6 - 6 - sizeof(double) - sizeof(std::int32_t));
 }
 
 TEST_F(SimpleObjectTests, test18) {
@@ -708,31 +729,31 @@ TEST_F(SimpleObjectTests, test19) {
     ASSERT_EQ(6, targetObject->getCount());
     
     rs::scriptobject::ScriptObjectKey key1;
-    ASSERT_TRUE(targetObject->keys->getKey("hello", key1));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("hello", key1));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::String, key1.type);
     ASSERT_STREQ("world", targetObject->getString(key1.index));
     
     rs::scriptobject::ScriptObjectKey key2;
-    ASSERT_TRUE(targetObject->keys->getKey("pi", key2));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("pi", key2));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Double, key2.type);
     ASSERT_FLOAT_EQ(3.14159f, targetObject->getDouble(key2.index));
     
     rs::scriptobject::ScriptObjectKey key3;
-    ASSERT_TRUE(targetObject->keys->getKey("nil", key3));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("nil", key3));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Null, key3.type);
     
     rs::scriptobject::ScriptObjectKey key4;
-    ASSERT_TRUE(targetObject->keys->getKey("lorem", key4));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("lorem", key4));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::String, key4.type);
     ASSERT_STREQ("ipsum", targetObject->getString(key4.index));
     
     rs::scriptobject::ScriptObjectKey key5;
-    ASSERT_TRUE(targetObject->keys->getKey("wet", key5));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("wet", key5));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Boolean, key5.type);
     ASSERT_FALSE(targetObject->getBoolean(key5.index));
     
     rs::scriptobject::ScriptObjectKey key6;
-    ASSERT_TRUE(targetObject->keys->getKey("the_answer", key6));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("the_answer", key6));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Int32, key6.type);
     ASSERT_EQ(42, targetObject->getInt32(key6.index));
 }
@@ -758,31 +779,31 @@ TEST_F(SimpleObjectTests, test20) {
     ASSERT_EQ(6, targetObject->getCount());
     
     rs::scriptobject::ScriptObjectKey key1;
-    ASSERT_TRUE(targetObject->keys->getKey("hello", key1));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("hello", key1));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::String, key1.type);
     ASSERT_STREQ("world", targetObject->getString(key1.index));
     
     rs::scriptobject::ScriptObjectKey key2;
-    ASSERT_TRUE(targetObject->keys->getKey("pi", key2));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("pi", key2));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Double, key2.type);
     ASSERT_FLOAT_EQ(3.14159f, targetObject->getDouble(key2.index));
     
     rs::scriptobject::ScriptObjectKey key3;
-    ASSERT_TRUE(targetObject->keys->getKey("nil", key3));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("nil", key3));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Null, key3.type);
     
     rs::scriptobject::ScriptObjectKey key4;
-    ASSERT_TRUE(targetObject->keys->getKey("lorem", key4));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("lorem", key4));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::String, key4.type);
     ASSERT_STREQ("ipsum", targetObject->getString(key4.index));
     
     rs::scriptobject::ScriptObjectKey key5;
-    ASSERT_TRUE(targetObject->keys->getKey("wet", key5));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("wet", key5));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Boolean, key5.type);
     ASSERT_FALSE(targetObject->getBoolean(key5.index));
     
     rs::scriptobject::ScriptObjectKey key6;
-    ASSERT_TRUE(targetObject->keys->getKey("the_answer", key6));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("the_answer", key6));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Int32, key6.type);
     ASSERT_EQ(42, targetObject->getInt32(key6.index));
 }
@@ -818,19 +839,19 @@ TEST_F(SimpleObjectTests, test21) {
     ASSERT_EQ(4, targetObject->getCount());
     
     rs::scriptobject::ScriptObjectKey key1;
-    ASSERT_TRUE(targetObject->keys->getKey("hello", key1));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("hello", key1));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::String, key1.type);
     
     rs::scriptobject::ScriptObjectKey key2;
-    ASSERT_TRUE(targetObject->keys->getKey("pi", key2));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("pi", key2));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Double, key2.type);
     
     rs::scriptobject::ScriptObjectKey key3;
-    ASSERT_TRUE(targetObject->keys->getKey("child", key3));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("child", key3));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Object, key3.type);
     
     rs::scriptobject::ScriptObjectKey key4;
-    ASSERT_TRUE(targetObject->keys->getKey("array", key4));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("array", key4));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Array, key4.type);
 }
 
@@ -851,12 +872,12 @@ TEST_F(SimpleObjectTests, test22) {
     ASSERT_EQ(2, targetObject->getCount());
     
     rs::scriptobject::ScriptObjectKey key1;
-    ASSERT_TRUE(targetObject->keys->getKey("hello", key1));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("hello", key1));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::String, key1.type);
     ASSERT_EQ(1, key1.index);
     
     rs::scriptobject::ScriptObjectKey key2;
-    ASSERT_TRUE(targetObject->keys->getKey("pi", key2));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("pi", key2));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Double, key2.type);
     ASSERT_EQ(0, key2.index);
 }
@@ -878,12 +899,12 @@ TEST_F(SimpleObjectTests, test23) {
     ASSERT_EQ(2, targetObject->getCount());
     
     rs::scriptobject::ScriptObjectKey key1;
-    ASSERT_TRUE(targetObject->keys->getKey("hello", key1));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("hello", key1));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::String, key1.type);
     ASSERT_EQ(0, key1.index);
     
     rs::scriptobject::ScriptObjectKey key2;
-    ASSERT_TRUE(targetObject->keys->getKey("pi", key2));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("pi", key2));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Double, key2.type);
     ASSERT_EQ(1, key2.index);
 }
@@ -909,32 +930,32 @@ TEST_F(SimpleObjectTests, test24) {
     ASSERT_EQ(6, targetObject->getCount());
     
     rs::scriptobject::ScriptObjectKey key1;
-    ASSERT_TRUE(targetObject->keys->getKey("hello", key1));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("hello", key1));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::String, key1.type);
     ASSERT_EQ(3, key1.index);
     
     rs::scriptobject::ScriptObjectKey key2;
-    ASSERT_TRUE(targetObject->keys->getKey("pi", key2));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("pi", key2));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Double, key2.type);
     ASSERT_EQ(0, key2.index);
     
     rs::scriptobject::ScriptObjectKey key3;
-    ASSERT_TRUE(targetObject->keys->getKey("nil", key3));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("nil", key3));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Null, key3.type);
     ASSERT_EQ(1, key3.index);
     
     rs::scriptobject::ScriptObjectKey key4;
-    ASSERT_TRUE(targetObject->keys->getKey("lorem", key4));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("lorem", key4));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::String, key4.type);
     ASSERT_EQ(4, key4.index);
     
     rs::scriptobject::ScriptObjectKey key5;
-    ASSERT_TRUE(targetObject->keys->getKey("wet", key5));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("wet", key5));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Boolean, key5.type);
     ASSERT_EQ(5, key5.index);
     
     rs::scriptobject::ScriptObjectKey key6;
-    ASSERT_TRUE(targetObject->keys->getKey("the_answer", key6));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("the_answer", key6));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Int32, key6.type);
     ASSERT_EQ(2, key6.index);
 }
@@ -960,32 +981,32 @@ TEST_F(SimpleObjectTests, test25) {
     ASSERT_EQ(6, targetObject->getCount());
     
     rs::scriptobject::ScriptObjectKey key1;
-    ASSERT_TRUE(targetObject->keys->getKey("hello", key1));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("hello", key1));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::String, key1.type);
     ASSERT_EQ(0, key1.index);
     
     rs::scriptobject::ScriptObjectKey key2;
-    ASSERT_TRUE(targetObject->keys->getKey("pi", key2));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("pi", key2));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Double, key2.type);
     ASSERT_EQ(3, key2.index);
     
     rs::scriptobject::ScriptObjectKey key3;
-    ASSERT_TRUE(targetObject->keys->getKey("nil", key3));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("nil", key3));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Null, key3.type);
     ASSERT_EQ(4, key3.index);
     
     rs::scriptobject::ScriptObjectKey key4;
-    ASSERT_TRUE(targetObject->keys->getKey("lorem", key4));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("lorem", key4));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::String, key4.type);
     ASSERT_EQ(1, key4.index);
     
     rs::scriptobject::ScriptObjectKey key5;
-    ASSERT_TRUE(targetObject->keys->getKey("wet", key5));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("wet", key5));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Boolean, key5.type);
     ASSERT_EQ(2, key5.index);
     
     rs::scriptobject::ScriptObjectKey key6;
-    ASSERT_TRUE(targetObject->keys->getKey("the_answer", key6));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("the_answer", key6));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Int32, key6.type);
     ASSERT_EQ(5, key6.index);
 }
@@ -1017,36 +1038,36 @@ TEST_F(SimpleObjectTests, test26) {
     ASSERT_EQ(6, targetObject->getCount());
     
     rs::scriptobject::ScriptObjectKey key1;
-    ASSERT_TRUE(targetObject->keys->getKey("hello", key1));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("hello", key1));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::String, key1.type);
     ASSERT_STREQ("world", targetObject->getString(key1.index));
     ASSERT_EQ(0, key1.index);
     
     rs::scriptobject::ScriptObjectKey key2;
-    ASSERT_TRUE(targetObject->keys->getKey("pi", key2));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("pi", key2));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Double, key2.type);
     ASSERT_FLOAT_EQ(3.14159f, targetObject->getDouble(key2.index));
     ASSERT_EQ(3, key2.index);
     
     rs::scriptobject::ScriptObjectKey key3;
-    ASSERT_TRUE(targetObject->keys->getKey("nil", key3));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("nil", key3));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Null, key3.type);
     ASSERT_EQ(4, key3.index);
     
     rs::scriptobject::ScriptObjectKey key4;
-    ASSERT_TRUE(targetObject->keys->getKey("lorem", key4));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("lorem", key4));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::String, key4.type);
     ASSERT_STREQ("ipsum", targetObject->getString(key4.index));
     ASSERT_EQ(1, key4.index);
     
     rs::scriptobject::ScriptObjectKey key5;
-    ASSERT_TRUE(targetObject->keys->getKey("wet", key5));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("wet", key5));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Boolean, key5.type);
     ASSERT_FALSE(targetObject->getBoolean(key5.index));
     ASSERT_EQ(2, key5.index);
     
     rs::scriptobject::ScriptObjectKey key6;
-    ASSERT_TRUE(targetObject->keys->getKey("the_answer", key6));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("the_answer", key6));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Int32, key6.type);
     ASSERT_EQ(42, targetObject->getInt32(key6.index));
     ASSERT_EQ(5, key6.index);
@@ -1079,36 +1100,36 @@ TEST_F(SimpleObjectTests, test27) {
     ASSERT_EQ(6, targetObject->getCount());
     
     rs::scriptobject::ScriptObjectKey key1;
-    ASSERT_TRUE(targetObject->keys->getKey("hello", key1));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("hello", key1));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::String, key1.type);
     ASSERT_STREQ("world", targetObject->getString(key1.index));
     ASSERT_EQ(0, key1.index);
     
     rs::scriptobject::ScriptObjectKey key2;
-    ASSERT_TRUE(targetObject->keys->getKey("pi", key2));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("pi", key2));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Double, key2.type);
     ASSERT_FLOAT_EQ(3.14159f, targetObject->getDouble(key2.index));
     ASSERT_EQ(3, key2.index);
     
     rs::scriptobject::ScriptObjectKey key3;
-    ASSERT_TRUE(targetObject->keys->getKey("nil", key3));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("nil", key3));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Null, key3.type);
     ASSERT_EQ(4, key3.index);
     
     rs::scriptobject::ScriptObjectKey key4;
-    ASSERT_TRUE(targetObject->keys->getKey("lorem", key4));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("lorem", key4));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::String, key4.type);
     ASSERT_STREQ("ipsum", targetObject->getString(key4.index));
     ASSERT_EQ(1, key4.index);
     
     rs::scriptobject::ScriptObjectKey key5;
-    ASSERT_TRUE(targetObject->keys->getKey("wet", key5));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("wet", key5));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Boolean, key5.type);
     ASSERT_FALSE(targetObject->getBoolean(key5.index));
     ASSERT_EQ(2, key5.index);
     
     rs::scriptobject::ScriptObjectKey key6;
-    ASSERT_TRUE(targetObject->keys->getKey("the_answer", key6));
+    ASSERT_TRUE(targetObject->getKeys()->getKey("the_answer", key6));
     ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Int32, key6.type);
     ASSERT_EQ(42, targetObject->getInt32(key6.index));
     ASSERT_EQ(5, key6.index);
