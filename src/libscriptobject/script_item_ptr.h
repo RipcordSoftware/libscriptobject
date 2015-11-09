@@ -91,6 +91,12 @@ public:
     inline T* operator->() const noexcept { return ptr_; }
     inline bool operator!() const noexcept { return ptr_ == nullptr; }
     
+    inline void swap(ScriptItemPtr<T>& rhs) noexcept {
+        T* temp = ptr_;
+        ptr_ = rhs.ptr_;
+        rhs.ptr_ = temp;
+    }
+    
 private:
     template <typename TT, typename... Args>
     friend ScriptItemPtr<TT> make_script_item_ptr(Args&&... args);
@@ -138,6 +144,11 @@ ScriptItemPtr<T> make_sized_script_item_ptr(size_t size, Args&&... args) {
 #endif
     
     return ScriptItemPtr<T>{new (ptr) T(std::forward<Args>(args)...)};
+}
+
+template <typename T>
+inline void swap(ScriptItemPtr<T>& lhs, ScriptItemPtr<T>& rhs) noexcept {
+    lhs.swap(rhs);
 }
 
 }}

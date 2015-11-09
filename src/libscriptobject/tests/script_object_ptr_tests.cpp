@@ -367,3 +367,16 @@ TEST_F(ScriptObjectPtrTests, test16) {
     
     ASSERT_EQ(2, destroyed);
 }
+
+TEST_F(ScriptObjectPtrTests, test17) {
+    long destroyed = 0;
+    
+    if (true) {
+        auto ptr1 = rs::scriptobject::make_script_item_ptr<SomeCountedTestType>(destroyed);
+        auto ptr2 = rs::scriptobject::make_script_item_ptr<SomeCountedTestType>(destroyed);
+        
+        swap(ptr1, ptr2);
+    }
+    
+    ASSERT_EQ(2, destroyed);
+}
