@@ -25,19 +25,12 @@ std::atomic<unsigned long> rs::scriptobject::ScriptArrayFactory::totalBytes_;
 rs::scriptobject::ScriptArrayPtr rs::scriptobject::ScriptArrayFactory::CreateArray(const rs::scriptobject::ScriptArraySource& source) {
     auto size = ScriptArray::CalculateSize(source);
     
-    // allocate the memory we need
-    auto arrayPtr = new unsigned char[size];
-#ifdef DEBUG_SCRIPT_OBJECT
-    // in debug mode fill the memory with ? chars
-    std::fill_n(arrayPtr, size, '?');
-#endif        
-    
-    // create the real array
-    auto array = new (arrayPtr) ScriptArray(size, source.count());
+    auto sourceCount = source.count();
+    auto array = make_sized_script_item_ptr<ScriptArrayPtr::element_type>(size, size, sourceCount);
     
     auto valueStart = ScriptArray::getValueStart(*array);
     auto types = ScriptArray::getTypeStart(*array);
-    unsigned offset = 0, stringOffset = size - (valueStart - arrayPtr) - ScriptArray::CalculateTypesSize(source.count());
+    unsigned offset = 0, stringOffset = size - (valueStart - array.getRawPtr()) - ScriptArray::CalculateTypesSize(source.count());
     for (int i = 0; i < array->count_; ++i) {
         const auto type = source.type(i);
         switch (type) {
@@ -91,7 +84,7 @@ rs::scriptobject::ScriptArrayPtr rs::scriptobject::ScriptArrayFactory::CreateArr
     ++ScriptArrayFactory::count_;
     ScriptArrayFactory::totalBytes_ += size;
     
-    return ScriptArrayPtr(array, ScriptArray::ScriptArrayDeleter);
+    return array;
 }
 
 unsigned rs::scriptobject::ScriptArrayFactory::getCount() {

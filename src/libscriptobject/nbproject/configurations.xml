@@ -11,6 +11,7 @@
       <itemPath>script_array_factory.h</itemPath>
       <itemPath>script_array_source.h</itemPath>
       <itemPath>script_array_vector_source.h</itemPath>
+      <itemPath>script_item_ptr.h</itemPath>
       <itemPath>script_object.h</itemPath>
       <itemPath>script_object_definition.h</itemPath>
       <itemPath>script_object_factory.h</itemPath>
@@ -35,6 +36,7 @@
       <itemPath>script_array.cpp</itemPath>
       <itemPath>script_array_factory.cpp</itemPath>
       <itemPath>script_array_vector_source.cpp</itemPath>
+      <itemPath>script_item_ptr.cpp</itemPath>
       <itemPath>script_object.cpp</itemPath>
       <itemPath>script_object_definition.cpp</itemPath>
       <itemPath>script_object_factory.cpp</itemPath>
@@ -65,6 +67,12 @@
                      projectFiles="true"
                      kind="TEST">
         <itemPath>tests/object_keys_tests.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f6"
+                     displayName="ScriptObjectPtr Tests"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/script_object_ptr_tests.cpp</itemPath>
       </logicalFolder>
       <logicalFolder name="f4"
                      displayName="Simple Array Tests"
@@ -197,6 +205,21 @@
           <output>${TESTDIR}/TestFiles/f5</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f6">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f6</output>
+        </linkerTool>
+      </folder>
       <item path="libscriptobject.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="md5.cpp" ex="false" tool="1" flavor2="0">
@@ -216,6 +239,10 @@
       <item path="script_array_vector_source.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="script_array_vector_source.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="script_item_ptr.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="script_item_ptr.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="script_object.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -262,6 +289,8 @@
       <item path="tests/object_defn_hash_tests.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/object_keys_tests.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/script_object_ptr_tests.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/simple_array_tests.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -379,6 +408,21 @@
           <output>${TESTDIR}/TestFiles/f5</output>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f6">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f6</output>
+        </linkerTool>
+      </folder>
       <item path="libscriptobject.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="md5.cpp" ex="false" tool="1" flavor2="0">
@@ -398,6 +442,10 @@
       <item path="script_array_vector_source.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="script_array_vector_source.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="script_item_ptr.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="script_item_ptr.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="script_object.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -444,6 +492,8 @@
       <item path="tests/object_defn_hash_tests.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/object_keys_tests.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/script_object_ptr_tests.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="tests/simple_array_tests.cpp" ex="false" tool="1" flavor2="0">
       </item>

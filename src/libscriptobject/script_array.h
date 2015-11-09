@@ -22,21 +22,23 @@
 
 #include "script_object_type.h"
 #include "script_object_hash.h"
+#include "script_item_ptr.h"
 
 namespace rs {
 namespace scriptobject {
 
 class ScriptArraySource;
 
-struct ScriptArray;
-typedef std::shared_ptr<ScriptArray> ScriptArrayPtr;
+class ScriptArray;
+using ScriptArrayPtr = ScriptItemPtr<ScriptArray>;
 
-struct ScriptObject;
-typedef std::shared_ptr<ScriptObject> ScriptObjectPtr;
+class ScriptObject;
+using ScriptObjectPtr = ScriptItemPtr<ScriptObject>;
 
-struct ScriptArray {
+class ScriptArray final : public ScriptItemPtrBase<ScriptArray> {
 private:
-    const unsigned size_;    
+    const unsigned size_;
+    ScriptItemPtrBase<ScriptArray>::atomic_count_type refCount_{0};
     struct {
         unsigned singleTypeFlag_ : 1;
         unsigned spareFlag1_ : 1;
@@ -63,19 +65,20 @@ public:
     
     static unsigned CalculateSizeOverhead(unsigned fieldCount);
     
-private:    
+private:
+    friend class ScriptItemPtrBase<ScriptArray>;
+    friend ScriptArrayPtr make_sized_script_item_ptr<ScriptArrayPtr::element_type>(size_t, unsigned&, unsigned&);
     friend class ScriptArrayFactory;
     
     ScriptArray(unsigned size, unsigned count);
+    ~ScriptArray();
     
     static unsigned CalculateSize(const ScriptArraySource& source);
     static unsigned CalculateTypesSize(unsigned fieldCount);
     const unsigned char* getValueStart() const;
     static unsigned char* getValueStart(ScriptArray& array);
     const ScriptObjectType* getTypeStart() const;
-    static ScriptObjectType* getTypeStart(ScriptArray& array);
-    
-    static void ScriptArrayDeleter(ScriptArray* ptr);
+    static ScriptObjectType* getTypeStart(ScriptArray& array);    
 
 } __attribute__ ((aligned (4)));;
 

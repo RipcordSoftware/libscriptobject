@@ -39,6 +39,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/script_array.o \
 	${OBJECTDIR}/script_array_factory.o \
 	${OBJECTDIR}/script_array_vector_source.o \
+	${OBJECTDIR}/script_item_ptr.o \
 	${OBJECTDIR}/script_object.o \
 	${OBJECTDIR}/script_object_definition.o \
 	${OBJECTDIR}/script_object_factory.o \
@@ -56,6 +57,7 @@ TESTFILES= \
 	${TESTDIR}/TestFiles/f5 \
 	${TESTDIR}/TestFiles/f2 \
 	${TESTDIR}/TestFiles/f1 \
+	${TESTDIR}/TestFiles/f6 \
 	${TESTDIR}/TestFiles/f4 \
 	${TESTDIR}/TestFiles/f3
 
@@ -104,6 +106,11 @@ ${OBJECTDIR}/script_array_vector_source.o: script_array_vector_source.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_array_vector_source.o script_array_vector_source.cpp
+
+${OBJECTDIR}/script_item_ptr.o: script_item_ptr.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_item_ptr.o script_item_ptr.cpp
 
 ${OBJECTDIR}/script_object.o: script_object.cpp 
 	${MKDIR} -p ${OBJECTDIR}
@@ -162,6 +169,10 @@ ${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests/object_keys_tests.o ${OBJECTFILES:%.o=
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} ../../externals/installed/lib/libgtest_main.a ../../externals/installed/lib/libgtest.a  -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS} 
 
+${TESTDIR}/TestFiles/f6: ${TESTDIR}/tests/script_object_ptr_tests.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc} ../../externals/installed/lib/libgtest_main.a ../../externals/installed/lib/libgtest.a  -o ${TESTDIR}/TestFiles/f6 $^ ${LDLIBSOPTIONS} 
+
 ${TESTDIR}/TestFiles/f4: ${TESTDIR}/tests/simple_array_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
 	${LINK.cc} ../../externals/installed/lib/libgtest_main.a ../../externals/installed/lib/libgtest.a  -o ${TESTDIR}/TestFiles/f4 $^ ${LDLIBSOPTIONS} 
@@ -187,6 +198,12 @@ ${TESTDIR}/tests/object_keys_tests.o: tests/object_keys_tests.cpp
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -I../../externals/installed/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/object_keys_tests.o tests/object_keys_tests.cpp
+
+
+${TESTDIR}/tests/script_object_ptr_tests.o: tests/script_object_ptr_tests.cpp 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -I../../externals/installed/include -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/script_object_ptr_tests.o tests/script_object_ptr_tests.cpp
 
 
 ${TESTDIR}/tests/simple_array_tests.o: tests/simple_array_tests.cpp 
@@ -251,6 +268,19 @@ ${OBJECTDIR}/script_array_vector_source_nomain.o: ${OBJECTDIR}/script_array_vect
 	    $(COMPILE.cc) -O2 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_array_vector_source_nomain.o script_array_vector_source.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/script_array_vector_source.o ${OBJECTDIR}/script_array_vector_source_nomain.o;\
+	fi
+
+${OBJECTDIR}/script_item_ptr_nomain.o: ${OBJECTDIR}/script_item_ptr.o script_item_ptr.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/script_item_ptr.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -O2 -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/script_item_ptr_nomain.o script_item_ptr.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/script_item_ptr.o ${OBJECTDIR}/script_item_ptr_nomain.o;\
 	fi
 
 ${OBJECTDIR}/script_object_nomain.o: ${OBJECTDIR}/script_object.o script_object.cpp 
@@ -364,6 +394,7 @@ ${OBJECTDIR}/script_object_vector_source_nomain.o: ${OBJECTDIR}/script_object_ve
 	    ${TESTDIR}/TestFiles/f5 || true; \
 	    ${TESTDIR}/TestFiles/f2 || true; \
 	    ${TESTDIR}/TestFiles/f1 || true; \
+	    ${TESTDIR}/TestFiles/f6 || true; \
 	    ${TESTDIR}/TestFiles/f4 || true; \
 	    ${TESTDIR}/TestFiles/f3 || true; \
 	else  \
