@@ -30,30 +30,25 @@ rs::scriptobject::ScriptObject::ScriptObject(unsigned size) : size_(size) {
     
 }
 
-void rs::scriptobject::ScriptObject::ScriptObjectDeleter(ScriptObject* ptr) {
+rs::scriptobject::ScriptObject::~ScriptObject() {
     // destroy all child object/array references
-    auto valueStart = getValueStart(*ptr);
-    for (int i = 0; i < ptr->keys_->count; ++i) {
-        auto index = ptr->keys_->keys[i].index;
+    auto valueStart = getValueStart(*this);
+    for (int i = 0; i < keys_->count; ++i) {
+        auto index = keys_->keys[i].index;
 
-        switch (static_cast<rs::scriptobject::ScriptObjectType>(ptr->keys_->keys[i].type)) {
+        switch (static_cast<rs::scriptobject::ScriptObjectType>(keys_->keys[i].type)) {
             case ScriptObjectType::Object: {
-                auto child = reinterpret_cast<ScriptObjectPtr*>(valueStart + ptr->valueOffsets_[index]);
+                auto child = reinterpret_cast<ScriptObjectPtr*>(valueStart + valueOffsets_[index]);
                 child->~ScriptObjectPtr();
                 break;
             }
             case ScriptObjectType::Array: {
-                auto child = reinterpret_cast<ScriptArrayPtr*>(valueStart + ptr->valueOffsets_[index]);
+                auto child = reinterpret_cast<ScriptArrayPtr*>(valueStart + valueOffsets_[index]);
                 child->~ScriptArrayPtr();
                 break;
             }
         }
     }
-
-    // destroy the key reference
-    ptr->keys_.~ScriptObjectKeysPtr();
-
-    delete[] reinterpret_cast<unsigned char*>(ptr); 
 }
 
 const unsigned char* rs::scriptobject::ScriptObject::getValueStart() const {

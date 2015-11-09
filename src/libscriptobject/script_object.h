@@ -22,22 +22,24 @@
 
 #include "script_object_keys.h"
 #include "script_object_hash.h"
+#include "script_item_ptr.h"
 
 namespace rs {
 namespace scriptobject {
     
 class ScriptObjectSource;
 
-struct ScriptObject;
-typedef std::shared_ptr<ScriptObject> ScriptObjectPtr;
+class ScriptObject;
+using ScriptObjectPtr = ScriptItemPtr<ScriptObject>;
 
-struct ScriptArray;
-typedef std::shared_ptr<ScriptArray> ScriptArrayPtr;
+class ScriptArray;
+using ScriptArrayPtr = ScriptItemPtr<ScriptArray>;
 
-struct ScriptObject {    
+class ScriptObject final : public ScriptItemPtrBase<ScriptObject> {    
 
 private:    
     const unsigned size_;
+    ScriptItemPtrBase<ScriptObject>::atomic_count_type refCount_{0};
     ScriptObjectKeysPtr keys_;
     unsigned valueOffsets_[];
 
@@ -89,9 +91,12 @@ public:
     static unsigned CalculateSizeOverhead(unsigned fieldCount);
     
 private:
+    friend class ScriptItemPtrBase<ScriptObject>;
+    friend ScriptObjectPtr make_sized_script_item_ptr<ScriptObjectPtr::element_type>(size_t, unsigned&);
     friend class ScriptObjectFactory;
     
     ScriptObject(unsigned size);
+    ~ScriptObject();
     
     static unsigned CalculateSize(const ScriptObjectSource& source);
     const unsigned char* getValueStart() const;
@@ -102,9 +107,7 @@ private:
     
     unsigned getStringFieldLength(const ScriptObjectKey&) const;
     
-    bool setString(const ScriptObjectKey&, const char*);
-    
-    static void ScriptObjectDeleter(ScriptObject* ptr);
+    bool setString(const ScriptObjectKey&, const char*);    
     
 } __attribute__ ((aligned (4)));
 

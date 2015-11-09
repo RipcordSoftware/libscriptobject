@@ -26,22 +26,14 @@ std::atomic<unsigned long> rs::scriptobject::ScriptObjectFactory::totalBytes_;
 rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptObjectFactory::CreateObject(const ScriptObjectSource& source, bool useKeyCache) {
     auto size = ScriptObject::CalculateSize(source);
     
-    // allocate the memory we need
-    auto objectPtr = new unsigned char[size];
-#ifdef DEBUG_SCRIPT_OBJECT
-    // in debug mode fill the memory with ? chars
-    std::fill_n(objectPtr, size, '?');
-#endif        
-    
-    // make the real object
-    auto object = new (objectPtr) ScriptObject(size);
+    auto object = make_sized_script_item_ptr<ScriptObject>(size, size);
     
     // construct the keys pointer
     new (&object->keys_) ScriptObjectKeysPtr(ScriptObjectKeysFactory::CreateKeys(source, useKeyCache));
     
     auto valueStart = ScriptObject::getValueStart(*object);
     int fieldCount = source.count();
-    unsigned offset = 0, stringOffset = size - (valueStart - objectPtr);
+    unsigned offset = 0, stringOffset = size - (valueStart - object.getRawPtr());
     for (int i = 0; i < fieldCount; ++i) {
         switch (source.type(i)) {
             case ScriptObjectType::Int32:
@@ -86,7 +78,7 @@ rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptObjectFactory::CreateO
     ++ScriptObjectFactory::count_;
     ScriptObjectFactory::totalBytes_ += size;
     
-    return ScriptObjectPtr(object, ScriptObject::ScriptObjectDeleter);
+    return object;
 }
 
 unsigned rs::scriptobject::ScriptObjectFactory::getCount() {

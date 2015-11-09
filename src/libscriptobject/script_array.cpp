@@ -29,27 +29,24 @@ rs::scriptobject::ScriptArray::ScriptArray(unsigned size, unsigned count) :
     spareFlag3_ = 0;
 }
 
-void rs::scriptobject::ScriptArray::ScriptArrayDeleter(ScriptArray* ptr) {
+rs::scriptobject::ScriptArray::~ScriptArray() {
     // destroy all child object/array references
-    auto valueStart = getValueStart(*ptr);
-    auto types = ptr->getTypeStart();
-    for (int i = 0; i < ptr->count_; ++i) {
+    auto valueStart = getValueStart(*this);
+    auto types = getTypeStart();
+    for (int i = 0; i < count_; ++i) {
         switch (static_cast<rs::scriptobject::ScriptObjectType>(types[i])) {
             case ScriptObjectType::Object: {
-                auto child = reinterpret_cast<ScriptObjectPtr*>(valueStart + ptr->offsets_[i]);
+                auto child = reinterpret_cast<ScriptObjectPtr*>(valueStart + offsets_[i]);
                 child->~ScriptObjectPtr();
                 break;
             }
             case ScriptObjectType::Array: {
-                auto child = reinterpret_cast<ScriptArrayPtr*>(valueStart + ptr->offsets_[i]);
+                auto child = reinterpret_cast<ScriptArrayPtr*>(valueStart + offsets_[i]);
                 child->~ScriptArrayPtr();
                 break;
             }
         }
     }
-    
-    ptr->~ScriptArray();
-    delete[] reinterpret_cast<unsigned char*>(ptr);
 }
 
 const unsigned char* rs::scriptobject::ScriptArray::getValueStart() const {
