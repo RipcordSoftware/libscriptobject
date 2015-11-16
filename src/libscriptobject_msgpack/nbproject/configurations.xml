@@ -4,6 +4,7 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <itemPath>libscriptobject_msgpack.h</itemPath>
       <itemPath>script_array_msgpack_source.h</itemPath>
       <itemPath>script_object_msgpack_source.h</itemPath>
     </logicalFolder>
@@ -48,6 +49,8 @@
         <archiverTool>
         </archiverTool>
       </compileType>
+      <item path="libscriptobject_msgpack.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="script_array_msgpack_source.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="script_array_msgpack_source.h" ex="false" tool="3" flavor2="0">
@@ -84,6 +87,8 @@
         <archiverTool>
         </archiverTool>
       </compileType>
+      <item path="libscriptobject_msgpack.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="script_array_msgpack_source.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="script_array_msgpack_source.h" ex="false" tool="3" flavor2="0">
