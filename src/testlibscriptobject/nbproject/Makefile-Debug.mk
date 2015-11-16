@@ -52,7 +52,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=../libscriptobject/dist/Debug/GNU-Linux-x86/libscriptobject.a ../libscriptobject_gason/dist/Debug/GNU-Linux-x86/liblibscriptobject_gason.a
+LDLIBSOPTIONS=../libscriptobject/dist/Debug/GNU-Linux-x86/libscriptobject.a ../libscriptobject_gason/dist/Debug/GNU-Linux-x86/liblibscriptobject_gason.a ../libscriptobject_msgpack/dist/Debug/GNU-Linux-x86/liblibscriptobject_msgpack.a
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
@@ -62,6 +62,8 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibscriptobject: ../libscriptobje
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibscriptobject: ../libscriptobject_gason/dist/Debug/GNU-Linux-x86/liblibscriptobject_gason.a
 
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibscriptobject: ../libscriptobject_msgpack/dist/Debug/GNU-Linux-x86/liblibscriptobject_msgpack.a
+
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibscriptobject: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibscriptobject ${OBJECTFILES} ${LDLIBSOPTIONS}
@@ -69,12 +71,13 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibscriptobject: ${OBJECTFILES}
 ${OBJECTDIR}/main.o: main.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -I../../externals/gason/src -I../libscriptobject -I../libscriptobject_gason -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
+	$(COMPILE.cc) -g -I../../externals/gason/src -I../libscriptobject -I../libscriptobject_gason -I../libscriptobject_msgpack -I../../externals/msgpack-c/include -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/main.o main.cpp
 
 # Subprojects
 .build-subprojects:
 	cd ../libscriptobject && ${MAKE}  -f Makefile CONF=Debug
 	cd ../libscriptobject_gason && ${MAKE}  -f Makefile CONF=Debug
+	cd ../libscriptobject_msgpack && ${MAKE}  -f Makefile CONF=Debug
 
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
@@ -85,6 +88,7 @@ ${OBJECTDIR}/main.o: main.cpp
 .clean-subprojects:
 	cd ../libscriptobject && ${MAKE}  -f Makefile CONF=Debug clean
 	cd ../libscriptobject_gason && ${MAKE}  -f Makefile CONF=Debug clean
+	cd ../libscriptobject_msgpack && ${MAKE}  -f Makefile CONF=Debug clean
 
 # Enable dependency checking
 .dep.inc: .depcheck-impl

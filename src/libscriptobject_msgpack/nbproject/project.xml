@@ -3,25 +3,21 @@
     <type>org.netbeans.modules.cnd.makeproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/make-project/1">
-            <name>testlibscriptobject</name>
+            <name>libscriptobject_msgpack</name>
             <c-extensions/>
             <cpp-extensions>cpp</cpp-extensions>
-            <header-extensions/>
+            <header-extensions>h</header-extensions>
             <sourceEncoding>UTF-8</sourceEncoding>
-            <make-dep-projects>
-                <make-dep-project>../libscriptobject_msgpack</make-dep-project>
-                <make-dep-project>../libscriptobject</make-dep-project>
-                <make-dep-project>../libscriptobject_gason</make-dep-project>
-            </make-dep-projects>
+            <make-dep-projects/>
             <sourceRootList/>
             <confList>
                 <confElem>
                     <name>Debug</name>
-                    <type>1</type>
+                    <type>3</type>
                 </confElem>
                 <confElem>
                     <name>Release</name>
-                    <type>1</type>
+                    <type>3</type>
                 </confElem>
             </confList>
             <formatting>

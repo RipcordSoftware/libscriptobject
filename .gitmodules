@@ -1,3 +1,6 @@
 [submodule "externals/gason"]
 	path = externals/gason
 	url = https://github.com/vivkin/gason.git
+[submodule "externals/msgpack-c"]
+	path = externals/msgpack-c
+	url = https://github.com/msgpack/msgpack-c.git

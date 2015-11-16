@@ -20,6 +20,7 @@
 #include <sstream>
 #include <iomanip>
 #include <array>
+#include <cstring>
 
 #include <unistd.h>
 
@@ -28,6 +29,9 @@
 #include "script_object_factory.h"
 #include "script_array_factory.h"
 #include "script_object_keys_cache.h"
+
+#include "script_object_msgpack_source.h"
+#include "script_array_msgpack_source.h"
 
 void ShowObject(const rs::scriptobject::ScriptObjectPtr object, int depth);
 void ShowArray(const rs::scriptobject::ScriptArrayPtr array, int depth);
@@ -182,9 +186,9 @@ bool IsArray(const char* json, int length) {
 
 
 int main(int argc, char** argv) {
-    
+
     if (argc != 2) {
-        std::cout << "command line: [json file]" << std::endl;
+        std::cout << "command line: [json/msgpack file]" << std::endl;
         return 1;
     } else {
         try {
@@ -207,16 +211,33 @@ int main(int argc, char** argv) {
         
             std::cerr << "Parsing... ";
             
-            if (IsObject(json, fileLength)) {
-                rs::scriptobject::ScriptObjectJsonSource source(&json[0]);
-                auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(source);
-                ShowObject(object);
-            } else if (IsArray(json, fileLength)) {
-                rs::scriptobject::ScriptArrayJsonSource source(&json[0]);
-                auto object = rs::scriptobject::ScriptArrayFactory::CreateArray(source);
-                ShowArray(object);
+            if (std::strstr(argv[1], ".json") != nullptr) {
+                if (IsObject(json, fileLength)) {
+                    rs::scriptobject::ScriptObjectJsonSource source(&json[0]);
+                    auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(source);
+                    ShowObject(object);
+                } else if (IsArray(json, fileLength)) {
+                    rs::scriptobject::ScriptArrayJsonSource source(&json[0]);
+                    auto array = rs::scriptobject::ScriptArrayFactory::CreateArray(source);
+                    ShowArray(array);
+                } else {
+                    throw "the input file was not recognised as JSON";
+                }
+            } else if (fileLength > 0 && std::strstr(argv[1], ".msgpack") != nullptr) {
+                if ((json[0] >= '\x80' && json[0] <= '\x8f') || json[0] == '\xde' || json[0] == '\xdf') {
+                    rs::scriptobject::ScriptObjectMsgpackSource source{json, fileLength};
+                    auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(source);
+                    ShowObject(object);
+                } else if ((json[0] >= '\x90' && json[0] <= '\x9f') || json[0] == '\xdc' || json[0] == '\xdd') {
+                    rs::scriptobject::ScriptArrayMsgpackSource source{json, fileLength};
+                    auto array = rs::scriptobject::ScriptArrayFactory::CreateArray(source);
+                    ShowArray(array);
+                } else {
+                    std::cerr << std::hex << (int)json[0] << std::endl;
+                    throw "the input file was not recognised as MsgPack";
+                }
             } else {
-                throw "Error: the input file was not recognised as JSON";
+                throw "the input file type was not recognised";
             }
             
             std::cerr << "done, found: " << std::endl << 

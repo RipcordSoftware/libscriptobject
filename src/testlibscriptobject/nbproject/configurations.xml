@@ -49,6 +49,8 @@
             <pElem>../../externals/gason/src</pElem>
             <pElem>../libscriptobject</pElem>
             <pElem>../libscriptobject_gason</pElem>
+            <pElem>../libscriptobject_msgpack</pElem>
+            <pElem>../../externals/msgpack-c/include</pElem>
           </incDir>
           <commandLine>--coverage</commandLine>
         </ccTool>
@@ -76,6 +78,18 @@
                             BC="${MAKE}  -f Makefile CONF=Debug"
                             CC="${MAKE}  -f Makefile CONF=Debug clean"
                             OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/liblibscriptobject_gason.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../libscriptobject_msgpack"
+                            CT="3"
+                            CN="Debug"
+                            AC="true"
+                            BL="true"
+                            WD="../libscriptobject_msgpack"
+                            BC="${MAKE}  -f Makefile CONF=Debug"
+                            CC="${MAKE}  -f Makefile CONF=Debug clean"
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/liblibscriptobject_msgpack.a">
               </makeArtifact>
             </linkerLibProjectItem>
           </linkerLibItems>
@@ -117,6 +131,8 @@
             <pElem>../../externals/gason/src</pElem>
             <pElem>../libscriptobject</pElem>
             <pElem>../libscriptobject_gason</pElem>
+            <pElem>../libscriptobject_msgpack</pElem>
+            <pElem>../../externals/msgpack-c/include</pElem>
           </incDir>
         </ccTool>
         <fortranCompilerTool>
@@ -149,6 +165,18 @@
                             BC="${MAKE}  -f Makefile CONF=Release"
                             CC="${MAKE}  -f Makefile CONF=Release clean"
                             OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/liblibscriptobject_gason.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../libscriptobject_msgpack"
+                            CT="3"
+                            CN="Release"
+                            AC="false"
+                            BL="true"
+                            WD="../libscriptobject_msgpack"
+                            BC="${MAKE}  -f Makefile CONF=Release"
+                            CC="${MAKE}  -f Makefile CONF=Release clean"
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/liblibscriptobject_msgpack.a">
               </makeArtifact>
             </linkerLibProjectItem>
           </linkerLibItems>
