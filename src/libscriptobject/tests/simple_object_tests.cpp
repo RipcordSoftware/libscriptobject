@@ -1639,3 +1639,103 @@ TEST_F(SimpleObjectTests, test46) {
     ASSERT_EQ(rs::scriptobject::ScriptObjectType::String, object->getType("abc", index));
     ASSERT_EQ(5, index);
 }
+
+TEST_F(SimpleObjectTests, test47) {
+    rs::scriptobject::utils::ScriptObjectVectorSource defn({
+        std::make_pair("wet", rs::scriptobject::utils::VectorValue(false)),
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),
+        std::make_pair("sunny", rs::scriptobject::utils::VectorValue(true))
+    });
+    
+    auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
+    
+    auto newObject = rs::scriptobject::ScriptObject::DeleteField(object, "hello");
+    ASSERT_EQ(2, newObject->getCount());
+    
+    int index = -1;
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::Boolean, newObject->getType("wet", index));
+    ASSERT_EQ(0, index);
+    ASSERT_FALSE(newObject->getBoolean(index));
+    ASSERT_FALSE(newObject->getBoolean("wet"));
+    
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::Boolean, newObject->getType("sunny", index));
+    ASSERT_EQ(1, index);
+    ASSERT_TRUE(newObject->getBoolean(index));
+    ASSERT_TRUE(newObject->getBoolean("sunny"));
+    
+    newObject = rs::scriptobject::ScriptObject::DeleteField(object, "sunny");
+    ASSERT_EQ(2, newObject->getCount());
+    
+    index = -1;
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::Boolean, newObject->getType("wet", index));
+    ASSERT_EQ(0, index);
+    ASSERT_FALSE(newObject->getBoolean(index));
+    ASSERT_FALSE(newObject->getBoolean("wet"));
+    
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::String, newObject->getType("hello", index));
+    ASSERT_EQ(1, index);
+    ASSERT_STREQ("world", newObject->getString(index));
+    ASSERT_STREQ("world", newObject->getString("hello"));
+    
+    newObject = rs::scriptobject::ScriptObject::DeleteField(object, "wet");
+    ASSERT_EQ(2, newObject->getCount());
+    
+    index = -1;
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::String, newObject->getType("hello", index));
+    ASSERT_EQ(0, index);
+    ASSERT_STREQ("world", newObject->getString(index));
+    ASSERT_STREQ("world", newObject->getString("hello"));
+    
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::Boolean, newObject->getType("sunny", index));
+    ASSERT_EQ(1, index);
+    ASSERT_TRUE(newObject->getBoolean(index));
+    ASSERT_TRUE(newObject->getBoolean("sunny"));
+}
+
+TEST_F(SimpleObjectTests, test48) {
+    rs::scriptobject::utils::ScriptObjectVectorSource defn({
+        std::make_pair("wet", rs::scriptobject::utils::VectorValue(false)),
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),
+        std::make_pair("sunny", rs::scriptobject::utils::VectorValue(true))
+    });
+    
+    auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
+    
+    auto newObject = rs::scriptobject::ScriptObject::DeleteField(object, "sunny");
+    newObject = rs::scriptobject::ScriptObject::DeleteField(newObject, "wet");
+    ASSERT_EQ(1, newObject->getCount());
+    
+    int index = -1;    
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::String, newObject->getType("hello", index));
+    ASSERT_EQ(0, index);
+    ASSERT_STREQ("world", newObject->getString(index));
+    ASSERT_STREQ("world", newObject->getString("hello"));
+    
+    newObject = rs::scriptobject::ScriptObject::DeleteField(newObject, "hello");
+    ASSERT_EQ(0, newObject->getCount());
+}
+
+TEST_F(SimpleObjectTests, test49) {
+    rs::scriptobject::utils::ScriptObjectVectorSource defn({
+        std::make_pair("wet", rs::scriptobject::utils::VectorValue(false)),
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),
+        std::make_pair("sunny", rs::scriptobject::utils::VectorValue(true))
+    });
+    
+    auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
+    
+    auto newObject = rs::scriptobject::ScriptObject::DeleteField(object, "xyz");
+    ASSERT_EQ(3, newObject->getCount());
+    ASSERT_EQ(object.get(), newObject.get());
+}
+
+TEST_F(SimpleObjectTests, test50) {
+    rs::scriptobject::utils::ObjectVector source;
+    rs::scriptobject::utils::ScriptObjectVectorSource defn{source};
+    
+    auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
+    ASSERT_EQ(0, object->getCount());    
+    
+    auto newObject = rs::scriptobject::ScriptObject::DeleteField(object, "xyz");
+    ASSERT_EQ(0, newObject->getCount());    
+}

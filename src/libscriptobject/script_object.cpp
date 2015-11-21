@@ -459,81 +459,106 @@ static void appendValue(rs::scriptobject::utils::ObjectVector& objVector, const 
     }
 }
 
-rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptObject::Merge(const ScriptObjectPtr left, const ScriptObjectPtr right, MergeStrategy strategy) {
-    if (left.get() == right.get()) {
-        return left;
+rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptObject::DeleteField(const ScriptObjectPtr obj, const char* fieldName) {
+    ScriptObjectKey fieldKey;
+    if (!obj->getKeys()->getKey(fieldName, fieldKey)) {
+        return obj;
+    } else {
+        auto fieldCount = obj->getCount();
+        
+        utils::ObjectVector newObject;
+        newObject.reserve(fieldCount - 1);
+        
+        for (decltype(fieldKey.index) i = 0; i < fieldKey.index; ++i) {
+            auto name = obj->getName(i);
+            appendValue(newObject, obj, name, i);
+        }
+        
+        for (decltype(fieldKey.index) i = fieldKey.index + 1; i < fieldCount; ++i) {
+            auto name = obj->getName(i);
+            appendValue(newObject, obj, name, i);
+        }
+        
+        utils::ScriptObjectVectorSource newSource{newObject};
+        return ScriptObjectFactory::CreateObject(newSource);
+    }
+}
+
+rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptObject::Merge(const ScriptObjectPtr lhs, const ScriptObjectPtr rhs, MergeStrategy strategy) {
+    if (lhs.get() == rhs.get()) {
+        return lhs;
     } else {
         switch (strategy) {
-            case MergeStrategy::Fast: return MergeFast(left, right);
-            default: return MergePosition(left, right, strategy);
+            case MergeStrategy::Fast: return MergeFast(lhs, rhs);
+            default: return MergePosition(lhs, rhs, strategy);
         }
     }
 }
 
-rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptObject::MergeFast(const ScriptObjectPtr left, const ScriptObjectPtr right) {
+rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptObject::MergeFast(const ScriptObjectPtr lhs, const ScriptObjectPtr rhs) {
     utils::ObjectVector mergedObject;
 
     auto l = 0, r = 0;
-    auto lMax = left->getCount();
-    auto rMax = right->getCount();
+    auto lMax = lhs->getCount();
+    auto rMax = rhs->getCount();
     while (l < lMax && r < rMax) {
-        auto leftName = left->getName(~l);
-        auto rightName = right->getName(~r);
+        auto leftName = lhs->getName(~l);
+        auto rightName = rhs->getName(~r);
         auto diff = std::strcmp(leftName, rightName);
 
         if (diff < 0) {
-            appendValue(mergedObject, left, leftName, ~l);
+            appendValue(mergedObject, lhs, leftName, ~l);
             ++l;
         } else if (diff > 0) {
-            appendValue(mergedObject, right, rightName, ~r);
+            appendValue(mergedObject, rhs, rightName, ~r);
             ++r;
         } else {
-            appendValue(mergedObject, right, rightName, ~r);
+            appendValue(mergedObject, rhs, rightName, ~r);
             ++l;
             ++r;
         }
     }
 
     for (; l < lMax; ++l) {
-        auto name = left->getName(~l);
-        appendValue(mergedObject, left, name, ~l);
+        auto name = lhs->getName(~l);
+        appendValue(mergedObject, lhs, name, ~l);
     }
 
     for (; r < rMax; ++r) {
-        auto name = right->getName(~r);
-        appendValue(mergedObject, right, name, ~r);
+        auto name = rhs->getName(~r);
+        appendValue(mergedObject, rhs, name, ~r);
     }
 
     utils::ScriptObjectVectorSource mergedSource{mergedObject};
     return ScriptObjectFactory::CreateObject(mergedSource);
 }
 
-rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptObject::MergePosition(const ScriptObjectPtr left, const ScriptObjectPtr right, MergeStrategy strategy) {
+rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptObject::MergePosition(const ScriptObjectPtr lhs, const ScriptObjectPtr rhs, MergeStrategy strategy) {
     utils::ObjectVector mergedObject;
 
-    const auto leftCount = left->getCount();
-    const auto rightCount = right->getCount();
+    const auto leftCount = lhs->getCount();
+    const auto rightCount = rhs->getCount();
 
     if (strategy == MergeStrategy::Front) {
         for (int i = 0; i < rightCount; ++i) {
-            auto name = right->getName(i);
-            appendValue(mergedObject, right, name, i);
+            auto name = rhs->getName(i);
+            appendValue(mergedObject, rhs, name, i);
         }
     }
 
     for (int i = 0; i < leftCount; ++i) {
-        auto name = left->getName(i);
+        auto name = lhs->getName(i);
 
         ScriptObjectKey key;
-        if (!right->keys_->getKey(name, key)) {
-            appendValue(mergedObject, left, name, i);
+        if (!rhs->keys_->getKey(name, key)) {
+            appendValue(mergedObject, lhs, name, i);
         }
     }
 
     if (strategy == MergeStrategy::Back) {
         for (int i = 0; i < rightCount; ++i) {
-            auto name = right->getName(i);
-            appendValue(mergedObject, right, name, i);
+            auto name = rhs->getName(i);
+            appendValue(mergedObject, rhs, name, i);
         }        
     }
 
