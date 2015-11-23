@@ -41,6 +41,21 @@ rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptObjectFactory::CreateO
                 object->valueOffsets_[i] = offset;
                 offset += sizeof(std::int32_t);
                 break;
+            case ScriptObjectType::UInt32:
+                *reinterpret_cast<std::uint32_t*>(valueStart + offset) = source.getUInt32(i);
+                object->valueOffsets_[i] = offset;
+                offset += sizeof(std::uint32_t);
+                break;
+            case ScriptObjectType::Int64:
+                *reinterpret_cast<std::int64_t*>(valueStart + offset) = source.getInt64(i);
+                object->valueOffsets_[i] = offset;
+                offset += sizeof(std::int64_t);
+                break;                
+            case ScriptObjectType::UInt64:
+                *reinterpret_cast<std::uint64_t*>(valueStart + offset) = source.getUInt64(i);
+                object->valueOffsets_[i] = offset;
+                offset += sizeof(std::uint64_t);
+                break;                
             case ScriptObjectType::Double:
                 *reinterpret_cast<double*>(valueStart + offset) = source.getDouble(i);
                 object->valueOffsets_[i] = offset;

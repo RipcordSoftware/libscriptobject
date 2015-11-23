@@ -24,13 +24,16 @@ namespace scriptobject {
 enum class ScriptObjectType : unsigned char {    
     Unknown = 0,
     Boolean = 1,
-    Int32 = 2,
-    Double = 3,
-    String = 4,
-    Object = 5,
-    Array = 6,
-    Null = 7,
-    Undefined = 8,
+    UInt32 = 2,
+    Int32 = 3,
+    UInt64 = 4,
+    Int64 = 5,
+    Double = 6,
+    String = 7,
+    Object = 8,
+    Array = 9,
+    Null = 10,
+    Undefined = 11,
     MAX = 16
 };
     

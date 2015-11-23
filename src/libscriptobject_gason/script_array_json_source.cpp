@@ -63,6 +63,18 @@ std::int32_t rs::scriptobject::ScriptArrayJsonSource::getInt32(int index) const 
     throw UnknownScriptArrayIndexException();
 }
 
+std::uint32_t rs::scriptobject::ScriptArrayJsonSource::getUInt32(int index) const { 
+    throw UnknownScriptArrayIndexException();
+}
+
+std::int64_t rs::scriptobject::ScriptArrayJsonSource::getInt64(int index) const { 
+    throw UnknownScriptArrayIndexException();
+}
+
+std::uint64_t rs::scriptobject::ScriptArrayJsonSource::getUInt64(int index) const { 
+    throw UnknownScriptArrayIndexException();
+}
+
 double rs::scriptobject::ScriptArrayJsonSource::getDouble(int index) const {
     if (type(index) != ScriptObjectType::Double) {
         throw TypeCastException();

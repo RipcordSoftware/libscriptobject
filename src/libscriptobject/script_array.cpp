@@ -99,6 +99,15 @@ unsigned rs::scriptobject::ScriptArray::CalculateSize(const ScriptArraySource& s
             case ScriptObjectType::Int32:
                 size += sizeof(std::int32_t);
                 break;
+            case ScriptObjectType::UInt32:
+                size += sizeof(std::uint32_t);
+                break;
+            case ScriptObjectType::Int64:
+                size += sizeof(std::int64_t);
+                break;
+            case ScriptObjectType::UInt64:
+                size += sizeof(std::uint64_t);
+                break;
             case ScriptObjectType::Null:
                 size += 0;
                 break;
@@ -204,6 +213,45 @@ std::int32_t rs::scriptobject::ScriptArray::getInt32(int index) const {
     return *ptr;
 }
 
+std::uint32_t rs::scriptobject::ScriptArray::getUInt32(int index) const {
+    if (index < 0 || index >= count_) {
+        throw UnknownScriptArrayIndexException();
+    }
+    
+    if (getTypeStart()[index] != ScriptObjectType::UInt32) {
+        throw TypeCastException();
+    }
+    
+    auto ptr = reinterpret_cast<const std::uint32_t*>(getValueStart() + offsets_[index]);
+    return *ptr;
+}
+
+std::int64_t rs::scriptobject::ScriptArray::getInt64(int index) const {
+    if (index < 0 || index >= count_) {
+        throw UnknownScriptArrayIndexException();
+    }
+    
+    if (getTypeStart()[index] != ScriptObjectType::Int64) {
+        throw TypeCastException();
+    }
+    
+    auto ptr = reinterpret_cast<const std::int64_t*>(getValueStart() + offsets_[index]);
+    return *ptr;
+}
+
+std::uint64_t rs::scriptobject::ScriptArray::getUInt64(int index) const {
+    if (index < 0 || index >= count_) {
+        throw UnknownScriptArrayIndexException();
+    }
+    
+    if (getTypeStart()[index] != ScriptObjectType::UInt64) {
+        throw TypeCastException();
+    }
+    
+    auto ptr = reinterpret_cast<const std::uint64_t*>(getValueStart() + offsets_[index]);
+    return *ptr;
+}
+
 const rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptArray::getObject(int index) const {
     if (index < 0 || index >= count_) {
         throw UnknownScriptArrayIndexException();
@@ -259,6 +307,21 @@ void rs::scriptobject::ScriptArray::CalculateHash(ScriptObjectHash& digest, bool
             }
             case ScriptObjectType::Int32: {
                 auto value = getInt32(i);
+                md5.update(reinterpret_cast<const unsigned char*>(&value), sizeof(value));
+                break;
+            }
+            case ScriptObjectType::UInt32: {
+                auto value = getUInt32(i);
+                md5.update(reinterpret_cast<const unsigned char*>(&value), sizeof(value));
+                break;
+            }
+            case ScriptObjectType::Int64: {
+                auto value = getInt64(i);
+                md5.update(reinterpret_cast<const unsigned char*>(&value), sizeof(value));
+                break;
+            }
+            case ScriptObjectType::UInt64: {
+                auto value = getUInt64(i);
                 md5.update(reinterpret_cast<const unsigned char*>(&value), sizeof(value));
                 break;
             }

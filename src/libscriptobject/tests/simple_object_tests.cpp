@@ -189,6 +189,83 @@ TEST_F(SimpleObjectTests, test6) {
     ASSERT_EQ(rs::scriptobject::ScriptObject::CalculateSizeOverhead(6), object->getSize() - 6 - sizeof(std::int32_t));
 }
 
+TEST_F(SimpleObjectTests, test6b) {
+    rs::scriptobject::utils::ScriptObjectVectorSource defn({
+        std::make_pair("not_the_answer", rs::scriptobject::utils::VectorValue(-42)),
+    });
+    
+    auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
+    
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::Int32, object->getType(0));
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::Int32, object->getType("not_the_answer"));
+    ASSERT_EQ(-42, object->getInt32(0));
+    ASSERT_EQ(-42, object->getInt32("not_the_answer"));
+    ASSERT_EQ(rs::scriptobject::ScriptObject::CalculateSizeOverhead(1), object->getSize() - sizeof(std::int32_t));
+}
+
+TEST_F(SimpleObjectTests, test6c) {
+    rs::scriptobject::utils::ScriptObjectVectorSource defn({
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42u)),
+    });
+    
+    auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
+    
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::UInt32, object->getType(0));
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::UInt32, object->getType("the_answer"));
+    ASSERT_EQ(42, object->getUInt32(0));
+    ASSERT_EQ(42, object->getUInt32("the_answer"));
+    ASSERT_EQ(rs::scriptobject::ScriptObject::CalculateSizeOverhead(1), object->getSize() - sizeof(std::uint32_t));
+}
+
+TEST_F(SimpleObjectTests, test6d) {
+    auto value = std::numeric_limits<std::int64_t>::min();
+    
+    rs::scriptobject::utils::ScriptObjectVectorSource defn({
+        std::make_pair("min_int64", rs::scriptobject::utils::VectorValue(value)),
+    });
+    
+    auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
+    
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::Int64, object->getType(0));
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::Int64, object->getType("min_int64"));
+    ASSERT_EQ(value, object->getInt64(0));
+    ASSERT_EQ(value, object->getInt64("min_int64"));
+    ASSERT_EQ(rs::scriptobject::ScriptObject::CalculateSizeOverhead(1), object->getSize() - sizeof(std::int64_t));
+}
+
+
+TEST_F(SimpleObjectTests, test6e) {
+    auto value = std::numeric_limits<std::int64_t>::max();
+    
+    rs::scriptobject::utils::ScriptObjectVectorSource defn({
+        std::make_pair("max_int64", rs::scriptobject::utils::VectorValue(value)),
+    });
+    
+    auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
+    
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::Int64, object->getType(0));
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::Int64, object->getType("max_int64"));
+    ASSERT_EQ(value, object->getInt64(0));
+    ASSERT_EQ(value, object->getInt64("max_int64"));
+    ASSERT_EQ(rs::scriptobject::ScriptObject::CalculateSizeOverhead(1), object->getSize() - sizeof(std::int64_t));
+}
+
+TEST_F(SimpleObjectTests, test6f) {
+    auto value = std::numeric_limits<std::uint64_t>::max();
+    
+    rs::scriptobject::utils::ScriptObjectVectorSource defn({
+        std::make_pair("max_uint64", rs::scriptobject::utils::VectorValue(value)),
+    });
+    
+    auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
+    
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::UInt64, object->getType(0));
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::UInt64, object->getType("max_uint64"));
+    ASSERT_EQ(value, object->getUInt64(0));
+    ASSERT_EQ(value, object->getUInt64("max_uint64"));
+    ASSERT_EQ(rs::scriptobject::ScriptObject::CalculateSizeOverhead(1), object->getSize() - sizeof(std::uint64_t));
+}
+
 TEST_F(SimpleObjectTests, test7) {
     rs::scriptobject::utils::ScriptObjectVectorSource defn({
         std::make_pair("wet", rs::scriptobject::utils::VectorValue(false)),        
@@ -211,6 +288,18 @@ TEST_F(SimpleObjectTests, test7) {
     
     ASSERT_THROW({
         object->getInt32("xyz");
+    }, rs::scriptobject::UnknownScriptObjectFieldException);
+    
+    ASSERT_THROW({
+        object->getUInt32("xyz");
+    }, rs::scriptobject::UnknownScriptObjectFieldException);
+    
+    ASSERT_THROW({
+        object->getInt64("xyz");
+    }, rs::scriptobject::UnknownScriptObjectFieldException);    
+    
+    ASSERT_THROW({
+        object->getUInt64("xyz");
     }, rs::scriptobject::UnknownScriptObjectFieldException);
     
     ASSERT_THROW({
@@ -240,6 +329,18 @@ TEST_F(SimpleObjectTests, test7) {
     }, rs::scriptobject::UnknownScriptObjectFieldException);
     
     ASSERT_THROW({
+        object->getUInt32(5050);
+    }, rs::scriptobject::UnknownScriptObjectFieldException);
+    
+    ASSERT_THROW({
+        object->getInt64(5500);
+    }, rs::scriptobject::UnknownScriptObjectFieldException);
+    
+    ASSERT_THROW({
+        object->getUInt64(5005);
+    }, rs::scriptobject::UnknownScriptObjectFieldException);
+    
+    ASSERT_THROW({
         object->getDouble(-99);
     }, rs::scriptobject::UnknownScriptObjectFieldException);
     
@@ -259,7 +360,8 @@ TEST_F(SimpleObjectTests, test8) {
         std::make_pair("wet", rs::scriptobject::utils::VectorValue(false)),        
         std::make_pair("sunny", rs::scriptobject::utils::VectorValue(true)),
         std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),
-        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42))
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42u)),
+        std::make_pair("not_the_answer", rs::scriptobject::utils::VectorValue(-42))
     });
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
@@ -275,6 +377,18 @@ TEST_F(SimpleObjectTests, test8) {
     ASSERT_THROW({
         object->getInt32("wet");
     }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
+        object->getUInt32("wet");
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        object->getInt64("wet");
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
+        object->getUInt64("wet");
+    }, rs::scriptobject::TypeCastException);    
     
     ASSERT_THROW({
         object->getObject("wet");
@@ -297,6 +411,18 @@ TEST_F(SimpleObjectTests, test8) {
     }, rs::scriptobject::TypeCastException);
     
     ASSERT_THROW({
+        object->getUInt32("hello");
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
+        object->getInt64("hello");
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
+        object->getUInt64("hello");
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
         object->getObject("hello");
     }, rs::scriptobject::TypeCastException);
     
@@ -307,6 +433,18 @@ TEST_F(SimpleObjectTests, test8) {
     ASSERT_THROW({
         object->getDouble("the_answer");
     }, rs::scriptobject::TypeCastException);    
+
+    ASSERT_THROW({
+        object->getInt32("the_answer");
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
+        object->getInt64("the_answer");
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
+        object->getUInt64("the_answer");
+    }, rs::scriptobject::TypeCastException);
     
     ASSERT_THROW({
         object->getString("the_answer");
@@ -325,6 +463,38 @@ TEST_F(SimpleObjectTests, test8) {
     }, rs::scriptobject::TypeCastException);
     
     ASSERT_THROW({
+        object->getDouble("not_the_answer");
+    }, rs::scriptobject::TypeCastException);    
+
+    ASSERT_THROW({
+        object->getUInt32("not_the_answer");
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
+        object->getInt64("not_the_answer");
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
+        object->getUInt64("not_the_answer");
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
+        object->getString("not_the_answer");
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        object->getBoolean("not_the_answer");
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        object->getObject("not_the_answer");
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
+        object->getArray("not_the_answer");
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
         object->getDouble("sunny");
     }, rs::scriptobject::TypeCastException);    
     
@@ -335,6 +505,18 @@ TEST_F(SimpleObjectTests, test8) {
     ASSERT_THROW({
         object->getInt32("sunny");
     }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
+        object->getUInt32("sunny");
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
+        object->getInt64("sunny");
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        object->getUInt64("sunny");
+    }, rs::scriptobject::TypeCastException);        
     
     ASSERT_THROW({
         object->getObject("sunny");
@@ -355,6 +537,18 @@ TEST_F(SimpleObjectTests, test8) {
     ASSERT_THROW({
         object->getInt32(0);
     }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
+        object->getUInt32(0);
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
+        object->getInt64(0);
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
+        object->getUInt64(0);
+    }, rs::scriptobject::TypeCastException);
 
     ASSERT_THROW({
         object->getArray(0);
@@ -370,6 +564,18 @@ TEST_F(SimpleObjectTests, test8) {
     
     ASSERT_THROW({
         object->getInt32(1);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        object->getUInt32(1);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        object->getInt64(1);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        object->getUInt64(1);
     }, rs::scriptobject::TypeCastException);    
     
     ASSERT_THROW({
@@ -393,6 +599,18 @@ TEST_F(SimpleObjectTests, test8) {
     }, rs::scriptobject::TypeCastException);    
     
     ASSERT_THROW({
+        object->getUInt32(2);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        object->getInt64(2);
+    }, rs::scriptobject::TypeCastException);        
+    
+    ASSERT_THROW({
+        object->getUInt64(2);
+    }, rs::scriptobject::TypeCastException);        
+    
+    ASSERT_THROW({
         object->getBoolean(2);
     }, rs::scriptobject::TypeCastException);    
     
@@ -409,6 +627,18 @@ TEST_F(SimpleObjectTests, test8) {
     }, rs::scriptobject::TypeCastException);    
     
     ASSERT_THROW({
+        object->getInt32(3);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        object->getInt64(3);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        object->getUInt64(3);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
         object->getString(3);
     }, rs::scriptobject::TypeCastException);    
     
@@ -422,6 +652,38 @@ TEST_F(SimpleObjectTests, test8) {
     
     ASSERT_THROW({
         object->getObject(3);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        object->getDouble(4);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        object->getUInt32(4);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        object->getInt64(4);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        object->getUInt64(4);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        object->getString(4);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        object->getBoolean(4);
+    }, rs::scriptobject::TypeCastException);            
+    
+    ASSERT_THROW({
+        object->getArray(4);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        object->getObject(4);
     }, rs::scriptobject::TypeCastException);
 }
 
@@ -454,7 +716,12 @@ TEST_F(SimpleObjectTests, test10) {
 
 TEST_F(SimpleObjectTests, test11) {
     rs::scriptobject::utils::ObjectVector vect;
-    rs::scriptobject::ScriptObjectType types[] = { rs::scriptobject::ScriptObjectType::String, rs::scriptobject::ScriptObjectType::Double, rs::scriptobject::ScriptObjectType::Int32 };
+    rs::scriptobject::ScriptObjectType types[] = { 
+        rs::scriptobject::ScriptObjectType::String, rs::scriptobject::ScriptObjectType::Double, 
+        rs::scriptobject::ScriptObjectType::Int32, rs::scriptobject::ScriptObjectType::UInt32,
+        rs::scriptobject::ScriptObjectType::Int64, rs::scriptobject::ScriptObjectType::UInt64,
+        rs::scriptobject::ScriptObjectType::Boolean, rs::scriptobject::ScriptObjectType::Null
+    };
     
     for (int i = 0; i < 1024; ++i) {
         auto type = types[i % (sizeof(types) / sizeof(types[0]))];
@@ -469,6 +736,21 @@ TEST_F(SimpleObjectTests, test11) {
             case rs::scriptobject::ScriptObjectType::Int32:
                 vect.push_back(std::make_pair(std::to_string(i), rs::scriptobject::utils::VectorValue(i)));
                 break;
+            case rs::scriptobject::ScriptObjectType::UInt32:
+                vect.push_back(std::make_pair(std::to_string(i), rs::scriptobject::utils::VectorValue((std::uint32_t)i)));
+                break;                
+            case rs::scriptobject::ScriptObjectType::Int64:
+                vect.push_back(std::make_pair(std::to_string(i), rs::scriptobject::utils::VectorValue((std::int64_t)std::numeric_limits<std::int32_t>::max() + i)));
+                break;                                
+            case rs::scriptobject::ScriptObjectType::UInt64:
+                vect.push_back(std::make_pair(std::to_string(i), rs::scriptobject::utils::VectorValue((std::uint64_t)std::numeric_limits<std::uint32_t>::max() + i)));
+                break;                                
+            case rs::scriptobject::ScriptObjectType::Boolean:
+                vect.push_back(std::make_pair(std::to_string(i), rs::scriptobject::utils::VectorValue(i % 2 == 0)));
+                break;                                
+            case rs::scriptobject::ScriptObjectType::Null:
+                vect.push_back(std::make_pair(std::to_string(i), rs::scriptobject::utils::VectorValue(rs::scriptobject::ScriptObjectType::Null)));
+                break;                                
         }
     }
     
@@ -492,6 +774,21 @@ TEST_F(SimpleObjectTests, test11) {
             case rs::scriptobject::ScriptObjectType::Int32:                
                 ASSERT_EQ(std::get<1>(vect[i]).getInt32(), object->getInt32(i));
                 break;
+            case rs::scriptobject::ScriptObjectType::UInt32:           
+                ASSERT_EQ(std::get<1>(vect[i]).getUInt32(), object->getUInt32(i));
+                break;                
+            case rs::scriptobject::ScriptObjectType::Int64:           
+                ASSERT_EQ(std::get<1>(vect[i]).getInt64(), object->getInt64(i));
+                break;                
+            case rs::scriptobject::ScriptObjectType::UInt64:           
+                ASSERT_EQ(std::get<1>(vect[i]).getUInt64(), object->getUInt64(i));
+                break;                
+            case rs::scriptobject::ScriptObjectType::Boolean:           
+                ASSERT_EQ(std::get<1>(vect[i]).getBoolean(), object->getBoolean(i));
+                break;
+            case rs::scriptobject::ScriptObjectType::Null:           
+                ASSERT_EQ(rs::scriptobject::ScriptObjectType::Null, object->getType(i));
+                break;
         }
     }
     
@@ -509,7 +806,22 @@ TEST_F(SimpleObjectTests, test11) {
                 ASSERT_FLOAT_EQ(std::get<1>(vect[i]).getDouble(), object->getDouble(name));
                 break;
             case rs::scriptobject::ScriptObjectType::Int32:                
-                ASSERT_FLOAT_EQ(std::get<1>(vect[i]).getInt32(), object->getInt32(name));
+                ASSERT_EQ(std::get<1>(vect[i]).getInt32(), object->getInt32(name));
+                break;
+            case rs::scriptobject::ScriptObjectType::UInt32:
+                ASSERT_EQ(std::get<1>(vect[i]).getUInt32(), object->getUInt32(name));
+                break;
+            case rs::scriptobject::ScriptObjectType::Int64:
+                ASSERT_EQ(std::get<1>(vect[i]).getInt64(), object->getInt64(name));
+                break;
+            case rs::scriptobject::ScriptObjectType::UInt64:
+                ASSERT_EQ(std::get<1>(vect[i]).getUInt64(), object->getUInt64(name));
+                break;
+            case rs::scriptobject::ScriptObjectType::Boolean:
+                ASSERT_EQ(std::get<1>(vect[i]).getBoolean(), object->getBoolean(name));
+                break;
+            case rs::scriptobject::ScriptObjectType::Null:
+                ASSERT_EQ(rs::scriptobject::ScriptObjectType::Null, object->getType(name));
                 break;
         }
     }
@@ -646,13 +958,17 @@ TEST_F(SimpleObjectTests, test17) {
     rs::scriptobject::utils::ScriptObjectVectorSource defn1({
         std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),
         std::make_pair("lorem", rs::scriptobject::utils::VectorValue("ipsum")),
-        std::make_pair("wet", rs::scriptobject::utils::VectorValue(false))
+        std::make_pair("wet", rs::scriptobject::utils::VectorValue(false)),
+        std::make_pair("not_the_answer", rs::scriptobject::utils::VectorValue(-42)),
+        std::make_pair("min_i64", rs::scriptobject::utils::VectorValue(std::numeric_limits<std::int64_t>::min()))
     });
     
     rs::scriptobject::utils::ScriptObjectVectorSource defn2({
         std::make_pair("pi", rs::scriptobject::utils::VectorValue(3.14159)),
         std::make_pair("nil", rs::scriptobject::utils::VectorValue()),
-        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42))
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42u)),
+        std::make_pair("max_i64", rs::scriptobject::utils::VectorValue(std::numeric_limits<std::int64_t>::max())),
+        std::make_pair("max_ui64", rs::scriptobject::utils::VectorValue(std::numeric_limits<std::uint64_t>::max()))
     });
     
     auto object1 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn1);
@@ -660,7 +976,7 @@ TEST_F(SimpleObjectTests, test17) {
     
     auto targetObject = rs::scriptobject::ScriptObject::Merge(object1, object2);
     
-    ASSERT_EQ(6, targetObject->getCount());
+    ASSERT_EQ(10, targetObject->getCount());
     
     rs::scriptobject::ScriptObjectKey key1;
     ASSERT_TRUE(targetObject->getKeys()->getKey("hello", key1));
@@ -684,10 +1000,29 @@ TEST_F(SimpleObjectTests, test17) {
     
     rs::scriptobject::ScriptObjectKey key6;
     ASSERT_TRUE(targetObject->getKeys()->getKey("the_answer", key6));
-    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Int32, key6.type);
+    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::UInt32, key6.type);
+    
+    rs::scriptobject::ScriptObjectKey key7;
+    ASSERT_TRUE(targetObject->getKeys()->getKey("not_the_answer", key7));
+    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Int32, key7.type);
+    
+    rs::scriptobject::ScriptObjectKey key8;
+    ASSERT_TRUE(targetObject->getKeys()->getKey("min_i64", key8));
+    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Int64, key8.type);
+    
+    rs::scriptobject::ScriptObjectKey key9;
+    ASSERT_TRUE(targetObject->getKeys()->getKey("max_i64", key9));
+    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Int64, key9.type);
+    
+    rs::scriptobject::ScriptObjectKey key10;
+    ASSERT_TRUE(targetObject->getKeys()->getKey("max_ui64", key10));
+    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::UInt64, key10.type);
         
-    ASSERT_EQ(rs::scriptobject::ScriptObject::CalculateSizeOverhead(6), 
-            targetObject->getSize(true) - 6 - 6 - sizeof(double) - sizeof(std::int32_t));
+    ASSERT_EQ(rs::scriptobject::ScriptObject::CalculateSizeOverhead(10), 
+            targetObject->getSize(true) - 6 - 6 - sizeof(double) - 
+            sizeof(std::uint32_t) - sizeof(std::int32_t) -
+            sizeof(std::int64_t) - sizeof(std::int64_t) -
+            sizeof(std::uint64_t));
 }
 
 TEST_F(SimpleObjectTests, test18) {
@@ -709,16 +1044,18 @@ TEST_F(SimpleObjectTests, test19) {
         std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(0)),
         std::make_pair("hello", rs::scriptobject::utils::VectorValue("")),
         std::make_pair("lorem", rs::scriptobject::utils::VectorValue("")),
-        std::make_pair("wet", rs::scriptobject::utils::VectorValue(true))    
+        std::make_pair("wet", rs::scriptobject::utils::VectorValue(true)),
+        std::make_pair("not_the_answer", rs::scriptobject::utils::VectorValue(0)),
     });
     
     rs::scriptobject::utils::ScriptObjectVectorSource defn2({
         std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),
         std::make_pair("lorem", rs::scriptobject::utils::VectorValue("ipsum")),
+        std::make_pair("not_the_answer", rs::scriptobject::utils::VectorValue(-42)),
         std::make_pair("wet", rs::scriptobject::utils::VectorValue(false)),
         std::make_pair("pi", rs::scriptobject::utils::VectorValue(3.14159)),
         std::make_pair("nil", rs::scriptobject::utils::VectorValue()),
-        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42))
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42u))
     });
     
     auto object1 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn1);
@@ -726,7 +1063,7 @@ TEST_F(SimpleObjectTests, test19) {
     
     auto targetObject = rs::scriptobject::ScriptObject::Merge(object1, object2);
     
-    ASSERT_EQ(6, targetObject->getCount());
+    ASSERT_EQ(7, targetObject->getCount());
     
     rs::scriptobject::ScriptObjectKey key1;
     ASSERT_TRUE(targetObject->getKeys()->getKey("hello", key1));
@@ -754,8 +1091,13 @@ TEST_F(SimpleObjectTests, test19) {
     
     rs::scriptobject::ScriptObjectKey key6;
     ASSERT_TRUE(targetObject->getKeys()->getKey("the_answer", key6));
-    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Int32, key6.type);
-    ASSERT_EQ(42, targetObject->getInt32(key6.index));
+    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::UInt32, key6.type);
+    ASSERT_EQ(42u, targetObject->getUInt32(key6.index));
+    
+    rs::scriptobject::ScriptObjectKey key7;
+    ASSERT_TRUE(targetObject->getKeys()->getKey("not_the_answer", key7));
+    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Int32, key7.type);
+    ASSERT_EQ(-42, targetObject->getInt32(key7.index));
 }
 
 TEST_F(SimpleObjectTests, test20) {
@@ -768,7 +1110,8 @@ TEST_F(SimpleObjectTests, test20) {
         std::make_pair("wet", rs::scriptobject::utils::VectorValue(false)),
         std::make_pair("pi", rs::scriptobject::utils::VectorValue(3.14159)),
         std::make_pair("nil", rs::scriptobject::utils::VectorValue()),
-        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42))
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42u)),
+        std::make_pair("not_the_answer", rs::scriptobject::utils::VectorValue(-42))
     });
     
     auto object1 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn1);
@@ -776,7 +1119,7 @@ TEST_F(SimpleObjectTests, test20) {
     
     auto targetObject = rs::scriptobject::ScriptObject::Merge(object1, object2);
     
-    ASSERT_EQ(6, targetObject->getCount());
+    ASSERT_EQ(7, targetObject->getCount());
     
     rs::scriptobject::ScriptObjectKey key1;
     ASSERT_TRUE(targetObject->getKeys()->getKey("hello", key1));
@@ -804,8 +1147,13 @@ TEST_F(SimpleObjectTests, test20) {
     
     rs::scriptobject::ScriptObjectKey key6;
     ASSERT_TRUE(targetObject->getKeys()->getKey("the_answer", key6));
-    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Int32, key6.type);
-    ASSERT_EQ(42, targetObject->getInt32(key6.index));
+    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::UInt32, key6.type);
+    ASSERT_EQ(42u, targetObject->getUInt32(key6.index));
+    
+    rs::scriptobject::ScriptObjectKey key7;
+    ASSERT_TRUE(targetObject->getKeys()->getKey("not_the_answer", key7));
+    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Int32, key7.type);
+    ASSERT_EQ(-42, targetObject->getInt32(key7.index));
 }
 
 TEST_F(SimpleObjectTests, test21) {
@@ -970,7 +1318,8 @@ TEST_F(SimpleObjectTests, test25) {
     rs::scriptobject::utils::ScriptObjectVectorSource defn2({
         std::make_pair("pi", rs::scriptobject::utils::VectorValue(3.14159)),
         std::make_pair("nil", rs::scriptobject::utils::VectorValue()),
-        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42))
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42u)),
+        std::make_pair("not_the_answer", rs::scriptobject::utils::VectorValue(-42))
     });
     
     auto object1 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn1);
@@ -978,7 +1327,7 @@ TEST_F(SimpleObjectTests, test25) {
     
     auto targetObject = rs::scriptobject::ScriptObject::Merge(object1, object2, rs::scriptobject::ScriptObject::MergeStrategy::Back);
     
-    ASSERT_EQ(6, targetObject->getCount());
+    ASSERT_EQ(7, targetObject->getCount());
     
     rs::scriptobject::ScriptObjectKey key1;
     ASSERT_TRUE(targetObject->getKeys()->getKey("hello", key1));
@@ -1007,8 +1356,13 @@ TEST_F(SimpleObjectTests, test25) {
     
     rs::scriptobject::ScriptObjectKey key6;
     ASSERT_TRUE(targetObject->getKeys()->getKey("the_answer", key6));
-    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Int32, key6.type);
+    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::UInt32, key6.type);
     ASSERT_EQ(5, key6.index);
+    
+    rs::scriptobject::ScriptObjectKey key7;
+    ASSERT_TRUE(targetObject->getKeys()->getKey("not_the_answer", key7));
+    ASSERT_EQ((unsigned)rs::scriptobject::ScriptObjectType::Int32, key7.type);
+    ASSERT_EQ(6, key7.index);
 }
 
 TEST_F(SimpleObjectTests, test26) {
@@ -1253,7 +1607,8 @@ TEST_F(SimpleObjectTests, test35) {
     rs::scriptobject::utils::ScriptObjectVectorSource defn({
         std::make_pair("pi", rs::scriptobject::utils::VectorValue(3.14159)),
         std::make_pair("text", rs::scriptobject::utils::VectorValue("lorem ipsum")),
-        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42))
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42u)),
+        std::make_pair("not_the_answer", rs::scriptobject::utils::VectorValue(-42))
     });
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
@@ -1275,6 +1630,10 @@ TEST_F(SimpleObjectTests, test35) {
     }, rs::scriptobject::TypeCastException);
     
     ASSERT_THROW({
+        object->setString("not_the_answer", "once more into the ....");
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
         object->setString("xyz", "the bomb");
     }, rs::scriptobject::UnknownScriptObjectFieldException);
 }
@@ -1283,19 +1642,22 @@ TEST_F(SimpleObjectTests, test36) {
     rs::scriptobject::utils::ScriptObjectVectorSource defn({        
         std::make_pair("wet", rs::scriptobject::utils::VectorValue(true)),
         std::make_pair("text", rs::scriptobject::utils::VectorValue("lorem ipsum")),
-        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42)),
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42u)),
+        std::make_pair("not_the_answer", rs::scriptobject::utils::VectorValue(-42)),
         std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),        
         std::make_pair("pi", rs::scriptobject::utils::VectorValue(3.14159)),
         std::make_pair("abc", rs::scriptobject::utils::VectorValue("xyz")),
         std::make_pair("items", rs::scriptobject::utils::VectorValue()),
-        std::make_pair("divByZero", rs::scriptobject::utils::VectorValue(rs::scriptobject::ScriptObjectType::Undefined))
+        std::make_pair("divByZero", rs::scriptobject::utils::VectorValue(rs::scriptobject::ScriptObjectType::Undefined)),
+        std::make_pair("min_i64", rs::scriptobject::utils::VectorValue(std::numeric_limits<std::int64_t>::min())),
+        std::make_pair("max_ui64", rs::scriptobject::utils::VectorValue(std::numeric_limits<std::uint64_t>::max()))
     });
     
     auto object1 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
     auto object2 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
     
-    ASSERT_EQ(8, object1->getCount());
-    ASSERT_EQ(8, object2->getCount());
+    ASSERT_EQ(11, object1->getCount());
+    ASSERT_EQ(11, object2->getCount());
     
     rs::scriptobject::ScriptObjectHash digest1;
     object1->CalculateHash(digest1);
@@ -1528,28 +1890,34 @@ TEST_F(SimpleObjectTests, test44) {
     rs::scriptobject::utils::ScriptObjectVectorSource defn1({        
         std::make_pair("wet", rs::scriptobject::utils::VectorValue(true)),
         std::make_pair("text", rs::scriptobject::utils::VectorValue("lorem ipsum")),
-        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42)),
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42u)),
+        std::make_pair("not_the_answer", rs::scriptobject::utils::VectorValue(-42)),
         std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),        
         std::make_pair("pi", rs::scriptobject::utils::VectorValue(3.14159)),
         std::make_pair("abc", rs::scriptobject::utils::VectorValue("xyz")),
-        std::make_pair("child", rs::scriptobject::utils::VectorValue(childArray1))
+        std::make_pair("child", rs::scriptobject::utils::VectorValue(childArray1)),
+        std::make_pair("min_i64", rs::scriptobject::utils::VectorValue(std::numeric_limits<std::int64_t>::min())),
+        std::make_pair("max_ui64", rs::scriptobject::utils::VectorValue(std::numeric_limits<std::uint64_t>::max()))
     });
     
     rs::scriptobject::utils::ScriptObjectVectorSource defn2({        
         std::make_pair("wet", rs::scriptobject::utils::VectorValue(true)),
         std::make_pair("text", rs::scriptobject::utils::VectorValue("lorem ipsum")),
-        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42)),
-        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),        
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42u)),
+        std::make_pair("not_the_answer", rs::scriptobject::utils::VectorValue(-42)),
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),
         std::make_pair("pi", rs::scriptobject::utils::VectorValue(3.14159)),
         std::make_pair("abc", rs::scriptobject::utils::VectorValue("xyz")),
-        std::make_pair("child", rs::scriptobject::utils::VectorValue(childArray2))
+        std::make_pair("child", rs::scriptobject::utils::VectorValue(childArray2)),
+        std::make_pair("min_i64", rs::scriptobject::utils::VectorValue(std::numeric_limits<std::int64_t>::min())),
+        std::make_pair("max_ui64", rs::scriptobject::utils::VectorValue(std::numeric_limits<std::uint64_t>::max()))
     });
     
     auto object1 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn1);
     auto object2 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn2);
     
-    ASSERT_EQ(7, object1->getCount());
-    ASSERT_EQ(7, object2->getCount());
+    ASSERT_EQ(10, object1->getCount());
+    ASSERT_EQ(10, object2->getCount());
     
     rs::scriptobject::ScriptObjectHash digest1;
     object1->CalculateHash(digest1);
@@ -1608,14 +1976,121 @@ TEST_F(SimpleObjectTests, test45) {
     ASSERT_TRUE(rs::scriptobject::CompareScriptObjectHash(digest1, digest2) != 0);
 }
 
+TEST_F(SimpleObjectTests, test45b) {
+    rs::scriptobject::utils::ScriptObjectVectorSource defn1({        
+        std::make_pair("wet", rs::scriptobject::utils::VectorValue(true)),
+        std::make_pair("text", rs::scriptobject::utils::VectorValue("lorem ipsum")),
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42u)),
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),        
+        std::make_pair("pi", rs::scriptobject::utils::VectorValue(3.14159)),
+        std::make_pair("abc", rs::scriptobject::utils::VectorValue("xyz"))
+    });
+    
+    rs::scriptobject::utils::ScriptObjectVectorSource defn2({        
+        std::make_pair("wet", rs::scriptobject::utils::VectorValue(true)),
+        std::make_pair("text", rs::scriptobject::utils::VectorValue("lorem ipsum")),
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(-42)),
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),        
+        std::make_pair("pi", rs::scriptobject::utils::VectorValue(3.14159)),
+        std::make_pair("abc", rs::scriptobject::utils::VectorValue("xyz"))
+    });
+    
+    auto object1 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn1);
+    auto object2 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn2);
+    
+    ASSERT_EQ(6, object1->getCount());
+    ASSERT_EQ(6, object2->getCount());
+    
+    rs::scriptobject::ScriptObjectHash digest1;
+    object1->CalculateHash(digest1);
+    
+    rs::scriptobject::ScriptObjectHash digest2;
+    object2->CalculateHash(digest2);
+    
+    ASSERT_TRUE(rs::scriptobject::CompareScriptObjectHash(digest1, digest2) != 0);
+}
+
+TEST_F(SimpleObjectTests, test45c) {
+    rs::scriptobject::utils::ScriptObjectVectorSource defn1({        
+        std::make_pair("wet", rs::scriptobject::utils::VectorValue(true)),
+        std::make_pair("text", rs::scriptobject::utils::VectorValue("lorem ipsum")),
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42u)),
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),        
+        std::make_pair("pi", rs::scriptobject::utils::VectorValue(3.14159)),
+        std::make_pair("abc", rs::scriptobject::utils::VectorValue("xyz")),
+        std::make_pair("big_number", rs::scriptobject::utils::VectorValue(std::numeric_limits<std::int64_t>::min()))
+    });
+    
+    rs::scriptobject::utils::ScriptObjectVectorSource defn2({        
+        std::make_pair("wet", rs::scriptobject::utils::VectorValue(true)),
+        std::make_pair("text", rs::scriptobject::utils::VectorValue("lorem ipsum")),
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42u)),
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),        
+        std::make_pair("pi", rs::scriptobject::utils::VectorValue(3.14159)),
+        std::make_pair("abc", rs::scriptobject::utils::VectorValue("xyz")),
+        std::make_pair("big_number", rs::scriptobject::utils::VectorValue(std::numeric_limits<std::int64_t>::max()))
+    });
+    
+    auto object1 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn1);
+    auto object2 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn2);
+    
+    ASSERT_EQ(7, object1->getCount());
+    ASSERT_EQ(7, object2->getCount());
+    
+    rs::scriptobject::ScriptObjectHash digest1;
+    object1->CalculateHash(digest1);
+    
+    rs::scriptobject::ScriptObjectHash digest2;
+    object2->CalculateHash(digest2);
+    
+    ASSERT_TRUE(rs::scriptobject::CompareScriptObjectHash(digest1, digest2) != 0);
+}
+
+TEST_F(SimpleObjectTests, test45d) {
+    rs::scriptobject::utils::ScriptObjectVectorSource defn1({        
+        std::make_pair("wet", rs::scriptobject::utils::VectorValue(true)),
+        std::make_pair("text", rs::scriptobject::utils::VectorValue("lorem ipsum")),
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42u)),
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),        
+        std::make_pair("pi", rs::scriptobject::utils::VectorValue(3.14159)),
+        std::make_pair("abc", rs::scriptobject::utils::VectorValue("xyz")),
+        std::make_pair("big_number", rs::scriptobject::utils::VectorValue(std::numeric_limits<std::uint64_t>::min()))
+    });
+    
+    rs::scriptobject::utils::ScriptObjectVectorSource defn2({        
+        std::make_pair("wet", rs::scriptobject::utils::VectorValue(true)),
+        std::make_pair("text", rs::scriptobject::utils::VectorValue("lorem ipsum")),
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42u)),
+        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),        
+        std::make_pair("pi", rs::scriptobject::utils::VectorValue(3.14159)),
+        std::make_pair("abc", rs::scriptobject::utils::VectorValue("xyz")),
+        std::make_pair("big_number", rs::scriptobject::utils::VectorValue(std::numeric_limits<std::uint64_t>::max()))
+    });
+    
+    auto object1 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn1);
+    auto object2 = rs::scriptobject::ScriptObjectFactory::CreateObject(defn2);
+    
+    ASSERT_EQ(7, object1->getCount());
+    ASSERT_EQ(7, object2->getCount());
+    
+    rs::scriptobject::ScriptObjectHash digest1;
+    object1->CalculateHash(digest1);
+    
+    rs::scriptobject::ScriptObjectHash digest2;
+    object2->CalculateHash(digest2);
+    
+    ASSERT_TRUE(rs::scriptobject::CompareScriptObjectHash(digest1, digest2) != 0);
+}
+
 TEST_F(SimpleObjectTests, test46) {
     rs::scriptobject::utils::ScriptObjectVectorSource defn({        
         std::make_pair("wet", rs::scriptobject::utils::VectorValue(true)),
         std::make_pair("text", rs::scriptobject::utils::VectorValue("lorem ipsum")),
-        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42)),
+        std::make_pair("the_answer", rs::scriptobject::utils::VectorValue(42u)),
         std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),        
         std::make_pair("pi", rs::scriptobject::utils::VectorValue(3.14159)),
-        std::make_pair("abc", rs::scriptobject::utils::VectorValue("xyz"))
+        std::make_pair("abc", rs::scriptobject::utils::VectorValue("xyz")),
+        std::make_pair("not_the_answer", rs::scriptobject::utils::VectorValue(-42))
     });
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
@@ -1627,7 +2102,7 @@ TEST_F(SimpleObjectTests, test46) {
     ASSERT_EQ(rs::scriptobject::ScriptObjectType::String, object->getType("text", index));
     ASSERT_EQ(1, index);
     
-    ASSERT_EQ(rs::scriptobject::ScriptObjectType::Int32, object->getType("the_answer", index));
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::UInt32, object->getType("the_answer", index));
     ASSERT_EQ(2, index);
     
     ASSERT_EQ(rs::scriptobject::ScriptObjectType::String, object->getType("hello", index));
@@ -1638,6 +2113,9 @@ TEST_F(SimpleObjectTests, test46) {
     
     ASSERT_EQ(rs::scriptobject::ScriptObjectType::String, object->getType("abc", index));
     ASSERT_EQ(5, index);
+    
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::Int32, object->getType("not_the_answer", index));
+    ASSERT_EQ(6, index);
 }
 
 TEST_F(SimpleObjectTests, test47) {

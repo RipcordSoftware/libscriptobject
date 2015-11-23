@@ -32,6 +32,9 @@ public:
     virtual ScriptObjectType type(int index) const = 0;
     virtual bool getBoolean(int index) const = 0;
     virtual std::int32_t getInt32(int index) const = 0;
+    virtual std::uint32_t getUInt32(int index) const = 0;
+    virtual std::int64_t getInt64(int index) const = 0;
+    virtual std::uint64_t getUInt64(int index) const = 0;
     virtual double getDouble(int index) const = 0;
     virtual const char* getString(int index) const = 0;
     virtual int getStringLength(int index) const = 0;

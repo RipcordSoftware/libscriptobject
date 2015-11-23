@@ -51,26 +51,6 @@ rs::scriptobject::utils::VectorValue::VectorValue(rs::scriptobject::ScriptObject
     type_(type) {
 }
 
-rs::scriptobject::utils::VectorValue::VectorValue(double value) :
-    type_(rs::scriptobject::ScriptObjectType::Double) {
-    value_.d_ = value;
-    }
-
-rs::scriptobject::utils::VectorValue::VectorValue(std::int32_t value) :
-    type_(rs::scriptobject::ScriptObjectType::Int32) {
-    value_.i_ = value;
-}
-
-rs::scriptobject::utils::VectorValue::VectorValue(bool value) :
-    type_(rs::scriptobject::ScriptObjectType::Boolean) {
-    value_.b_ = value;
-}
-    
-rs::scriptobject::utils::VectorValue::VectorValue(const char* value) :
-    type_(rs::scriptobject::ScriptObjectType::String) {
-    value_.s_ = CopyString(value);
-}
-
 rs::scriptobject::utils::VectorValue::VectorValue(const ScriptObjectPtr value) :
     type_(rs::scriptobject::ScriptObjectType::Object) {
     value_.obj_ = new ScriptObjectPtr(value);
@@ -104,7 +84,19 @@ double rs::scriptobject::utils::VectorValue::getDouble() const {
 }
 
 std::int32_t rs::scriptobject::utils::VectorValue::getInt32() const {
-    return value_.i_;
+    return value_.i32_;
+}
+
+std::uint32_t rs::scriptobject::utils::VectorValue::getUInt32() const {
+    return value_.ui32_;
+}
+
+std::int64_t rs::scriptobject::utils::VectorValue::getInt64() const {
+    return value_.i64_;
+}
+
+std::uint64_t rs::scriptobject::utils::VectorValue::getUInt64() const {
+    return value_.ui64_;
 }
 
 bool rs::scriptobject::utils::VectorValue::getBoolean() const {
@@ -154,8 +146,20 @@ bool rs::scriptobject::utils::ScriptObjectVectorSource::getBoolean(int index) co
     return std::get<1>(source_[index]).getBoolean(); 
 }
 
-int32_t rs::scriptobject::utils::ScriptObjectVectorSource::getInt32(int index) const { 
+std::int32_t rs::scriptobject::utils::ScriptObjectVectorSource::getInt32(int index) const { 
     return std::get<1>(source_[index]).getInt32(); 
+}
+
+std::uint32_t rs::scriptobject::utils::ScriptObjectVectorSource::getUInt32(int index) const { 
+    return std::get<1>(source_[index]).getUInt32(); 
+}
+
+std::int64_t rs::scriptobject::utils::ScriptObjectVectorSource::getInt64(int index) const { 
+    return std::get<1>(source_[index]).getInt64(); 
+}
+
+std::uint64_t rs::scriptobject::utils::ScriptObjectVectorSource::getUInt64(int index) const { 
+    return std::get<1>(source_[index]).getUInt64(); 
 }
 
 double rs::scriptobject::utils::ScriptObjectVectorSource::getDouble(int index) const { 

@@ -20,6 +20,9 @@
 
 #include <vector>
 #include <string>
+#include <cstdint>
+#include <type_traits>
+#include <limits>
 
 #include "script_object_source.h"
 
@@ -32,18 +35,59 @@ public:
     VectorValue();
     VectorValue(const VectorValue& other);    
     VectorValue(VectorValue&& other);        
-    VectorValue(rs::scriptobject::ScriptObjectType type);    
-    VectorValue(double value);
-    VectorValue(std::int32_t value);    
-    VectorValue(bool value);    
-    VectorValue(const char* value);    
+    VectorValue(rs::scriptobject::ScriptObjectType type);
+    
+    template <typename T, typename std::enable_if<std::is_floating_point<T>::value>::type* = nullptr>
+    VectorValue(T value) {
+        type_ = rs::scriptobject::ScriptObjectType::Double;
+        value_.d_ = value;
+    }
+    
+    template <typename T, typename std::enable_if<std::is_signed<T>::value && !std::is_floating_point<T>::value>::type* = nullptr>
+    VectorValue(T value) {
+        if (value >= std::numeric_limits<std::int32_t>::min() &&
+            value <= std::numeric_limits<std::int32_t>::max()) {
+            type_ = rs::scriptobject::ScriptObjectType::Int32;
+            value_.i32_ = value;
+        } else {
+            type_ = rs::scriptobject::ScriptObjectType::Int64;
+            value_.i64_ = value;
+        }
+    }
+    
+    template <typename T, typename std::enable_if<std::is_unsigned<T>::value && !std::is_same<T, bool>::value>::type* = nullptr>
+    VectorValue(T value) {
+        if (value <= std::numeric_limits<std::uint32_t>::max()) {
+            type_ = rs::scriptobject::ScriptObjectType::UInt32;
+            value_.ui32_ = value;
+        } else {
+            type_ = rs::scriptobject::ScriptObjectType::UInt64;
+            value_.ui64_ = value;
+        }
+    }
+    
+    template <typename T, typename std::enable_if<std::is_same<T, bool>::value>::type* = nullptr>
+    VectorValue(T value) {
+        type_ = rs::scriptobject::ScriptObjectType::Boolean;
+        value_.b_ = value;
+    }
+    
+    template <typename T, typename std::enable_if<std::is_same<T, char>::value>::type* = nullptr>
+    VectorValue(const T* value) {
+        type_ = rs::scriptobject::ScriptObjectType::String;
+        value_.s_ = CopyString(value);
+    }
+    
     VectorValue(const ScriptObjectPtr value);
     VectorValue(const ScriptArrayPtr value);
     ~VectorValue();
     
     rs::scriptobject::ScriptObjectType getType() const;
     double getDouble() const;    
-    std::int32_t getInt32() const;    
+    std::int32_t getInt32() const;
+    std::uint32_t getUInt32() const;
+    std::int64_t getInt64() const;
+    std::uint64_t getUInt64() const;
     bool getBoolean() const;    
     const char* getString() const;
     const ScriptObjectPtr getObject() const;
@@ -55,7 +99,10 @@ private:
     rs::scriptobject::ScriptObjectType type_;
     union Value {
         double d_;
-        std::int32_t i_;
+        std::int32_t i32_;
+        std::uint32_t ui32_;
+        std::int64_t i64_;
+        std::uint64_t ui64_;
         bool b_;
         char* s_;
         ScriptObjectPtr* obj_;
@@ -75,7 +122,10 @@ public:
     virtual rs::scriptobject::ScriptObjectType type(int index) const override;
     
     virtual bool getBoolean(int index) const override;
-    virtual int32_t getInt32(int index) const override;
+    virtual std::int32_t getInt32(int index) const override;
+    virtual std::uint32_t getUInt32(int index) const override;
+    virtual std::int64_t getInt64(int index) const override;
+    virtual std::uint64_t getUInt64(int index) const override;
     virtual double getDouble(int index) const override;
     virtual const char* getString(int index) const override;
     virtual int getStringLength(int index) const override;

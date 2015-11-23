@@ -147,6 +147,33 @@ public:
     std::int32_t getInt32(int index) const;
     
     /**
+     * Gets the unsigned integer value of the field with the specified index
+     * @param index the index to query
+     * @return the value of the field
+     * @throws UnknownScriptObjectFieldException if the index is not in bounds
+     * @throws TypeCastException if the field was not an integer type
+     */
+    std::uint32_t getUInt32(int index) const;
+    
+    /**
+     * Gets the integer value of the field with the specified index
+     * @param index the index to query
+     * @return the value of the field
+     * @throws UnknownScriptObjectFieldException if the index is not in bounds
+     * @throws TypeCastException if the field was not an integer type
+     */
+    std::int64_t getInt64(int index) const;
+    
+    /**
+     * Gets the unsigned integer value of the field with the specified index
+     * @param index the index to query
+     * @return the value of the field
+     * @throws UnknownScriptObjectFieldException if the index is not in bounds
+     * @throws TypeCastException if the field was not an integer type
+     */
+    std::uint64_t getUInt64(int index) const;
+    
+    /**
      * Gets the integer value of the field with the specified name
      * @param name the name of the field to query
      * @return the field value
@@ -154,6 +181,33 @@ public:
      * @throws TypeCastException if the field was not an integer type
      */
     std::int32_t getInt32(const char* name) const;
+    
+    /**
+     * Gets the unsigned integer value of the field with the specified name
+     * @param name the name of the field to query
+     * @return the field value
+     * @throws UnknownScriptObjectFieldException if the name was not known
+     * @throws TypeCastException if the field was not an integer type
+     */
+    std::uint32_t getUInt32(const char* name) const;
+    
+    /**
+     * Gets the integer value of the field with the specified name
+     * @param name the name of the field to query
+     * @return the field value
+     * @throws UnknownScriptObjectFieldException if the name was not known
+     * @throws TypeCastException if the field was not an integer type
+     */
+    std::int64_t getInt64(const char* name) const;
+    
+    /**
+     * Gets the unsigned integer value of the field with the specified name
+     * @param name the name of the field to query
+     * @return the field value
+     * @throws UnknownScriptObjectFieldException if the name was not known
+     * @throws TypeCastException if the field was not an integer type
+     */
+    std::uint64_t getUInt64(const char* name) const;
     
     /**
      * Gets the double value of the field with the specified index

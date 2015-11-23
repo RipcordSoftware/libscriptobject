@@ -88,6 +88,15 @@ unsigned rs::scriptobject::ScriptObject::CalculateSize(const ScriptObjectSource&
             case ScriptObjectType::Int32:
                 size += sizeof(std::int32_t);
                 break;
+            case ScriptObjectType::UInt32:
+                size += sizeof(std::uint32_t);
+                break;
+            case ScriptObjectType::Int64:
+                size += sizeof(std::int64_t);
+                break;                
+            case ScriptObjectType::UInt64:
+                size += sizeof(std::uint64_t);
+                break;                
             case ScriptObjectType::Null:
                 size += 0;
                 break;
@@ -348,6 +357,48 @@ std::int32_t rs::scriptobject::ScriptObject::getInt32(int index) const {
     return *ptr;
 }
 
+std::uint32_t rs::scriptobject::ScriptObject::getUInt32(int index) const {
+    ScriptObjectKey key;
+    if (!keys_->getKey(index, key)) {
+        throw UnknownScriptObjectFieldException();
+    }
+    
+    if (key.type != (unsigned)ScriptObjectType::UInt32) {
+        throw TypeCastException();
+    }
+    
+    auto ptr = reinterpret_cast<const std::uint32_t*>(getValueStart() + valueOffsets_[key.index]);
+    return *ptr;
+}
+
+std::int64_t rs::scriptobject::ScriptObject::getInt64(int index) const {
+    ScriptObjectKey key;
+    if (!keys_->getKey(index, key)) {
+        throw UnknownScriptObjectFieldException();
+    }
+    
+    if (key.type != (unsigned)ScriptObjectType::Int64) {
+        throw TypeCastException();
+    }
+    
+    auto ptr = reinterpret_cast<const std::int64_t*>(getValueStart() + valueOffsets_[key.index]);
+    return *ptr;
+}
+
+std::uint64_t rs::scriptobject::ScriptObject::getUInt64(int index) const {
+    ScriptObjectKey key;
+    if (!keys_->getKey(index, key)) {
+        throw UnknownScriptObjectFieldException();
+    }
+    
+    if (key.type != (unsigned)ScriptObjectType::UInt64) {
+        throw TypeCastException();
+    }
+    
+    auto ptr = reinterpret_cast<const std::uint64_t*>(getValueStart() + valueOffsets_[key.index]);
+    return *ptr;
+}
+
 std::int32_t rs::scriptobject::ScriptObject::getInt32(const char* name) const {
     ScriptObjectKey key;
     if (!keys_->getKey(name, key)) {
@@ -359,6 +410,48 @@ std::int32_t rs::scriptobject::ScriptObject::getInt32(const char* name) const {
     }
     
     auto ptr = reinterpret_cast<const std::int32_t*>(getValueStart() + valueOffsets_[key.index]);
+    return *ptr;
+}
+
+std::uint32_t rs::scriptobject::ScriptObject::getUInt32(const char* name) const {
+    ScriptObjectKey key;
+    if (!keys_->getKey(name, key)) {
+        throw UnknownScriptObjectFieldException();
+    }
+    
+    if (key.type != (unsigned)ScriptObjectType::UInt32) {
+        throw TypeCastException();
+    }
+    
+    auto ptr = reinterpret_cast<const std::uint32_t*>(getValueStart() + valueOffsets_[key.index]);
+    return *ptr;
+}
+
+std::int64_t rs::scriptobject::ScriptObject::getInt64(const char* name) const {
+    ScriptObjectKey key;
+    if (!keys_->getKey(name, key)) {
+        throw UnknownScriptObjectFieldException();
+    }
+    
+    if (key.type != (unsigned)ScriptObjectType::Int64) {
+        throw TypeCastException();
+    }
+    
+    auto ptr = reinterpret_cast<const std::int64_t*>(getValueStart() + valueOffsets_[key.index]);
+    return *ptr;
+}
+
+std::uint64_t rs::scriptobject::ScriptObject::getUInt64(const char* name) const {
+    ScriptObjectKey key;
+    if (!keys_->getKey(name, key)) {
+        throw UnknownScriptObjectFieldException();
+    }
+    
+    if (key.type != (unsigned)ScriptObjectType::UInt64) {
+        throw TypeCastException();
+    }
+    
+    auto ptr = reinterpret_cast<const std::uint64_t*>(getValueStart() + valueOffsets_[key.index]);
     return *ptr;
 }
 
@@ -438,6 +531,21 @@ static void appendValue(rs::scriptobject::utils::ObjectVector& objVector, const 
         }
         case rs::scriptobject::ScriptObjectType::Int32: {
             rs::scriptobject::utils::VectorValue v{obj->getInt32(index)};
+            objVector.push_back(std::make_pair(name, v));
+            break;
+        }
+        case rs::scriptobject::ScriptObjectType::UInt32: {
+            rs::scriptobject::utils::VectorValue v{obj->getUInt32(index)};
+            objVector.push_back(std::make_pair(name, v));
+            break;
+        }
+        case rs::scriptobject::ScriptObjectType::Int64: {
+            rs::scriptobject::utils::VectorValue v{obj->getInt64(index)};
+            objVector.push_back(std::make_pair(name, v));
+            break;
+        }
+        case rs::scriptobject::ScriptObjectType::UInt64: {
+            rs::scriptobject::utils::VectorValue v{obj->getUInt64(index)};
             objVector.push_back(std::make_pair(name, v));
             break;
         }
@@ -600,6 +708,21 @@ void rs::scriptobject::ScriptObject::CalculateHash(ScriptObjectHash& digest, boo
                 }
                 case ScriptObjectType::Int32: {
                     auto value = getInt32(i);
+                    md5.update(reinterpret_cast<const unsigned char*>(&value), sizeof(value));
+                    break;
+                }
+                case ScriptObjectType::UInt32: {
+                    auto value = getUInt32(i);
+                    md5.update(reinterpret_cast<const unsigned char*>(&value), sizeof(value));
+                    break;
+                }
+                case ScriptObjectType::Int64: {
+                    auto value = getInt64(i);
+                    md5.update(reinterpret_cast<const unsigned char*>(&value), sizeof(value));
+                    break;
+                }
+                case ScriptObjectType::UInt64: {
+                    auto value = getUInt64(i);
                     md5.update(reinterpret_cast<const unsigned char*>(&value), sizeof(value));
                     break;
                 }

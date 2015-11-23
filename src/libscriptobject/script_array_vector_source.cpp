@@ -38,6 +38,18 @@ std::int32_t rs::scriptobject::utils::ScriptArrayVectorSource::getInt32(int inde
     return array_[index].getInt32();
 }
 
+std::uint32_t rs::scriptobject::utils::ScriptArrayVectorSource::getUInt32(int index) const {
+    return array_[index].getUInt32();
+}
+
+std::int64_t rs::scriptobject::utils::ScriptArrayVectorSource::getInt64(int index) const {
+    return array_[index].getInt64();
+}
+
+std::uint64_t rs::scriptobject::utils::ScriptArrayVectorSource::getUInt64(int index) const {
+    return array_[index].getUInt64();
+}
+
 double rs::scriptobject::utils::ScriptArrayVectorSource::getDouble(int index) const {
     return array_[index].getDouble();
 }

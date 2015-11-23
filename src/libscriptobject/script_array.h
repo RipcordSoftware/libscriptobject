@@ -56,6 +56,9 @@ public:
     ScriptObjectType getType(int index) const;
     const char* getString(int index) const;
     std::int32_t getInt32(int index) const;
+    std::uint32_t getUInt32(int index) const;
+    std::int64_t getInt64(int index) const;
+    std::uint64_t getUInt64(int index) const;
     double getDouble(int index) const;
     bool getBoolean(int index) const;
     const ScriptObjectPtr getObject(int index) const;

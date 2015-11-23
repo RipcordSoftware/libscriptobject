@@ -203,7 +203,11 @@ TEST_F(ObjectKeysTests, test7) {
 
 TEST_F(ObjectKeysTests, test8) {
     rs::scriptobject::test::VectorDefn vect;
-    rs::scriptobject::ScriptObjectType types[] = { rs::scriptobject::ScriptObjectType::String, rs::scriptobject::ScriptObjectType::Double, rs::scriptobject::ScriptObjectType::Int32 };
+    rs::scriptobject::ScriptObjectType types[] = { 
+        rs::scriptobject::ScriptObjectType::String, rs::scriptobject::ScriptObjectType::Double, 
+        rs::scriptobject::ScriptObjectType::Int32, rs::scriptobject::ScriptObjectType::UInt32, 
+        rs::scriptobject::ScriptObjectType::Int64, rs::scriptobject::ScriptObjectType::UInt64,
+        rs::scriptobject::ScriptObjectType::Boolean, rs::scriptobject::ScriptObjectType::Null };
     
     for (int i = 0; i < 1024; ++i) {
         auto type = types[i % (sizeof(types) / sizeof(types[0]))];

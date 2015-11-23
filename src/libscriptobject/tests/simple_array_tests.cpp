@@ -107,7 +107,10 @@ TEST_F(SimpleArrayTests, test5) {
         rs::scriptobject::utils::VectorValue(false),
         rs::scriptobject::utils::VectorValue("world"),
         rs::scriptobject::utils::VectorValue(true),
-        rs::scriptobject::utils::VectorValue(42)
+        rs::scriptobject::utils::VectorValue(42u),
+        rs::scriptobject::utils::VectorValue(-42),
+        rs::scriptobject::utils::VectorValue(std::numeric_limits<std::int64_t>::min()),
+        rs::scriptobject::utils::VectorValue(std::numeric_limits<std::uint64_t>::max())
     });
     
     auto array = rs::scriptobject::ScriptArrayFactory::CreateArray(defn);
@@ -118,9 +121,17 @@ TEST_F(SimpleArrayTests, test5) {
     ASSERT_STREQ("world", array->getString(1));
     ASSERT_EQ(rs::scriptobject::ScriptObjectType::Boolean, array->getType(2));
     ASSERT_TRUE(array->getBoolean(2));
-    ASSERT_EQ(rs::scriptobject::ScriptObjectType::Int32, array->getType(3));
-    ASSERT_EQ(42, array->getInt32(3));
-    ASSERT_EQ(rs::scriptobject::ScriptArray::CalculateSizeOverhead(4), array->getSize() - 6 - sizeof(std::int32_t));
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::UInt32, array->getType(3));
+    ASSERT_EQ(42u, array->getUInt32(3));
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::Int32, array->getType(4));
+    ASSERT_EQ(-42, array->getInt32(4));
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::Int64, array->getType(5));
+    ASSERT_EQ(std::numeric_limits<std::int64_t>::min(), array->getInt64(5));
+    ASSERT_EQ(rs::scriptobject::ScriptObjectType::UInt64, array->getType(6));
+    ASSERT_EQ(std::numeric_limits<std::uint64_t>::max(), array->getUInt64(6));
+    ASSERT_EQ(rs::scriptobject::ScriptArray::CalculateSizeOverhead(7), 
+        array->getSize() - 6 - sizeof(std::uint32_t) - sizeof(std::int32_t) -
+        sizeof(std::int64_t) - sizeof(std::uint64_t));
 }
 
 TEST_F(SimpleArrayTests, test6) {
@@ -171,6 +182,18 @@ TEST_F(SimpleArrayTests, test7) {
     }, rs::scriptobject::UnknownScriptArrayIndexException);
     
     ASSERT_THROW({
+        array->getUInt32(5000);
+    }, rs::scriptobject::UnknownScriptArrayIndexException);
+    
+    ASSERT_THROW({
+        array->getInt64(5000);
+    }, rs::scriptobject::UnknownScriptArrayIndexException);
+    
+    ASSERT_THROW({
+        array->getUInt64(5000);
+    }, rs::scriptobject::UnknownScriptArrayIndexException);
+    
+    ASSERT_THROW({
         array->getDouble(-99);
     }, rs::scriptobject::UnknownScriptArrayIndexException);
     
@@ -192,7 +215,10 @@ TEST_F(SimpleArrayTests, test8) {
         rs::scriptobject::utils::VectorValue(false),        
         rs::scriptobject::utils::VectorValue(true),
         rs::scriptobject::utils::VectorValue("world"),
-        rs::scriptobject::utils::VectorValue(42)
+        rs::scriptobject::utils::VectorValue(42u),
+        rs::scriptobject::utils::VectorValue(-42),
+        rs::scriptobject::utils::VectorValue(std::numeric_limits<std::int64_t>::min()),
+        rs::scriptobject::utils::VectorValue(std::numeric_limits<std::uint64_t>::max())
     });
     
     auto array = rs::scriptobject::ScriptArrayFactory::CreateArray(defn);
@@ -210,6 +236,18 @@ TEST_F(SimpleArrayTests, test8) {
     }, rs::scriptobject::TypeCastException);    
     
     ASSERT_THROW({
+        array->getUInt32(0);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        array->getInt64(0);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        array->getUInt64(0);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
         array->getArray(0);
     }, rs::scriptobject::TypeCastException);    
     
@@ -223,6 +261,18 @@ TEST_F(SimpleArrayTests, test8) {
     
     ASSERT_THROW({
         array->getInt32(1);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        array->getUInt32(1);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        array->getInt64(1);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        array->getUInt64(1);
     }, rs::scriptobject::TypeCastException);    
     
     ASSERT_THROW({
@@ -246,6 +296,18 @@ TEST_F(SimpleArrayTests, test8) {
     }, rs::scriptobject::TypeCastException);    
     
     ASSERT_THROW({
+        array->getUInt32(2);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        array->getInt64(2);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        array->getUInt64(2);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
         array->getBoolean(2);
     }, rs::scriptobject::TypeCastException);    
     
@@ -262,6 +324,18 @@ TEST_F(SimpleArrayTests, test8) {
     }, rs::scriptobject::TypeCastException);    
     
     ASSERT_THROW({
+        array->getInt32(3);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        array->getInt64(3);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        array->getUInt64(3);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
         array->getString(3);
     }, rs::scriptobject::TypeCastException);    
     
@@ -275,6 +349,102 @@ TEST_F(SimpleArrayTests, test8) {
     
     ASSERT_THROW({
         array->getObject(3);
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
+        array->getDouble(4);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        array->getUInt32(4);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        array->getInt64(4);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        array->getUInt64(4);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        array->getString(4);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        array->getBoolean(4);
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
+        array->getArray(4);
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
+        array->getObject(4);
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
+        array->getDouble(5);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        array->getInt32(5);
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
+        array->getUInt32(5);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        array->getUInt64(5);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        array->getString(5);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        array->getBoolean(5);
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
+        array->getArray(5);
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
+        array->getObject(5);
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
+        array->getDouble(6);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        array->getInt32(6);
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
+        array->getUInt32(6);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        array->getInt64(6);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        array->getString(6);
+    }, rs::scriptobject::TypeCastException);    
+    
+    ASSERT_THROW({
+        array->getBoolean(6);
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
+        array->getArray(6);
+    }, rs::scriptobject::TypeCastException);
+    
+    ASSERT_THROW({
+        array->getObject(6);
     }, rs::scriptobject::TypeCastException);
 }
 
@@ -304,7 +474,11 @@ TEST_F(SimpleArrayTests, test10) {
 
 TEST_F(SimpleArrayTests, test11) {
     rs::scriptobject::utils::ArrayVector vect;
-    rs::scriptobject::ScriptObjectType types[] = { rs::scriptobject::ScriptObjectType::String, rs::scriptobject::ScriptObjectType::Double, rs::scriptobject::ScriptObjectType::Int32 };
+    rs::scriptobject::ScriptObjectType types[] = { 
+        rs::scriptobject::ScriptObjectType::String, rs::scriptobject::ScriptObjectType::Double, 
+        rs::scriptobject::ScriptObjectType::Int32, rs::scriptobject::ScriptObjectType::UInt32,
+        rs::scriptobject::ScriptObjectType::Int64, rs::scriptobject::ScriptObjectType::UInt64
+    };
     
     for (int i = 0; i < 1024; ++i) {
         auto type = types[i % (sizeof(types) / sizeof(types[0]))];
@@ -317,6 +491,18 @@ TEST_F(SimpleArrayTests, test11) {
                 break;
             case rs::scriptobject::ScriptObjectType::Int32:
                 vect.push_back(i);
+                break;
+                
+            case rs::scriptobject::ScriptObjectType::UInt32:
+                vect.push_back((std::uint32_t)i);
+                break;
+                
+            case rs::scriptobject::ScriptObjectType::Int64:
+                vect.push_back((std::int64_t)std::numeric_limits<std::int32_t>::max() + i);
+                break;
+                
+            case rs::scriptobject::ScriptObjectType::UInt64:
+                vect.push_back((std::uint64_t)std::numeric_limits<std::uint32_t>::max() + i);
                 break;
         }                
     }
@@ -339,6 +525,18 @@ TEST_F(SimpleArrayTests, test11) {
                 break;
             case rs::scriptobject::ScriptObjectType::Int32:                
                 ASSERT_EQ(vect[i].getInt32(), array->getInt32(i));
+                break;
+                
+            case rs::scriptobject::ScriptObjectType::UInt32:                
+                ASSERT_EQ(vect[i].getUInt32(), array->getUInt32(i));
+                break;
+                
+            case rs::scriptobject::ScriptObjectType::Int64:                
+                ASSERT_EQ(vect[i].getInt64(), array->getInt64(i));
+                break;
+                
+            case rs::scriptobject::ScriptObjectType::UInt64:                
+                ASSERT_EQ(vect[i].getUInt64(), array->getUInt64(i));
                 break;
         }
     }    
@@ -415,9 +613,12 @@ TEST_F(SimpleArrayTests, test14) {
 TEST_F(SimpleArrayTests, test15) {
     rs::scriptobject::utils::ScriptArrayVectorSource defn({
         rs::scriptobject::utils::VectorValue("world"),
-        rs::scriptobject::utils::VectorValue(42),
+        rs::scriptobject::utils::VectorValue(42u),
+        rs::scriptobject::utils::VectorValue(-42),
         rs::scriptobject::utils::VectorValue(true),
-        rs::scriptobject::utils::VectorValue(3.14159)
+        rs::scriptobject::utils::VectorValue(3.14159),
+        rs::scriptobject::utils::VectorValue(std::numeric_limits<std::int64_t>::min()),
+        rs::scriptobject::utils::VectorValue(std::numeric_limits<std::uint64_t>::max())
     });
     
     auto array1 = rs::scriptobject::ScriptArrayFactory::CreateArray(defn);    
@@ -458,6 +659,86 @@ TEST_F(SimpleArrayTests, test17) {
     
     rs::scriptobject::utils::ScriptArrayVectorSource defn2({
         rs::scriptobject::utils::VectorValue(43)
+    });
+    
+    auto array1 = rs::scriptobject::ScriptArrayFactory::CreateArray(defn1);    
+    rs::scriptobject::ScriptObjectHash digest1;
+    array1->CalculateHash(digest1);
+    
+    auto array2 = rs::scriptobject::ScriptArrayFactory::CreateArray(defn2);
+    rs::scriptobject::ScriptObjectHash digest2;
+    array2->CalculateHash(digest2);
+    
+    ASSERT_TRUE(rs::scriptobject::CompareScriptObjectHash(digest1, digest2) != 0);
+}
+
+TEST_F(SimpleArrayTests, test17b) {
+    rs::scriptobject::utils::ScriptArrayVectorSource defn1({
+        rs::scriptobject::utils::VectorValue(42u)
+    });
+    
+    rs::scriptobject::utils::ScriptArrayVectorSource defn2({
+        rs::scriptobject::utils::VectorValue(42)
+    });
+    
+    auto array1 = rs::scriptobject::ScriptArrayFactory::CreateArray(defn1);    
+    rs::scriptobject::ScriptObjectHash digest1;
+    array1->CalculateHash(digest1);
+    
+    auto array2 = rs::scriptobject::ScriptArrayFactory::CreateArray(defn2);
+    rs::scriptobject::ScriptObjectHash digest2;
+    array2->CalculateHash(digest2);
+    
+    ASSERT_TRUE(rs::scriptobject::CompareScriptObjectHash(digest1, digest2) == 0);
+}
+
+TEST_F(SimpleArrayTests, test17c) {
+    rs::scriptobject::utils::ScriptArrayVectorSource defn1({
+        rs::scriptobject::utils::VectorValue(42u)
+    });
+    
+    rs::scriptobject::utils::ScriptArrayVectorSource defn2({
+        rs::scriptobject::utils::VectorValue(42l)
+    });
+    
+    auto array1 = rs::scriptobject::ScriptArrayFactory::CreateArray(defn1);    
+    rs::scriptobject::ScriptObjectHash digest1;
+    array1->CalculateHash(digest1);
+    
+    auto array2 = rs::scriptobject::ScriptArrayFactory::CreateArray(defn2);
+    rs::scriptobject::ScriptObjectHash digest2;
+    array2->CalculateHash(digest2);
+    
+    ASSERT_TRUE(rs::scriptobject::CompareScriptObjectHash(digest1, digest2) == 0);
+}
+
+TEST_F(SimpleArrayTests, test17d) {
+    rs::scriptobject::utils::ScriptArrayVectorSource defn1({
+        rs::scriptobject::utils::VectorValue(42u)
+    });
+    
+    rs::scriptobject::utils::ScriptArrayVectorSource defn2({
+        rs::scriptobject::utils::VectorValue(std::numeric_limits<std::int64_t>::min())
+    });
+    
+    auto array1 = rs::scriptobject::ScriptArrayFactory::CreateArray(defn1);    
+    rs::scriptobject::ScriptObjectHash digest1;
+    array1->CalculateHash(digest1);
+    
+    auto array2 = rs::scriptobject::ScriptArrayFactory::CreateArray(defn2);
+    rs::scriptobject::ScriptObjectHash digest2;
+    array2->CalculateHash(digest2);
+    
+    ASSERT_TRUE(rs::scriptobject::CompareScriptObjectHash(digest1, digest2) != 0);
+}
+
+TEST_F(SimpleArrayTests, test17e) {
+    rs::scriptobject::utils::ScriptArrayVectorSource defn1({
+        rs::scriptobject::utils::VectorValue(std::numeric_limits<std::uint64_t>::min())
+    });
+    
+    rs::scriptobject::utils::ScriptArrayVectorSource defn2({
+        rs::scriptobject::utils::VectorValue(std::numeric_limits<std::int64_t>::min())
     });
     
     auto array1 = rs::scriptobject::ScriptArrayFactory::CreateArray(defn1);    

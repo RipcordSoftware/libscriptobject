@@ -76,6 +76,18 @@ std::int32_t rs::scriptobject::ScriptArrayMsgpackSource::getInt32(int index) con
     throw TypeCastException{};
 }
 
+std::uint32_t rs::scriptobject::ScriptArrayMsgpackSource::getUInt32(int index) const {
+    throw TypeCastException{};
+}
+
+std::int64_t rs::scriptobject::ScriptArrayMsgpackSource::getInt64(int index) const {
+    throw TypeCastException{};
+}
+
+std::uint64_t rs::scriptobject::ScriptArrayMsgpackSource::getUInt64(int index) const {
+    throw TypeCastException{};
+}
+
 double rs::scriptobject::ScriptArrayMsgpackSource::getDouble(int index) const {
     if (index >= count_) {
         throw UnknownScriptObjectFieldException{};
