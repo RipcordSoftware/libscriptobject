@@ -469,18 +469,21 @@ const rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptObject::getObjec
     return *ptr;
 }
 
-const rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptObject::getObject(const char* name) const {
+const rs::scriptobject::ScriptObjectPtr rs::scriptobject::ScriptObject::getObject(const char* name, bool throwOnError) const {
+    ScriptObjectPtr obj;
+
     ScriptObjectKey key;
-    if (!keys_->getKey(name, key)) {
+    if (keys_->getKey(name, key)) {
+        if (key.type == (unsigned)ScriptObjectType::Object) {
+            obj = *reinterpret_cast<const ScriptObjectPtr*>(getValueStart() + valueOffsets_[key.index]);
+        } else if (throwOnError) {
+            throw TypeCastException{};
+        }
+    } else if (throwOnError) {
         throw UnknownScriptObjectFieldException();
     }
-    
-    if (key.type != (unsigned)ScriptObjectType::Object) {
-        throw TypeCastException();
-    }
-    
-    auto ptr = reinterpret_cast<const ScriptObjectPtr*>(getValueStart() + valueOffsets_[key.index]);
-    return *ptr;
+        
+    return obj;
 }
 
 const rs::scriptobject::ScriptArrayPtr rs::scriptobject::ScriptObject::getArray(int index) const {

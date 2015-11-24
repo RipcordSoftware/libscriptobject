@@ -257,11 +257,12 @@ public:
     /**
      * Gets the child object of the field with the specified name
      * @param name the name of the field to query
+     * @param throwOnError throw and error if the field was not found
      * @return the field value
      * @throws UnknownScriptObjectFieldException if the name was not known
      * @throws TypeCastException if the field was not an object type
      */
-    const ScriptObjectPtr getObject(const char* name) const;
+    const ScriptObjectPtr getObject(const char* name, bool throwOnError = true) const;
     
     /**
      * Gets the child array of the field with the specified index
