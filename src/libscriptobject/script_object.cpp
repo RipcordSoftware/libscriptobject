@@ -118,22 +118,38 @@ unsigned rs::scriptobject::ScriptObject::CalculateSize(const ScriptObjectSource&
     return size;
 }
 
-unsigned rs::scriptobject::ScriptObject::getStringFieldLength(const char* name) const {
+unsigned rs::scriptobject::ScriptObject::getStringLength(const char* name) const {
     ScriptObjectKey key;
     if (!keys_->getKey(name, key)) {
         throw UnknownScriptObjectFieldException();
     }
     
-    return getStringFieldLength(key);
+    auto length = getStringFieldLength(key);
+    if (length > 0) {
+        auto str = getString(key.index);
+        while (length > 0 && str[length - 1] == '\0') {
+            --length;
+        }
+    }
+    
+    return length;
 }
 
-unsigned rs::scriptobject::ScriptObject::getStringFieldLength(int index) const {
+unsigned rs::scriptobject::ScriptObject::getStringLength(int index) const {
     ScriptObjectKey key;
     if (!keys_->getKey(index, key)) {
         throw UnknownScriptObjectFieldException();
     }
     
-    return getStringFieldLength(key);
+    auto length = getStringFieldLength(key);
+    if (length > 0) {
+        auto str = getString(key.index);
+        while (length > 0 && str[length - 1] == '\0') {
+            --length;
+        }
+    }
+    
+    return length;
 }
 
 unsigned rs::scriptobject::ScriptObject::getStringFieldLength(const ScriptObjectKey& key) const {
@@ -279,12 +295,14 @@ bool rs::scriptobject::ScriptObject::setString(const ScriptObjectKey& key, const
     }
     
     auto fieldLength = getStringFieldLength(key);
-    if (std::strlen(value) + 1 > fieldLength) {
+    auto valueLength = std::strlen(value);
+    if ((valueLength + 1) > fieldLength) {
         return false;
     } else {                        
         auto str = const_cast<char*>(reinterpret_cast<const char*>(getValueStart()));
         str += valueOffsets_[key.index];
-        std::strcpy(str, value);
+        std::memcpy(str, value, valueLength);
+        std::memset(str + valueLength, 0, fieldLength - valueLength);
         return true;
     }
 }

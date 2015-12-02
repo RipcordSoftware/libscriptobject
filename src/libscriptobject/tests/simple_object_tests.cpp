@@ -1498,9 +1498,9 @@ TEST_F(SimpleObjectTests, test28) {
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
     
-    ASSERT_EQ(4, object->getStringFieldLength(0));
-    ASSERT_EQ(6, object->getStringFieldLength(1));
-    ASSERT_EQ(12, object->getStringFieldLength(2));
+    ASSERT_EQ(3, object->getStringLength(0));
+    ASSERT_EQ(5, object->getStringLength(1));
+    ASSERT_EQ(11, object->getStringLength(2));
 }
 
 TEST_F(SimpleObjectTests, test29) {
@@ -1512,9 +1512,9 @@ TEST_F(SimpleObjectTests, test29) {
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
     
-    ASSERT_EQ(12, object->getStringFieldLength(0));
-    ASSERT_EQ(6, object->getStringFieldLength(1));
-    ASSERT_EQ(4, object->getStringFieldLength(2));
+    ASSERT_EQ(11, object->getStringLength(0));
+    ASSERT_EQ(5, object->getStringLength(1));
+    ASSERT_EQ(3, object->getStringLength(2));
 }
 
 TEST_F(SimpleObjectTests, test30) {
@@ -1529,9 +1529,9 @@ TEST_F(SimpleObjectTests, test30) {
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
     
-    ASSERT_EQ(12, object->getStringFieldLength(1));
-    ASSERT_EQ(6, object->getStringFieldLength(3));
-    ASSERT_EQ(4, object->getStringFieldLength(5));
+    ASSERT_EQ(11, object->getStringLength(1));
+    ASSERT_EQ(5, object->getStringLength(3));
+    ASSERT_EQ(3, object->getStringLength(5));
 }
 
 TEST_F(SimpleObjectTests, test31) {
@@ -1542,14 +1542,14 @@ TEST_F(SimpleObjectTests, test31) {
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
     
-    ASSERT_EQ(4, object->getStringFieldLength(0));
+    ASSERT_EQ(3, object->getStringLength(0));
     
     ASSERT_THROW({
-        object->getStringFieldLength(1);
+        object->getStringLength(1);
     }, rs::scriptobject::TypeCastException);
     
     ASSERT_THROW({
-        object->getStringFieldLength(10);
+        object->getStringLength(10);
     }, rs::scriptobject::UnknownScriptObjectFieldException);
 }
 
@@ -1562,9 +1562,9 @@ TEST_F(SimpleObjectTests, test32) {
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
     
-    ASSERT_EQ(4, object->getStringFieldLength("abc"));
-    ASSERT_EQ(6, object->getStringFieldLength("hello"));
-    ASSERT_EQ(12, object->getStringFieldLength("text"));
+    ASSERT_EQ(3, object->getStringLength("abc"));
+    ASSERT_EQ(5, object->getStringLength("hello"));
+    ASSERT_EQ(11, object->getStringLength("text"));
 }
 
 TEST_F(SimpleObjectTests, test33) {
@@ -1579,9 +1579,9 @@ TEST_F(SimpleObjectTests, test33) {
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
     
-    ASSERT_EQ(4, object->getStringFieldLength("abc"));
-    ASSERT_EQ(6, object->getStringFieldLength("hello"));
-    ASSERT_EQ(12, object->getStringFieldLength("text"));
+    ASSERT_EQ(3, object->getStringLength("abc"));
+    ASSERT_EQ(5, object->getStringLength("hello"));
+    ASSERT_EQ(11, object->getStringLength("text"));
 }
 
 TEST_F(SimpleObjectTests, test34) {
@@ -1592,14 +1592,14 @@ TEST_F(SimpleObjectTests, test34) {
     
     auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(defn);
     
-    ASSERT_EQ(4, object->getStringFieldLength(0));
+    ASSERT_EQ(3, object->getStringLength(0));
     
     ASSERT_THROW({
-        object->getStringFieldLength("the_answer");
+        object->getStringLength("the_answer");
     }, rs::scriptobject::TypeCastException);
     
     ASSERT_THROW({
-        object->getStringFieldLength("xyz");
+        object->getStringLength("xyz");
     }, rs::scriptobject::UnknownScriptObjectFieldException);
 }
 
@@ -1619,8 +1619,13 @@ TEST_F(SimpleObjectTests, test35) {
     ASSERT_FALSE(object->setString(1, "hello world from mars"));
     ASSERT_STREQ("hello world", object->getString(1));
     
+    ASSERT_TRUE(object->setString(1, "hello"));
+    ASSERT_STREQ("hello", object->getString(1));
+    ASSERT_EQ(5, object->getStringLength(1));
+    
     ASSERT_TRUE(object->setString("text", "welcome"));
     ASSERT_STREQ("welcome", object->getString("text"));
+    ASSERT_EQ(7, object->getStringLength("text"));
     
     ASSERT_FALSE(object->setString("text", "hello world from mars"));
     ASSERT_STREQ("welcome", object->getString("text"));

@@ -283,24 +283,22 @@ public:
     const ScriptArrayPtr getArray(const char* name) const;
     
     /**
-     * Gets the allocated length of the string field at the specified index.
-     * If the string was modified by a call to setString then the string data will not match the allocated size.
+     * Gets the length of the string field at the specified index.
      * @param index the index to query
      * @return the length of the string in characters
      * @throws UnknownScriptObjectFieldException if the index is not in bounds
      * @throws TypeCastException if the field was not a string type
      */
-    unsigned getStringFieldLength(int index) const;
+    unsigned getStringLength(int index) const;
 
     /**
-     * Gets the allocated length of the string field with the specified name.
-     * If the string was modified by a call to setString then the string data will not match the allocated size.
+     * Gets the length of the string field with the specified name.
      * @param name the field to query
      * @return the length of the string in characters
      * @throws UnknownScriptObjectFieldException if the name was not known
      * @throws TypeCastException if the field was not a string type
      */
-    unsigned getStringFieldLength(const char* name) const;
+    unsigned getStringLength(const char* name) const;
     
     /**
      * Calculates the hash of the current object
