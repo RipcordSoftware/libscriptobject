@@ -30,7 +30,7 @@ clean: force_true
 		unzip gtest-${GTEST_VER}.zip && \
 		cd gtest-${GTEST_VER} && \
 		./configure && \
-		make -j 2 && \
+		$(MAKE) -j 2 && \
 		if [ ! -d "../installed/include" ]; then mkdir -p ../installed/include; fi && \
 		if [ ! -d "../installed/lib" ]; then mkdir -p ../installed/lib; fi && \
 		cp -Rf include/* ../installed/include && \
@@ -39,11 +39,11 @@ clean: force_true
 
 .gason: force_true
 	if ! `grep -q '\[submodule' .git/config`; then \
-                git submodule init; \
-        fi; \
-        if [ ! -d externals/gason/.git ]; then \
-                git submodule update; \
-        fi
+		git submodule init; \
+	fi; \
+	if [ ! -d externals/gason/.git ]; then \
+		git submodule update; \
+	fi
 
 force_true:
 	true
