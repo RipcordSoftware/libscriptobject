@@ -21,6 +21,7 @@
 #include <atomic>
 #include <memory>
 #include <new>
+#include <algorithm>
 
 namespace rs {
 namespace scriptobject {

@@ -200,7 +200,7 @@ int main(int argc, char** argv) {
             
             std::cerr << "Reading... ";
             istream.seekg(0, std::ios::end);
-            auto fileLength = istream.tellg();
+            auto fileLength = static_cast<std::size_t>(istream.tellg());
             istream.seekg(0, std::ios::beg);
 
             char* json = new char[fileLength];
