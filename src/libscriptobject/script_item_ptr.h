@@ -37,13 +37,13 @@ public:
     ScriptItemPtrBase(ScriptItemPtrBase&&) {}
     
     inline static void AddRef(T* ptr) noexcept {
-        if (ptr) ++ptr->refCount_;
+        if (ptr) ptr->refCount_.fetch_add(1, std::memory_order::memory_order_relaxed);
     }
     
     inline static void Release(T* ptr) noexcept {
         if (ptr) {
-            auto count = --ptr->refCount_;
-            if (count == 0) {
+            auto count = ptr->refCount_.fetch_add(-1, std::memory_order::memory_order_relaxed);
+            if (count == 1) {
                 ptr->~T();
                 auto rawPtr = reinterpret_cast<AllocT*>(ptr);
                 delete[] rawPtr;
@@ -52,7 +52,7 @@ public:
     }
     
     inline count_type Count(T* ptr) const noexcept {
-        return ptr != nullptr ? ptr->refCount_.load() : 0;
+        return ptr ? ptr->refCount_.load(std::memory_order::memory_order_relaxed) : 0;
     }
 };
 
