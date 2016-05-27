@@ -1,16 +1,16 @@
 GTEST_VER=1.7.0
 
-build: force_true .googletest .gason
+build: force_true .googletest
 	cd src/libscriptobject && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) build
 	cd src/libscriptobject_gason && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) build
 	cd src/testlibscriptobject && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) build
 
-all: force_true .googletest .gason
+all: force_true .googletest
 	cd src/libscriptobject && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) all
 	cd src/libscriptobject_gason && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) all
 	cd src/testlibscriptobject && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) all
 
-test: force_true .googletest .gason
+test: force_true .googletest
 	cd src/libscriptobject && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) test
 	cd src/testlibscriptobject && ./test.sh
 
@@ -35,14 +35,6 @@ clean: force_true
 		if [ ! -d "../installed/lib" ]; then mkdir -p ../installed/lib; fi && \
 		cp -Rf include/* ../installed/include && \
 		cp -Rf lib/.libs/* ../installed/lib; \
-	fi
-
-.gason: force_true
-	if ! `grep -q '\[submodule' .git/config`; then \
-		git submodule init; \
-	fi; \
-	if [ ! -d externals/gason/.git ]; then \
-		git submodule update; \
 	fi
 
 force_true:
