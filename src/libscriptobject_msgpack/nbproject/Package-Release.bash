@@ -13,8 +13,8 @@ CND_BUILDDIR=build
 CND_DLIB_EXT=so
 NBTMPDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tmp-packaging
 TMPDIRNAME=tmp-packaging
-OUTPUT_PATH=${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/liblibscriptobject_msgpack.a
-OUTPUT_BASENAME=liblibscriptobject_msgpack.a
+OUTPUT_PATH=${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libscriptobject_msgpack.a
+OUTPUT_BASENAME=libscriptobject_msgpack.a
 PACKAGE_TOP_DIR=libscriptobjectmsgpack/
 
 # Functions

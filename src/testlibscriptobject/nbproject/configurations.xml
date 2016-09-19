@@ -77,7 +77,7 @@
                             WD="../libscriptobject_gason"
                             BC="${MAKE}  -f Makefile CONF=Debug"
                             CC="${MAKE}  -f Makefile CONF=Debug clean"
-                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/liblibscriptobject_gason.a">
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libscriptobject_gason.a">
               </makeArtifact>
             </linkerLibProjectItem>
             <linkerLibProjectItem>
@@ -89,7 +89,7 @@
                             WD="../libscriptobject_msgpack"
                             BC="${MAKE}  -f Makefile CONF=Debug"
                             CC="${MAKE}  -f Makefile CONF=Debug clean"
-                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/liblibscriptobject_msgpack.a">
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libscriptobject_msgpack.a">
               </makeArtifact>
             </linkerLibProjectItem>
           </linkerLibItems>
@@ -164,7 +164,7 @@
                             WD="../libscriptobject_gason"
                             BC="${MAKE}  -f Makefile CONF=Release"
                             CC="${MAKE}  -f Makefile CONF=Release clean"
-                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/liblibscriptobject_gason.a">
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libscriptobject_gason.a">
               </makeArtifact>
             </linkerLibProjectItem>
             <linkerLibProjectItem>
@@ -176,7 +176,7 @@
                             WD="../libscriptobject_msgpack"
                             BC="${MAKE}  -f Makefile CONF=Release"
                             CC="${MAKE}  -f Makefile CONF=Release clean"
-                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/liblibscriptobject_msgpack.a">
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libscriptobject_msgpack.a">
               </makeArtifact>
             </linkerLibProjectItem>
           </linkerLibItems>

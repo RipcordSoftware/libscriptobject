@@ -52,7 +52,7 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=../libscriptobject/dist/Release/GNU-Linux-x86/libscriptobject.a ../libscriptobject_gason/dist/Release/GNU-Linux-x86/liblibscriptobject_gason.a ../libscriptobject_msgpack/dist/Release/GNU-Linux-x86/liblibscriptobject_msgpack.a
+LDLIBSOPTIONS=../libscriptobject/dist/Release/GNU-Linux-x86/libscriptobject.a ../libscriptobject_gason/dist/Release/GNU-Linux-x86/libscriptobject_gason.a ../libscriptobject_msgpack/dist/Release/GNU-Linux-x86/libscriptobject_msgpack.a
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
@@ -60,9 +60,9 @@ LDLIBSOPTIONS=../libscriptobject/dist/Release/GNU-Linux-x86/libscriptobject.a ..
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibscriptobject: ../libscriptobject/dist/Release/GNU-Linux-x86/libscriptobject.a
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibscriptobject: ../libscriptobject_gason/dist/Release/GNU-Linux-x86/liblibscriptobject_gason.a
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibscriptobject: ../libscriptobject_gason/dist/Release/GNU-Linux-x86/libscriptobject_gason.a
 
-${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibscriptobject: ../libscriptobject_msgpack/dist/Release/GNU-Linux-x86/liblibscriptobject_msgpack.a
+${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibscriptobject: ../libscriptobject_msgpack/dist/Release/GNU-Linux-x86/libscriptobject_msgpack.a
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/testlibscriptobject: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
