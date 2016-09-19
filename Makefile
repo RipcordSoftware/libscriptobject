@@ -1,41 +1,32 @@
 GTEST_VER=1.7.0
 
-build: force_true .googletest
-	cd src/libscriptobject && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) build
-	cd src/libscriptobject_gason && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) build
-	cd src/testlibscriptobject && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) build
+.PHONY: build all clean .googletest
 
-all: force_true .googletest
-	cd src/libscriptobject && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) all
-	cd src/libscriptobject_gason && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) all
-	cd src/testlibscriptobject && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) all
+.NOTPARALLEL: test
 
-test: force_true .googletest
-	cd src/libscriptobject && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) test
+build all clean: .googletest
+	cd src/libscriptobject && $(MAKE) $@
+	cd src/libscriptobject_gason && $(MAKE) $@
+	cd src/testlibscriptobject && $(MAKE) $@
+
+test: .googletest
+	cd src/libscriptobject && $(MAKE) $@
 	cd src/testlibscriptobject && ./test.sh
 
-clean: force_true
-	cd src/libscriptobject && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) clean
-	cd src/libscriptobject_gason && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) clean
-	cd src/testlibscriptobject && $(MAKE) $(MFLAGS) $(MAKEOVERRIDES) clean
-
-.googletest: force_true
+.googletest:
 	if [ "${CI}" = "true" ]; then \
 		curl ftp://ftp.ripcordsoftware.com/pub/gtest-${GTEST_VER}-travis-ci-externals-installed.tar.xz -O && \
 		tar xfJ gtest-*; \
 	elif [ ! -d externals/gtest-${GTEST_VER}/lib/.libs ]; then \
 		mkdir -p externals && \
 		cd externals && \
-		if [ ! -f gtest-${GTEST_VER}.zip ]; then curl https://googletest.googlecode.com/files/gtest-${GTEST_VER}.zip -O; fi && \
+		if [ ! -f gtest-${GTEST_VER}.zip ]; then curl ftp://ftp.ripcordsoftware.com/pub/gtest-${GTEST_VER}.zip -O; fi && \
 		unzip gtest-${GTEST_VER}.zip && \
 		cd gtest-${GTEST_VER} && \
 		./configure && \
-		$(MAKE) -j 2 && \
+		$(MAKE) && \
 		if [ ! -d "../installed/include" ]; then mkdir -p ../installed/include; fi && \
 		if [ ! -d "../installed/lib" ]; then mkdir -p ../installed/lib; fi && \
 		cp -Rf include/* ../installed/include && \
 		cp -Rf lib/.libs/* ../installed/lib; \
 	fi
-
-force_true:
-	true
