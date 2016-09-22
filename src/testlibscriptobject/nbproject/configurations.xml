@@ -52,7 +52,7 @@
             <pElem>../libscriptobject_msgpack</pElem>
             <pElem>../../externals/msgpack-c/include</pElem>
           </incDir>
-          <commandLine>--coverage</commandLine>
+          <commandLine>$(COVERAGE_FLAGS)</commandLine>
         </ccTool>
         <linkerTool>
           <linkerLibItems>

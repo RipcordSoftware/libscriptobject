@@ -65,8 +65,8 @@ TESTFILES= \
 CFLAGS=
 
 # CC Compiler Flags
-CCFLAGS=--coverage
-CXXFLAGS=--coverage
+CCFLAGS=$(COVERAGE_FLAGS)
+CXXFLAGS=$(COVERAGE_FLAGS)
 
 # Fortran Compiler Flags
 FFLAGS=
@@ -159,63 +159,63 @@ ${OBJECTDIR}/script_object_vector_source.o: script_object_vector_source.cpp
 .build-tests-conf: .build-conf ${TESTFILES}
 ${TESTDIR}/TestFiles/f5: ${TESTDIR}/tests/exception_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc} ../../externals/installed/lib/libgtest_main.a ../../externals/installed/lib/libgtest.a --coverage  -o ${TESTDIR}/TestFiles/f5 $^ ${LDLIBSOPTIONS} -lpthread 
+	${LINK.cc} ../../externals/installed/lib/libgtest_main.a ../../externals/installed/lib/libgtest.a $(COVERAGE_FLAGS)  -o ${TESTDIR}/TestFiles/f5 $^ ${LDLIBSOPTIONS} -lpthread 
 
 ${TESTDIR}/TestFiles/f2: ${TESTDIR}/tests/object_defn_hash_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc} ../../externals/installed/lib/libgtest_main.a ../../externals/installed/lib/libgtest.a --coverage  -o ${TESTDIR}/TestFiles/f2 $^ ${LDLIBSOPTIONS} -lpthread 
+	${LINK.cc} ../../externals/installed/lib/libgtest_main.a ../../externals/installed/lib/libgtest.a $(COVERAGE_FLAGS)  -o ${TESTDIR}/TestFiles/f2 $^ ${LDLIBSOPTIONS} -lpthread 
 
 ${TESTDIR}/TestFiles/f1: ${TESTDIR}/tests/object_keys_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc} ../../externals/installed/lib/libgtest_main.a ../../externals/installed/lib/libgtest.a --coverage  -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS} -lpthread 
+	${LINK.cc} ../../externals/installed/lib/libgtest_main.a ../../externals/installed/lib/libgtest.a $(COVERAGE_FLAGS)  -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS} -lpthread 
 
 ${TESTDIR}/TestFiles/f6: ${TESTDIR}/tests/script_object_ptr_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc} ../../externals/installed/lib/libgtest_main.a ../../externals/installed/lib/libgtest.a --coverage  -o ${TESTDIR}/TestFiles/f6 $^ ${LDLIBSOPTIONS} -lpthread 
+	${LINK.cc} ../../externals/installed/lib/libgtest_main.a ../../externals/installed/lib/libgtest.a $(COVERAGE_FLAGS)  -o ${TESTDIR}/TestFiles/f6 $^ ${LDLIBSOPTIONS} -lpthread 
 
 ${TESTDIR}/TestFiles/f4: ${TESTDIR}/tests/simple_array_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc} ../../externals/installed/lib/libgtest_main.a ../../externals/installed/lib/libgtest.a --coverage  -o ${TESTDIR}/TestFiles/f4 $^ ${LDLIBSOPTIONS} -lpthread 
+	${LINK.cc} ../../externals/installed/lib/libgtest_main.a ../../externals/installed/lib/libgtest.a $(COVERAGE_FLAGS)  -o ${TESTDIR}/TestFiles/f4 $^ ${LDLIBSOPTIONS} -lpthread 
 
 ${TESTDIR}/TestFiles/f3: ${TESTDIR}/tests/simple_object_tests.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc} ../../externals/installed/lib/libgtest_main.a ../../externals/installed/lib/libgtest.a --coverage  -o ${TESTDIR}/TestFiles/f3 $^ ${LDLIBSOPTIONS} -lpthread 
+	${LINK.cc} ../../externals/installed/lib/libgtest_main.a ../../externals/installed/lib/libgtest.a $(COVERAGE_FLAGS)  -o ${TESTDIR}/TestFiles/f3 $^ ${LDLIBSOPTIONS} -lpthread 
 
 
 ${TESTDIR}/tests/exception_tests.o: tests/exception_tests.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT=1 -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/exception_tests.o tests/exception_tests.cpp
+	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT=1 -I../../externals/installed/include -I. -std=c++11 $(COVERAGE_FLAGS) -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/exception_tests.o tests/exception_tests.cpp
 
 
 ${TESTDIR}/tests/object_defn_hash_tests.o: tests/object_defn_hash_tests.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT=1 -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/object_defn_hash_tests.o tests/object_defn_hash_tests.cpp
+	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT=1 -I../../externals/installed/include -I. -std=c++11 $(COVERAGE_FLAGS) -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/object_defn_hash_tests.o tests/object_defn_hash_tests.cpp
 
 
 ${TESTDIR}/tests/object_keys_tests.o: tests/object_keys_tests.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT=1 -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/object_keys_tests.o tests/object_keys_tests.cpp
+	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT=1 -I../../externals/installed/include -I. -std=c++11 $(COVERAGE_FLAGS) -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/object_keys_tests.o tests/object_keys_tests.cpp
 
 
 ${TESTDIR}/tests/script_object_ptr_tests.o: tests/script_object_ptr_tests.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT=1 -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/script_object_ptr_tests.o tests/script_object_ptr_tests.cpp
+	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT=1 -I../../externals/installed/include -I. -std=c++11 $(COVERAGE_FLAGS) -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/script_object_ptr_tests.o tests/script_object_ptr_tests.cpp
 
 
 ${TESTDIR}/tests/simple_array_tests.o: tests/simple_array_tests.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT=1 -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/simple_array_tests.o tests/simple_array_tests.cpp
+	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT=1 -I../../externals/installed/include -I. -std=c++11 $(COVERAGE_FLAGS) -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/simple_array_tests.o tests/simple_array_tests.cpp
 
 
 ${TESTDIR}/tests/simple_object_tests.o: tests/simple_object_tests.cpp 
 	${MKDIR} -p ${TESTDIR}/tests
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT=1 -I../../externals/installed/include -I. -std=c++11 --coverage -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/simple_object_tests.o tests/simple_object_tests.cpp
+	$(COMPILE.cc) -g -DDEBUG_SCRIPT_OBJECT=1 -I../../externals/installed/include -I. -std=c++11 $(COVERAGE_FLAGS) -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/simple_object_tests.o tests/simple_object_tests.cpp
 
 
 ${OBJECTDIR}/md5_nomain.o: ${OBJECTDIR}/md5.o md5.cpp 

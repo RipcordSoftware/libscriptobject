@@ -46,7 +46,7 @@
           <incDir>
             <pElem>../libscriptobject</pElem>
           </incDir>
-          <commandLine>--coverage</commandLine>
+          <commandLine>$(COVERAGE_FLAGS)</commandLine>
         </ccTool>
         <archiverTool>
         </archiverTool>

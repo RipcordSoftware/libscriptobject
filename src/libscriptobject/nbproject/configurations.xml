@@ -105,7 +105,7 @@
       <compileType>
         <ccTool>
           <standard>8</standard>
-          <commandLine>--coverage</commandLine>
+          <commandLine>$(COVERAGE_FLAGS)</commandLine>
           <preprocessorList>
             <Elem>DEBUG_SCRIPT_OBJECT=1</Elem>
           </preprocessorList>
@@ -121,13 +121,13 @@
           <incDir>
             <pElem>../../externals/installed/include</pElem>
           </incDir>
-          <commandLine>--coverage</commandLine>
+          <commandLine>$(COVERAGE_FLAGS)</commandLine>
         </ccTool>
         <linkerTool>
           <linkerLibItems>
             <linkerLibStdlibItem>PosixThreads</linkerLibStdlibItem>
           </linkerLibItems>
-          <commandLine>../../externals/installed/lib/libgtest_main.a ../../externals/installed/lib/libgtest.a --coverage</commandLine>
+          <commandLine>../../externals/installed/lib/libgtest_main.a ../../externals/installed/lib/libgtest.a $(COVERAGE_FLAGS)</commandLine>
         </linkerTool>
       </folder>
       <folder path="TestFiles/f1">
