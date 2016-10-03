@@ -11,6 +11,8 @@ if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
     export PATH=~/.local/bin:$PATH
 elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
     brew update
+    curl https://bootstrap.pypa.io/get-pip.py -O
+    sudo python get-pip.py
 fi
 
 popd
