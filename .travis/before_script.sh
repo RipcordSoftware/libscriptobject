@@ -11,8 +11,11 @@ if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
     export PATH=~/.local/bin:$PATH
 elif [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
     brew update
+    
     curl https://bootstrap.pypa.io/get-pip.py -O
     sudo python get-pip.py
+    pip install --user json_tools u-msgpack-python
+    export PATH=$PATH:~/Library/Python/2.7/bin
 fi
 
 popd
