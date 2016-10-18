@@ -1,10 +1,16 @@
 #!/bin/bash
 
-make all
+PARENT_PROCESS=`basename $_`
 
 CONFIG=Debug
-if [ "$1" != "" ]; then
+if [[ "$1" != "" ]]; then
     CONFIG=$1
+fi
+
+# spawn make if we weren't invoked by it already
+if [[ "$PARENT_PROCESS" != "make" && "$PARENT_PROCESS" != "gmake" ]]; then
+    MAKE=`which gmake || which make`
+    ${MAKE} CONF=${CONFIG} || exit 5
 fi
 
 json &> /dev/null
@@ -35,7 +41,7 @@ done
 
 for f in test*.json
 do
-    of=`basename -s .json $f`.msgpack
+    of=`basename $f .json`.msgpack
     python json2msgpack.py $f test.out/${of}
     dist/$CONFIG/GNU-Linux-x86/testlibscriptobject test.out/${of} > test.out/test.json
     json diff $f test.out/test.json > test.out/diff.out
