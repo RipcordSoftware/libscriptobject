@@ -34,7 +34,7 @@ acceptable.
 
 # Building
 Requires:
-* GCC 4.9+
+* GCC 4.9+ or CLANG 3.5+
 * GNU Make
 * lcov, Ruby, python, python-pip (for test coverage)
 * valgrind (for memory analysis)
