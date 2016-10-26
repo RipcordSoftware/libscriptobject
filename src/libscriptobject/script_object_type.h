@@ -21,6 +21,9 @@
 namespace rs {
 namespace scriptobject {
     
+/**
+ * The base field types of ScriptObject and ScriptArray
+ */
 enum class ScriptObjectType : unsigned char {    
     Unknown = 0,
     Boolean = 1,

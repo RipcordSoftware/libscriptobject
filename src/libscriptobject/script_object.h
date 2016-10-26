@@ -35,6 +35,9 @@ using ScriptObjectPtr = ScriptItemPtr<ScriptObject>;
 class ScriptArray;
 using ScriptArrayPtr = ScriptItemPtr<ScriptArray>;
 
+/**
+ * A type which describes a scriptable object
+ */
 class ScriptObject final : public ScriptItemPtrBase<ScriptObject> {    
 
 private:    
@@ -302,10 +305,10 @@ public:
     
     /**
      * Calculates the hash of the current object
-     * @param on return contains the hash of the object
-     * @param a function predicate which should return true if the field is to be included in the hash calculation, can be nullptr to include all fields
+     * @param digest on return contains the hash of the object
+     * @param validateFieldFunc a function predicate which should return true if the field is to be included in the hash calculation, can be nullptr to include all fields
      */
-    void CalculateHash(ScriptObjectHash&, bool (*)(const char*) = nullptr);
+    void CalculateHash(ScriptObjectHash& digest, bool (*validateFieldFunc)(const char* name) = nullptr);
     
     /**
      * A enumeration which controls the behaviour of the Merge method
@@ -366,4 +369,3 @@ private:
 }}
 
 #endif	/* RS_LIBSCRIPTOBJECT_SCRIPT_OBJECT_H */
-

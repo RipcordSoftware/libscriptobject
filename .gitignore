@@ -43,3 +43,7 @@ gtest-*.tar.xz
 
 # ignore externals/installed
 externals/installed
+
+# ignore doxygen docs
+docs/*
+

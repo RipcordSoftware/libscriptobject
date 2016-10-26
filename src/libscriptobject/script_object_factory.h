@@ -26,14 +26,32 @@
 namespace rs {
 namespace scriptobject {
 
+/**
+ * A factory for creating ScriptObjects
+ */
 class ScriptObjectFactory final {
 public:
     ScriptObjectFactory() = delete;
     ScriptObjectFactory(const ScriptObjectFactory& orig) = delete;
     
+    /**
+     * Creates a ScriptObject from a ScriptObjectSource
+     * @param source The source object used to populate the new ScriptObject
+     * @param useKeyCache When true libscriptobject will re-use a matching key object, otherwise a new one is created
+     * @return A new ScriptObjectPtr instance
+     */
     static ScriptObjectPtr CreateObject(const ScriptObjectSource& source, bool useKeyCache = true);
     
+    /**
+     * Gets the total number of ScriptObjects that have been created
+     * @return The total number of ScriptObjects allocated
+     */
     static unsigned getCount();
+    
+    /**
+     * Gets the total number of bytes allocated by all the ScriptObjects
+     * @return The total number of bytes allocated by all the ScriptObjects
+     */
     static unsigned long getTotalBytesAllocated();
     
 private:

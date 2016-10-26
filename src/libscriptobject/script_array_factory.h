@@ -26,14 +26,31 @@
 namespace rs {
 namespace scriptobject {
 
+/**
+ * A factory for creating ScriptArrays
+ */
 class ScriptArrayFactory final {
 public:
     ScriptArrayFactory() = delete;
     ScriptArrayFactory(const ScriptArrayFactory& orig) = delete;
     
+    /**
+     * Creates a ScriptArray from the specified source
+     * @param source The source of the new ScriptArray object
+     * @return The new ScriptArrayPtr
+     */
     static ScriptArrayPtr CreateArray(const ScriptArraySource& source);
     
+    /**
+     * Gets the total number of array objects created
+     * @return The total number of array objects created
+     */
     static unsigned getCount();
+    
+    /**
+     * Gets the total number of bytes allocated by the created array objects
+     * @return The total number of bytes allocated to store the created array objects
+     */
     static unsigned long getTotalBytesAllocated();
     
 private:

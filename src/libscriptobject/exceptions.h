@@ -22,7 +22,10 @@
 
 namespace rs {
 namespace scriptobject {
-    
+
+/**
+ * The base exception type for libscriptobject
+ */    
 class ScriptObjectException : public std::exception {
 public:
     virtual const char* what() const noexcept override {
@@ -30,28 +33,40 @@ public:
     }
 };
 
-class TypeCastException : public ScriptObjectException {
+/**
+ * An exception type thrown when an invalid type cast has been requested
+ */
+class TypeCastException final : public ScriptObjectException {
 public:
     virtual const char* what() const noexcept override {
         return "A ScriptObject type cast exception occurred";
     }
 };
 
-class UnknownSourceFieldTypeException : public ScriptObjectException {
+/**
+ * An exception type thrown when an unknown source field has been requested
+ */
+class UnknownSourceFieldTypeException final : public ScriptObjectException {
 public:
     virtual const char* what() const noexcept override {
         return "Unknown ScriptObjectSource field type";
     }
 };
 
-class UnknownScriptObjectFieldException : public ScriptObjectException {
+/**
+ * An exception type thrown when an unknown field has been requested from a script object instance
+ */
+class UnknownScriptObjectFieldException final : public ScriptObjectException {
 public:
     virtual const char* what() const noexcept override {
         return "Unknown ScriptObject field";
     }
 };
 
-class UnknownScriptArrayIndexException : public ScriptObjectException {
+/**
+ * An exception type thrown when an unknown index (i.e. out of bounds) has been requested from a script array instance
+ */
+class UnknownScriptArrayIndexException final : public ScriptObjectException {
 public:
     virtual const char* what() const noexcept override {
         return "Unknown ScriptArray index";

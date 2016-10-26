@@ -34,7 +34,7 @@ public:
     /**
      * Creates a ScriptObjectKeys smart pointer instance
      * @param defn The source object definition
-     * @param defn Set to true to use the object key cache
+     * @param useCache Set to true to use the object key cache
      * @return A smart pointer containing the new object
      */    
     static ScriptObjectKeysPtr CreateKeys(const ScriptObjectDefinition& defn, bool useCache = true);

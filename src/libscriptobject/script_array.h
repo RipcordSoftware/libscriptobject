@@ -35,6 +35,9 @@ using ScriptArrayPtr = ScriptItemPtr<ScriptArray>;
 class ScriptObject;
 using ScriptObjectPtr = ScriptItemPtr<ScriptObject>;
 
+/**
+ * A type which describes a scriptable array
+ */
 class ScriptArray final : public ScriptItemPtrBase<ScriptArray> {
 private:
     const unsigned size_;
@@ -51,21 +54,102 @@ private:
     //ScriptObjectType types[count];
 
 public:
+    /**
+     * Gets the size of the array instance and optionally all its children
+     * @param includeChildren When true the size will include all the children of the array (i.e. child arrays, child objects)
+     * @return 
+     */
     std::uint64_t getSize(bool includeChildren = false) const;
+    
+    /**
+     * Gets the size of the array
+     * @return The number of items in the array
+     */
     unsigned getCount() const;
+    
+    /**
+     * Gets the type of the item at the specified index
+     * @param index The index to query
+     * @return The type of the item at the specified index
+     */
     ScriptObjectType getType(int index) const;
+    
+    /**
+     * Gets the string at the specified index
+     * @param index The index in the array
+     * @return A pointer to the string entry in the array
+     */
     const char* getString(int index) const;
+    
+    /**
+     * Gets the value as an int32_t at the specified index
+     * @param index The index in the array
+     * @return The value from the specified index
+     */
     std::int32_t getInt32(int index) const;
+    
+    /**
+     * Gets the value as a uint32_t at the specified index
+     * @param index The index in the array
+     * @return The value from the specified index
+     */
     std::uint32_t getUInt32(int index) const;
+    
+    /**
+     * Gets the value as an int64_t at the specified index
+     * @param index The index in the array
+     * @return The value from the specified index
+     */
     std::int64_t getInt64(int index) const;
+    
+    /**
+     * Gets the value as a uint64_t at the specified index
+     * @param index The index in the array
+     * @return The value from the specified index
+     */
     std::uint64_t getUInt64(int index) const;
+    
+    /**
+     * Gets the value as a double at the specified index
+     * @param index The index in the array
+     * @return The value from the specified index
+     */
     double getDouble(int index) const;
+    
+    /**
+     * Gets the value as a boolean at the specified index
+     * @param index The index in the array
+     * @return The value from the specified index
+     */
     bool getBoolean(int index) const;
+    
+    /**
+     * Gets the object at the specified index in the array
+     * @param index The index in the array
+     * @return The object instance from the specified index
+     */
     const ScriptObjectPtr getObject(int index) const;
+    
+    /**
+     * Gets the child array at the specified index in the array
+     * @param index The index in the array
+     * @return The child array instance from the specified index
+     */
     const ScriptArrayPtr getArray(int index) const;
     
-    void CalculateHash(ScriptObjectHash&, bool (*)(const char*) = nullptr);
+    /**
+     * Calculates the hash of the current array
+     * @param digest on return contains the hash of the array
+     * @param validateFieldFunc a function predicate which should return true if the child object field is to be included in the hash calculation, can be nullptr to include all fields
+     */
+    void CalculateHash(ScriptObjectHash& digest, bool (*validateFieldFunc)(const char* name) = nullptr);
     
+    /**
+     * Calculates the size overhead of the 'management' data of the array object.
+     * The overhead is the data portion of the script array which is not the actual field data itself. For example field offsets and indexes.
+     * @param fieldCount the number of fields to use in the calculation
+     * @return The overhead size in bytes
+     */
     static unsigned CalculateSizeOverhead(unsigned fieldCount);
     
 private:
@@ -88,4 +172,3 @@ private:
 }}
 
 #endif	/* RS_LIBSCRIPTOBJECT_SCRIPT_ARRAY_H */
-
