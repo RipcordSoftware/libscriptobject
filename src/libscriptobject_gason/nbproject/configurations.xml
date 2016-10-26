@@ -49,6 +49,7 @@
           <commandLine>$(COVERAGE_FLAGS)</commandLine>
         </ccTool>
         <archiverTool>
+          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libscriptobject_gason.a</output>
         </archiverTool>
       </compileType>
       <item path="../../externals/gason/src/gason.cpp"
@@ -93,6 +94,7 @@
           <developmentMode>5</developmentMode>
         </asmTool>
         <archiverTool>
+          <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libscriptobject_gason.a</output>
         </archiverTool>
       </compileType>
       <item path="../../externals/gason/src/gason.cpp"
