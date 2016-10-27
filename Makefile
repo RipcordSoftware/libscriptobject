@@ -1,6 +1,6 @@
 GTEST_VER=1.7.0
 
-.PHONY: build all clean .googletest
+.PHONY: build all clean docs .googletest
 
 .NOTPARALLEL: test
 
@@ -12,6 +12,9 @@ build all clean: .googletest
 test: .googletest
 	cd src/libscriptobject && $(MAKE) $@
 	cd src/testlibscriptobject && ./test.sh
+	
+docs:
+	doxygen Doxyfile
 
 .googletest:
 	if [ "${CI}" = "true" && "${TRAVIS_OS_NAME}" == "linux" ]; then \
