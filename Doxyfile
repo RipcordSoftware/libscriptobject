@@ -867,7 +867,8 @@ INPUT_FILTER           =
 # filters are used. If the FILTER_PATTERNS tag is empty or if none of the
 # patterns match the file name, INPUT_FILTER is applied.
 
-FILTER_PATTERNS        =
+# replace GitHub code and build status blocks with Doxygen compatible markdown
+FILTER_PATTERNS        = "*.md=\"sed 's/^\[!\[.\+$//g;s/^```\(.\+\)$/~~~{.\1}/g;s/^```$/~~~/g;s/{.bash}/{.sh}/g'\""
 
 # If the FILTER_SOURCE_FILES tag is set to YES, the input filter (if set using
 # INPUT_FILTER ) will also be used to filter the input files that are used for
