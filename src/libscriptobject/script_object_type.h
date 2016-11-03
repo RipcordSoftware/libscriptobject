@@ -18,11 +18,16 @@
 #ifndef RS_LIBSCRIPTOBJECT_SCRIPT_OBJECT_TYPE_H
 #define RS_LIBSCRIPTOBJECT_SCRIPT_OBJECT_TYPE_H
 
+/**
+ * @file
+ * Contains ScriptObjectType defining all the field types supported by libscriptobject
+ */
+
 namespace rs {
 namespace scriptobject {
     
 /**
- * The base field types of ScriptObject and ScriptArray
+ * An enumeration containing all the possible script object and array field types
  */
 enum class ScriptObjectType : unsigned char {    
     Unknown = 0,

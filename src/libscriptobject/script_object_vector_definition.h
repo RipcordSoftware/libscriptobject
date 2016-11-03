@@ -18,6 +18,11 @@
 #ifndef RS_LIBSCRIPTOBJECT_SCRIPT_OBJECT_VECTOR_DEFINITION_H
 #define RS_LIBSCRIPTOBJECT_SCRIPT_OBJECT_VECTOR_DEFINITION_H
 
+/**
+ * @file
+ * Declares VectorKeysDefn a helper class used by unit tests
+ */
+
 #include <vector>
 #include <string>
 
@@ -25,9 +30,10 @@
 
 namespace rs {
 namespace scriptobject {
+/// Test types reside in this namespace
 namespace test {
 
-typedef std::vector<std::pair<std::string, rs::scriptobject::ScriptObjectType>> VectorDefn;
+using VectorDefn = std::vector<std::pair<std::string, rs::scriptobject::ScriptObjectType>>;
 
 class VectorKeysDefn : public rs::scriptobject::ScriptObjectDefinition {
 public:

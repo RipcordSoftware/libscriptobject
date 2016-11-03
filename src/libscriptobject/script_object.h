@@ -18,13 +18,20 @@
 #ifndef RS_LIBSCRIPTOBJECT_SCRIPT_OBJECT_H
 #define RS_LIBSCRIPTOBJECT_SCRIPT_OBJECT_H
 
+/**
+ * @file
+ * Declares ScriptObject and associated helper types
+ */
+
 #include <memory>
 
 #include "script_object_keys.h"
 #include "script_object_hash.h"
 #include "script_item_ptr.h"
 
+ /// The ripcordsoftware namespace
 namespace rs {
+/// All libscriptobject types live in the scriptobject namespace
 namespace scriptobject {
     
 class ScriptObjectSource;

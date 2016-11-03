@@ -18,11 +18,25 @@
 #ifndef RS_LIBSCRIPTOBJECT_SCRIPT_OBJECT_HASH_H
 #define RS_LIBSCRIPTOBJECT_SCRIPT_OBJECT_HASH_H
 
+/** 
+ * @file 
+ * Declares ScriptObjectHash and CompareScriptObjectHash, a simple comparison function
+ */
+
 namespace rs {
 namespace scriptobject {
     
-typedef unsigned char ScriptObjectHash[16];
+/**
+ * An alias type containing a hash for a script object
+ */
+using ScriptObjectHash = unsigned char[16];
 
+/**
+ * Compares two script object hashes
+ * @param x The first hash to compare
+ * @param y The second hash to compare
+ * @return 0 if equal, -1 is x is less than y and 1 if x is greater than y
+ */
 int CompareScriptObjectHash(const ScriptObjectHash& x, ScriptObjectHash& y);
 
 }}
