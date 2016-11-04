@@ -1,6 +1,6 @@
 GTEST_VER=1.7.0
 
-.PHONY: build all clean docs .googletest
+.PHONY: build all clean docs publish_docs .googletest
 
 .NOTPARALLEL: test
 
@@ -15,6 +15,17 @@ test: .googletest
 	
 docs:
 	doxygen Doxyfile
+
+publish_docs: docs
+	cd docs && \
+	rm -rf libscriptobject-docs && \
+	git clone https://github.com/RipcordSoftware/libscriptobject-docs.git && \
+	cd libscriptobject-docs && \
+	rm -rf ./* && \
+	cp -R ../html/* . && \
+	git add . && \
+	git commit -m "Update `date`" && \
+	git push
 
 .googletest:
 	if [ "${CI}" = "true" && "${TRAVIS_OS_NAME}" == "linux" ]; then \
