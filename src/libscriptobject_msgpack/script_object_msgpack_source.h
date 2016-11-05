@@ -18,23 +18,26 @@
 #ifndef RS_LIBSCRIPTOBJECT_SCRIPT_OBJECT_MSGPACK_SOURCE_H
 #define RS_LIBSCRIPTOBJECT_SCRIPT_OBJECT_MSGPACK_SOURCE_H
 
+#include <string>
+
 #include "script_object_source.h"
+#include "exceptions.h"
 
 #include "msgpack.hpp"
 
 namespace rs {
 namespace scriptobject {
     
-class ScriptObjectMsgpackSourceParseException : public std::exception {
+class ScriptObjectMsgpackSourceParseException : public ScriptObjectException {
 public:    
     ScriptObjectMsgpackSourceParseException(const char* msg) : msg_(msg) {}
             
     virtual const char* what() const noexcept override {
-        return msg_;
+        return msg_.c_str();
     }
     
 private:
-    const char* msg_;
+    const std::string msg_;
 };
 
 class ScriptObjectMsgpackSource final : public rs::scriptobject::ScriptObjectSource {

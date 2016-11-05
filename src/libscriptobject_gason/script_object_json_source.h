@@ -19,24 +19,26 @@
 #define	RS_LIBSCRIPTOBJECT_SCRIPT_OBJECT_JSON_SOURCE_H
 
 #include <vector>
+#include <string>
 
 #include "../../externals/gason/src/gason.h"
 
 #include "script_object_source.h"
+#include "exceptions.h"
 
 namespace rs {
 namespace scriptobject {
     
-class ScriptObjectJsonSourceParseException : public std::exception {
+class ScriptObjectJsonSourceParseException : public ScriptObjectException {
 public:    
     ScriptObjectJsonSourceParseException(const char* msg) : msg_(msg) {}
             
     virtual const char* what() const noexcept override {
-        return msg_;
+        return msg_.c_str();
     }
     
 private:
-    const char* msg_;
+    const std::string msg_;
 };
 
 class ScriptObjectJsonSource : public rs::scriptobject::ScriptObjectSource {
