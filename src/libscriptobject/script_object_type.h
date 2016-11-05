@@ -1,4 +1,8 @@
-/*
+/**
+ * @file
+ * Contains ScriptObjectType defining all the field types supported by libscriptobject
+ * 
+ * @internal
  *  This file is part of libscriptobject.
  *
  *  libscriptobject is free software: you can redistribute it and/or modify
@@ -17,11 +21,6 @@
 
 #ifndef RS_LIBSCRIPTOBJECT_SCRIPT_OBJECT_TYPE_H
 #define RS_LIBSCRIPTOBJECT_SCRIPT_OBJECT_TYPE_H
-
-/**
- * @file
- * Contains ScriptObjectType defining all the field types supported by libscriptobject
- */
 
 namespace rs {
 namespace scriptobject {

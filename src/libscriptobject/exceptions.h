@@ -1,4 +1,8 @@
-/*
+/**
+ * @file
+ * Declare exception types specific to libscriptobject
+ * 
+ * @internal
  *  This file is part of libscriptobject.
  *
  *  libscriptobject is free software: you can redistribute it and/or modify
@@ -13,6 +17,9 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with libscriptobject.  If not, see <http://www.gnu.org/licenses/>.
+ * @endinternal
+ * 
+ * @defgroup Exceptions Exception types specific to libscriptobject
 **/
 
 #ifndef RS_LIBSCRIPTOBJECT_EXCEPTIONS_H
@@ -25,6 +32,7 @@ namespace scriptobject {
 
 /**
  * The base exception type for libscriptobject
+ * @ingroup Exceptions
  */    
 class ScriptObjectException : public std::exception {
 public:
@@ -35,6 +43,7 @@ public:
 
 /**
  * An exception type thrown when an invalid type cast has been requested
+ * @ingroup Exceptions
  */
 class TypeCastException final : public ScriptObjectException {
 public:
@@ -45,6 +54,7 @@ public:
 
 /**
  * An exception type thrown when an unknown source field has been requested
+ * @ingroup Exceptions
  */
 class UnknownSourceFieldTypeException final : public ScriptObjectException {
 public:
@@ -55,6 +65,7 @@ public:
 
 /**
  * An exception type thrown when an unknown field has been requested from a script object instance
+ * @ingroup Exceptions
  */
 class UnknownScriptObjectFieldException final : public ScriptObjectException {
 public:
@@ -65,6 +76,7 @@ public:
 
 /**
  * An exception type thrown when an unknown index (i.e. out of bounds) has been requested from a script array instance
+ * @ingroup Exceptions
  */
 class UnknownScriptArrayIndexException final : public ScriptObjectException {
 public:

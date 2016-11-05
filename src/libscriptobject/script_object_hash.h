@@ -1,4 +1,8 @@
-/*
+/** 
+ * @file 
+ * Declares ScriptObjectHash and CompareScriptObjectHash, a simple comparison function
+ * 
+ * @internal
  *  This file is part of libscriptobject.
  *
  *  libscriptobject is free software: you can redistribute it and/or modify
@@ -17,11 +21,6 @@
 
 #ifndef RS_LIBSCRIPTOBJECT_SCRIPT_OBJECT_HASH_H
 #define RS_LIBSCRIPTOBJECT_SCRIPT_OBJECT_HASH_H
-
-/** 
- * @file 
- * Declares ScriptObjectHash and CompareScriptObjectHash, a simple comparison function
- */
 
 namespace rs {
 namespace scriptobject {

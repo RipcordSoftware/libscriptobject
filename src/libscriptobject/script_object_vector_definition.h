@@ -1,4 +1,8 @@
-/*
+/**
+ * @file
+ * Declares VectorKeysDefn a helper class used by unit tests
+ * 
+ * @internal
  *  This file is part of libscriptobject.
  *
  *  libscriptobject is free software: you can redistribute it and/or modify
@@ -17,11 +21,6 @@
 
 #ifndef RS_LIBSCRIPTOBJECT_SCRIPT_OBJECT_VECTOR_DEFINITION_H
 #define RS_LIBSCRIPTOBJECT_SCRIPT_OBJECT_VECTOR_DEFINITION_H
-
-/**
- * @file
- * Declares VectorKeysDefn a helper class used by unit tests
- */
 
 #include <vector>
 #include <string>

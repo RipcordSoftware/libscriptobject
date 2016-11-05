@@ -1,4 +1,8 @@
-/*
+/**
+ * @file 
+ * Declares ScriptObject and associated helper types
+ * 
+ * @internal
  *  This file is part of libscriptobject.
  *
  *  libscriptobject is free software: you can redistribute it and/or modify
@@ -17,11 +21,6 @@
 
 #ifndef RS_LIBSCRIPTOBJECT_SCRIPT_OBJECT_H
 #define RS_LIBSCRIPTOBJECT_SCRIPT_OBJECT_H
-
-/**
- * @file
- * Declares ScriptObject and associated helper types
- */
 
 #include <memory>
 

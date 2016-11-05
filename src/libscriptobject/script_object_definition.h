@@ -1,4 +1,8 @@
-/*
+/**
+ * @file
+ * Declares ScriptObjectDefinition the abstract class used to query object metadata
+ * 
+ * @internal
  *  This file is part of libscriptobject.
  *
  *  libscriptobject is free software: you can redistribute it and/or modify
@@ -17,11 +21,6 @@
 
 #ifndef RS_LIBSCRIPTOBJECT_SCRIPT_OBJECT_DEFINITION_H
 #define RS_LIBSCRIPTOBJECT_SCRIPT_OBJECT_DEFINITION_H
-
-/**
- * @file
- * Declares ScriptObjectDefinition the abstract class used to query object metadata
- */
 
 #include "script_object_type.h"
 #include "script_object_hash.h"
