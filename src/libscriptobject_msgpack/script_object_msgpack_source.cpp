@@ -18,7 +18,6 @@
 #include "script_object_msgpack_source.h"
 #include "script_array_msgpack_source.h"
 
-#include "exceptions.h"
 #include "script_object_factory.h"
 #include "script_array_factory.h"
 

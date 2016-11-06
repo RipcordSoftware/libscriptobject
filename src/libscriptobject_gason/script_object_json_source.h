@@ -24,7 +24,7 @@
 #include "../../externals/gason/src/gason.h"
 
 #include "script_object_source.h"
-#include "exceptions.h"
+#include "script_object_exceptions.h"
 
 namespace rs {
 namespace scriptobject {

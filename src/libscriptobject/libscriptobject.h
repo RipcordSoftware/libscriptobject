@@ -18,7 +18,7 @@
 #ifndef RS_LIBSCRIPTOBJECT_H
 #define RS_LIBSCRIPTOBJECT_H
 
-#include "exceptions.h"
+#include "script_object_exceptions.h"
 #include "script_item_ptr.h"
 #include "script_object_keys_factory.h"
 #include "script_object_factory.h"

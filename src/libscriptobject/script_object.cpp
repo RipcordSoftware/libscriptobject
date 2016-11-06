@@ -21,7 +21,7 @@
 
 #include "md5.h"
 
-#include "exceptions.h"
+#include "script_object_exceptions.h"
 #include "script_object_source.h"
 #include "script_object_vector_source.h"
 #include "script_object_factory.h"

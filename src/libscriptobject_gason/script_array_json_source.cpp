@@ -19,7 +19,6 @@
 
 #include <cstring>
 
-#include "exceptions.h"
 #include "script_object_factory.h"
 #include "script_array_factory.h"
 

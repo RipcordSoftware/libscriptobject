@@ -17,7 +17,7 @@
 
 #include "script_array.h"
 #include "script_array_source.h"
-#include "exceptions.h"
+#include "script_object_exceptions.h"
 
 #include "md5.h"
 
