@@ -1,4 +1,8 @@
-/*
+/**
+ * @file 
+ * Declares VectorValue and ScriptObjectVectorSource, utility classes which make it easy to create objects from std::vector
+ * 
+ * @internal
  *  This file is part of libscriptobject.
  *
  *  libscriptobject is free software: you can redistribute it and/or modify
@@ -28,8 +32,12 @@
 
 namespace rs {
 namespace scriptobject {
+/// Utility (helper) types reside in this namespace
 namespace utils {
 
+/**
+ * A simple sciptable value type capable of containing any ScriptObjectType typed field
+ */
 class VectorValue final {
 public: 
     VectorValue();
@@ -109,9 +117,15 @@ private:
         ScriptArrayPtr* arr_;
     } value_;
 };
-    
-typedef std::vector<std::pair<std::string, VectorValue>> ObjectVector;
 
+/**
+ * A vector containing key value pairs of field name and values
+ */
+using ObjectVector = std::vector<std::pair<std::string, VectorValue>>;
+
+/**
+ * A type representing an object source stored in a vector
+ */
 class ScriptObjectVectorSource final : public rs::scriptobject::ScriptObjectSource {
 public:
     ScriptObjectVectorSource(const ObjectVector& source);
@@ -140,4 +154,3 @@ private:
 }}}
     
 #endif	/* RS_LIBSCRIPTOBJECT_SCRIPT_OBJECT_VECTOR_SOURCE_H */
-
