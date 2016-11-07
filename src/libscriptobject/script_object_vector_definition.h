@@ -32,8 +32,15 @@ namespace scriptobject {
 /// Test types reside in this namespace
 namespace test {
 
+/**
+ * A std::vector based types which maps field names to types
+ */
 using VectorDefn = std::vector<std::pair<std::string, rs::scriptobject::ScriptObjectType>>;
 
+/**
+ * A type which defines the mapping between field names and types
+ * @param keys
+ */
 class VectorKeysDefn : public rs::scriptobject::ScriptObjectDefinition {
 public:
     VectorKeysDefn(const VectorDefn& keys) : keys_(keys) {}

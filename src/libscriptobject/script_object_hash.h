@@ -27,6 +27,8 @@ namespace scriptobject {
     
 /**
  * An alias type containing a hash for a script object
+ * @see ScriptObjectKeys
+ * @see ScriptObjectKeysCache
  */
 using ScriptObjectHash = unsigned char[16];
 

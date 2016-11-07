@@ -119,12 +119,14 @@ private:
 };
 
 /**
- * A vector containing key value pairs of field name and values
+ * A std::vector containing key value pairs of field name and values
+ * @see VectorValue
  */
 using ObjectVector = std::vector<std::pair<std::string, VectorValue>>;
 
 /**
  * A type representing an object source stored in a vector
+ * @see ScriptObjectSource
  */
 class ScriptObjectVectorSource final : public rs::scriptobject::ScriptObjectSource {
 public:

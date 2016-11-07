@@ -1,4 +1,8 @@
-/*
+/**
+ * @file
+ * Declares ScriptObjectKey and ScriptObjectKeys
+ * 
+ * @internal
  *  This file is part of libscriptobject.
  *
  *  libscriptobject is free software: you can redistribute it and/or modify
@@ -28,6 +32,7 @@ namespace scriptobject {
 
 /**
  * A key which contains the field type, raw index and offset
+ * @see ScriptObjectKeys
  */    
 struct ScriptObjectKey {
     unsigned type : 4;                  /// < The type of the key
@@ -40,20 +45,47 @@ struct ScriptObjectKey {
  * @ note
  * This structure is designed to be very efficient with memory. Only a single
  * block is allocated to contain the field names, types and other associated data.
+ * @see ScriptObjectKey
+ * @see ScriptObjectKeysCache
  */
 struct ScriptObjectKeys {
     using size_t = unsigned short;
 
-    size_t size;                        /// < The size of the entire key structure
-    size_t count;                       /// < The number of keys
-    ScriptObjectHash hash;              /// < The MD5 hash generated from key+type
-    ScriptObjectKey keys[/*count*/];    /// < The key definitions
+    size_t size;                        ///< The size of the entire key structure
+    size_t count;                       ///< The number of keys
+    ScriptObjectHash hash;              ///< The MD5 hash generated from key+type
+    ScriptObjectKey keys[/*count*/];    ///< The key definitions
     // Index index[count];              // a map of original index position to sorted position
     // char names[count];               // the null terminated field names
     
+    /**
+     * Gets the key descriptor at the specified index
+     * @param index The index to get
+     * @param key A key object which is populated on success
+     * @return True if successful
+     */
     bool getKey(int index, ScriptObjectKey& key) const;
+    
+    /**
+     * Gets the key descriptor of the specified field name
+     * @param name The name of the field
+     * @param key A key object which is populated on success
+     * @return True if successful
+     */
     bool getKey(const char* name, ScriptObjectKey& key) const;
+    
+    /**
+     * Gets the name of the key at the specified index
+     * @param index The index to get
+     * @return The key name or nullptr if the index is not known
+     */
     const char* getKeyName(int index) const;
+    
+    /**
+     * Gets the type of the key at the specified index
+     * @param index The index to get
+     * @return The type of the key at the given index
+     */
     ScriptObjectType getKeyType(int index) const;
     
 private:    
@@ -78,4 +110,3 @@ typedef std::shared_ptr<ScriptObjectKeys> ScriptObjectKeysPtr;
 }}
 
 #endif	/* RS_LIBSCRIPTOBJECT_SCRIPT_OBJECT_KEYS_H */
-

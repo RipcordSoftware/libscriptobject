@@ -1,4 +1,8 @@
-/*
+/**
+ * @file
+ * Declares ScriptArrayMsgpackSource
+ * 
+ * @internal
  *  This file is part of libscriptobject.
  *
  *  libscriptobject is free software: you can redistribute it and/or modify
@@ -25,6 +29,11 @@
 namespace rs {
 namespace scriptobject {
 
+/**
+ * A source for a scriptable array, read from a msgpack character stream
+ * @see ScriptArraySource
+ * @see ScriptArrayFactory
+ */
 class ScriptArrayMsgpackSource final : public rs::scriptobject::ScriptArraySource {
 public:
     

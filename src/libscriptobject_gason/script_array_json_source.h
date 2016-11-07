@@ -1,4 +1,8 @@
-/*
+/**
+ * @file
+ * Declares ScriptArrayJsonSource
+ * 
+ * @internal
  *  This file is part of libscriptobject.
  *
  *  libscriptobject is free software: you can redistribute it and/or modify
@@ -27,6 +31,11 @@
 namespace rs {
 namespace scriptobject {
 
+/**
+ * A source for a scriptable array, read from a JSON character stream
+ * @see ScriptArraySource
+ * @see ScriptArrayFactory
+ */
 class ScriptArrayJsonSource : public rs::scriptobject::ScriptArraySource {
 public:
     ScriptArrayJsonSource(char* json);    

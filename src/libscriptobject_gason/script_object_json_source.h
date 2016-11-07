@@ -1,4 +1,8 @@
-/*
+/**
+ * @file
+ * Declares ScriptObjectJsonSourceParseException and ScriptObjectJsonSource
+ * 
+ * @internal
  *  This file is part of libscriptobject.
  *
  *  libscriptobject is free software: you can redistribute it and/or modify
@@ -29,6 +33,11 @@
 namespace rs {
 namespace scriptobject {
     
+/**
+ * An exception thrown when a parse error has occurred in the input JSON stream
+ * @see ScriptObjectException
+ * @ingroup Exceptions
+ */
 class ScriptObjectJsonSourceParseException : public ScriptObjectException {
 public:    
     ScriptObjectJsonSourceParseException(const char* msg) : msg_(msg) {}
@@ -41,6 +50,11 @@ private:
     const std::string msg_;
 };
 
+/**
+ * A source for a scriptable object, read from a JSON character stream
+ * @see ScriptObject
+ * @see ScriptObjectFactory
+ */
 class ScriptObjectJsonSource : public rs::scriptobject::ScriptObjectSource {
 public:
     ScriptObjectJsonSource(char* json);

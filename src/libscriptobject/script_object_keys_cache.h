@@ -1,4 +1,8 @@
-/*
+/**
+ * @file
+ * Declares ScriptObjectKeysCache
+ * 
+ * @internal
  *  This file is part of libscriptobject.
  *
  *  libscriptobject is free software: you can redistribute it and/or modify
@@ -28,17 +32,38 @@
 namespace rs {
 namespace scriptobject {
 
+/**
+ * A type which caches script object keys based on their hashes
+ * @see ScriptObjectKeys
+ * @see ScriptObjectKey
+ * @see ScriptObjectHash
+ */
 class ScriptObjectKeysCache final {
 public:
     ScriptObjectKeysCache() = delete;
     ScriptObjectKeysCache(const ScriptObjectKeysCache& orig) = delete;
     
+    /**
+     * Adds an object keys instance to the cache
+     * @param keys A keys instance to add
+     * @return The added instance
+     */
     static ScriptObjectKeysPtr AddObjectKeys(const ScriptObjectKeysPtr& keys);
-    
+
+    /**
+     * Gets an matching keys instance if it already exists in the cache
+     */
     static ScriptObjectKeysPtr GetObjectKeys(const ScriptObjectKeysPtr& keys);
     
+    /**
+     * Gets the number of keys in the cache
+     * @return The number of keys in the cache
+     */
     static std::size_t getCount();
     
+    /**
+     * Flushes (clears) the contents of the cache
+     */
     static void Flush();
     
 private:

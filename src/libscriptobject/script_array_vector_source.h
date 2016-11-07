@@ -1,4 +1,8 @@
-/*
+/**
+ * @file
+ * Declares ArrayVector and ScriptArrayVectorSource, utility classes which make it easy to create arrays from std::vector
+ * 
+ * @internal
  *  This file is part of libscriptobject.
  *
  *  libscriptobject is free software: you can redistribute it and/or modify
@@ -26,9 +30,19 @@
 namespace rs {
 namespace scriptobject {
 namespace utils {
-    
-typedef std::vector<VectorValue> ArrayVector;
 
+/**
+ * A std::vector based type for storing script object values
+ * @see VectorValue
+ */
+using ArrayVector = std::vector<VectorValue>;
+
+/**
+ * A type declaring a source for a scriptable array
+ * @see ArrayVector
+ * @see ScriptArray
+ * @see ScriptArrayFactory
+ */
 class ScriptArrayVectorSource final : public ScriptArraySource {
 public:
     ScriptArrayVectorSource(const ArrayVector&);
@@ -53,4 +67,3 @@ private:
 }}}
 
 #endif	/* RS_LIBSCRIPTOBJECT_SCRIPT_ARRAY_VECTOR_SOURCE_H */
-

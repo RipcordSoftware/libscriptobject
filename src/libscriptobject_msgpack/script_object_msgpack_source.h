@@ -1,4 +1,8 @@
-/*
+/**
+ * @file
+ * Declares ScriptObjectMsgpackSourceParseException and ScriptObjectMsgpackSource
+ * 
+ * @internal
  *  This file is part of libscriptobject.
  *
  *  libscriptobject is free software: you can redistribute it and/or modify
@@ -27,7 +31,12 @@
 
 namespace rs {
 namespace scriptobject {
-    
+
+/**
+ * An exception thrown when the msgpack parser encounters an error in the input stream
+ * @see ScriptObjectException
+ * @ingroup Exceptions
+ */
 class ScriptObjectMsgpackSourceParseException : public ScriptObjectException {
 public:    
     ScriptObjectMsgpackSourceParseException(const char* msg) : msg_(msg) {}
@@ -40,6 +49,11 @@ private:
     const std::string msg_;
 };
 
+/**
+ * A source for a scriptable object, read from a msgpack character stream
+ * @see ScriptObject
+ * @see ScriptObjectFactory
+ */
 class ScriptObjectMsgpackSource final : public rs::scriptobject::ScriptObjectSource {
 public:
     

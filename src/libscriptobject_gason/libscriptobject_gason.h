@@ -1,4 +1,8 @@
-/*
+/**
+ * @file
+ * The main header file to clients wishing to use libscriptobjects JSON sources
+ * 
+ * @internal
  *  This file is part of libscriptobject.
  *
  *  libscriptobject is free software: you can redistribute it and/or modify

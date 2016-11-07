@@ -1,4 +1,8 @@
-/*
+/**
+ * @file
+ * Declares ScriptObjectKeysFactory
+ * 
+ * @internal
  *  This file is part of libscriptobject.
  *
  *  libscriptobject is free software: you can redistribute it and/or modify
@@ -26,6 +30,8 @@ namespace scriptobject {
 
 /**
  * A factory for creating ScriptObjectKeys
+ * @see ScriptObjectKeys
+ * @see ScriptObjectKey
  */
 class ScriptObjectKeysFactory final {
 public:
