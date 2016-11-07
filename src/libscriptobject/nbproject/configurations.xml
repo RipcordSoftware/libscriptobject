@@ -4,7 +4,6 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
-      <itemPath>exceptions.h</itemPath>
       <itemPath>libscriptobject.h</itemPath>
       <itemPath>md5.h</itemPath>
       <itemPath>script_array.h</itemPath>
@@ -14,6 +13,7 @@
       <itemPath>script_item_ptr.h</itemPath>
       <itemPath>script_object.h</itemPath>
       <itemPath>script_object_definition.h</itemPath>
+      <itemPath>script_object_exceptions.h</itemPath>
       <itemPath>script_object_factory.h</itemPath>
       <itemPath>script_object_hash.h</itemPath>
       <itemPath>script_object_header.h</itemPath>
@@ -114,8 +114,6 @@
           <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libscriptobject.a</output>
         </archiverTool>
       </compileType>
-      <item path="exceptions.h" ex="false" tool="3" flavor2="0">
-      </item>
       <folder path="TestFiles">
         <ccTool>
           <incDir>
@@ -252,6 +250,8 @@
       </item>
       <item path="script_object_definition.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="script_object_exceptions.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="script_object_factory.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="script_object_factory.h" ex="false" tool="3" flavor2="0">
@@ -321,8 +321,6 @@
           <output>${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libscriptobject.a</output>
         </archiverTool>
       </compileType>
-      <item path="exceptions.h" ex="false" tool="3" flavor2="0">
-      </item>
       <folder path="TestFiles">
         <ccTool>
           <incDir>
@@ -454,6 +452,8 @@
       <item path="script_object_definition.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="script_object_definition.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="script_object_exceptions.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="script_object_factory.cpp" ex="false" tool="1" flavor2="0">
       </item>
