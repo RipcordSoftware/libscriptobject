@@ -20,4 +20,4 @@ $(LIBPATH):
 	cd $(LIBROOT) && $(MAKE) CONF=$(CONF)
 
 clean:
-	-rm -f simple_object
+	-rm -f bin/$(CONF)/simple_object

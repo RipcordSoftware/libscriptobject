@@ -20,4 +20,4 @@ $(LIBPATH):
 	cd $(LIBROOT) && $(MAKE) CONF=$(CONF)
 
 clean:
-	-rm -f simple_array
+	-rm -f bin/$(CONF)/simple_array

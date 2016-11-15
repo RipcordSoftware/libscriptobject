@@ -1,4 +1,4 @@
-SUBDIRS=simple_object simple_array
+SUBDIRS=simple_object simple_array embed_lua
 
 SUBDIRS_CLEAN=$(addsuffix .clean, $(SUBDIRS))
 
