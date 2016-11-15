@@ -10,9 +10,9 @@ ifeq ($(CONF), Debug)
 	CPPFLAGS+=--coverage
 endif
 
-all: simple_object
+all: simple_array
 
-simple_object: simple_object.cpp $(LIBPATH)
+simple_array: simple_array.cpp $(LIBPATH)
 	-mkdir -p bin/$(CONF)
 	$(CXX) -o bin/$(CONF)/$@ $< $(CPPFLAGS)
 
@@ -20,4 +20,4 @@ $(LIBPATH):
 	cd $(LIBROOT) && $(MAKE) CONF=$(CONF)
 
 clean:
-	-rm -f simple_object
+	-rm -f simple_array

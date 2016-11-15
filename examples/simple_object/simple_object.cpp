@@ -20,24 +20,27 @@
 #include "libscriptobject.h"
 #include "script_object_vector_source.h"
 
+using namespace std;
+using namespace rs::scriptobject;
+
 int main() {
     // create an object source
-    rs::scriptobject::utils::ScriptObjectVectorSource source({
-        std::make_pair("hello", rs::scriptobject::utils::VectorValue("world")),
-        std::make_pair("lorem", rs::scriptobject::utils::VectorValue("ipsum")),
-        std::make_pair("pi", rs::scriptobject::utils::VectorValue(3.14159)),
-        std::make_pair("moreTaxes", rs::scriptobject::utils::VectorValue(false)),
+    utils::ScriptObjectVectorSource source({
+        make_pair("hello", utils::VectorValue("world")),
+        make_pair("lorem", utils::VectorValue("ipsum")),
+        make_pair("pi", utils::VectorValue(3.14159)),
+        make_pair("moreTaxes", utils::VectorValue(false)),
     });
 
     // use the object factory to create the new object based on our source
-    auto object = rs::scriptobject::ScriptObjectFactory::CreateObject(source);
+    auto object = ScriptObjectFactory::CreateObject(source);
 
     // get the object keys
     auto keys = object->getKeys();
 
     // output the object key names and values to stdout
-    std::cout << keys->getKeyName(0) << ": " << object->getString(0) << std::endl;
-    std::cout << keys->getKeyName(1) << ": " << object->getString(1) << std::endl;
-    std::cout << keys->getKeyName(2) << ": " << object->getDouble(2) << std::endl;
-    std::cout << keys->getKeyName(3) << ": " << (object->getBoolean(3) ? "true" : "false") << std::endl;
+    cout << keys->getKeyName(0) << ": " << object->getString(0) << endl;
+    cout << keys->getKeyName(1) << ": " << object->getString(1) << endl;
+    cout << keys->getKeyName(2) << ": " << object->getDouble(2) << endl;
+    cout << keys->getKeyName(3) << ": " << (object->getBoolean(3) ? "true" : "false") << endl;
 }

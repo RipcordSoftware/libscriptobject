@@ -28,6 +28,8 @@
 *.app
 
 # ignore the coverage output files
+*.gcno
+*.gcda
 *coverage.info
 coverage/*
 
@@ -47,3 +49,5 @@ externals/installed
 # ignore doxygen docs
 docs/*
 
+# ignore example binaries
+examples/*/bin/*

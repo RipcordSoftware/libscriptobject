@@ -1,8 +1,15 @@
-.PHONY: all clean
+SUBDIRS=simple_object simple_array
 
-all:
-	cd simple_object && $(MAKE) $@
+SUBDIRS_CLEAN=$(addsuffix .clean, $(SUBDIRS))
 
-clean:
-	cd simple_object && $(MAKE) $@
+.PHONY: all clean $(SUBDIRS) $(SUBDIRS_CLEAN)
 
+all: $(SUBDIRS)
+
+clean: $(SUBDIRS_CLEAN)
+
+$(SUBDIRS):
+	cd $@ && $(MAKE)
+
+$(SUBDIRS_CLEAN):
+	cd $(basename $@) && $(MAKE) clean
