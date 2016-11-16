@@ -2,22 +2,23 @@ CONF=Debug
 
 .PHONY: all clean
 
+VPATH:=$(CURDIR)
 LIBROOT=../../src/libscriptobject
 LIBPATH=$(LIBROOT)/dist/$(CONF)/GNU-Linux-x86/libscriptobject.a
+OUTDIR=bin/$(CONF)
 CPPFLAGS=--std=c++11 -I$(LIBROOT) $(LIBPATH)
 
 ifeq ($(CONF), Debug)
 	CPPFLAGS+=--coverage
 endif
 
-all: simple_object
+all: $(OUTDIR)/simple_object
 
-simple_object: simple_object.cpp $(LIBPATH)
-	-mkdir -p bin/$(CONF)
-	$(CXX) -o bin/$(CONF)/$@ $< $(CPPFLAGS)
+$(OUTDIR)/simple_object: simple_object.cpp $(LIBPATH)
+	$(CXX) -o $@ $< $(CPPFLAGS)
 
 $(LIBPATH):
 	cd $(LIBROOT) && $(MAKE) CONF=$(CONF)
 
 clean:
-	-rm -f bin/$(CONF)/simple_object
+	-rm -f $(OUTDIR)/simple_object

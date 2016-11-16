@@ -7,19 +7,20 @@ CONF=Debug
 LUA_INCLUDE=/usr/include/lua5.2
 LUA_LIB=lua5.2
 
+VPATH:=$(CURDIR)
 LIBROOT=../../src/libscriptobject
 LIBPATH=$(LIBROOT)/dist/$(CONF)/GNU-Linux-x86/libscriptobject.a
+OUTDIR=bin/$(CONF)
 CPPFLAGS=--std=c++14 -I$(LIBROOT) -I. -I$(LUA_INCLUDE) $(LIBPATH) -l$(LUA_LIB)
 
 ifeq ($(CONF), Debug)
 	CPPFLAGS+=--coverage
 endif
 
-all: lua_check embed_lua
+all: lua_check $(OUTDIR)/embed_lua
 
-embed_lua: embed_lua.cpp $(LIBPATH)
-	-mkdir -p bin/$(CONF)
-	$(CXX) -o bin/$(CONF)/$@ $< $(CPPFLAGS)
+$(OUTDIR)/embed_lua: embed_lua.cpp $(LIBPATH)
+	$(CXX) -o $@ $< $(CPPFLAGS)
 
 $(LIBPATH):
 	cd $(LIBROOT) && $(MAKE) CONF=$(CONF)
@@ -31,4 +32,4 @@ lua_check:
 	@test -d $(LUA_INCLUDE) || (echo "Unable to find Lua 5.2, expected to find it at '$(LUA_INCLUDE)'"; false)
 
 clean:
-	-rm -f bin/$(CONF)/embed_lua
+	-rm -f $(OUTDIR)/embed_lua
