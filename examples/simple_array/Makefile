@@ -15,6 +15,7 @@ endif
 all: $(OUTDIR)/simple_array
 
 $(OUTDIR)/simple_array: simple_array.cpp $(LIBPATH)
+	-mkdir -p $(OUTDIR)
 	$(CXX) -o $@ $< $(CPPFLAGS)
 
 $(LIBPATH):

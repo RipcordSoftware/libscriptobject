@@ -15,6 +15,7 @@ endif
 all: $(OUTDIR)/simple_object
 
 $(OUTDIR)/simple_object: simple_object.cpp $(LIBPATH)
+	-mkdir -p $(OUTDIR)
 	$(CXX) -o $@ $< $(CPPFLAGS)
 
 $(LIBPATH):
