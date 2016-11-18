@@ -35,6 +35,10 @@ rs::scriptobject::ScriptObjectJsonSource::ScriptObjectJsonSource(char* json) {
     members_ = GetMembers(value);
 }
 
+rs::scriptobject::ScriptObjectJsonSource::ScriptObjectJsonSource(const char* json) : 
+    ScriptObjectJsonSource(json != nullptr ? std::vector<char>{&json[0], &json[strlen(json)]}.data() : nullptr) {
+}
+
 rs::scriptobject::ScriptObjectJsonSource::ScriptObjectJsonSource(JsonValue value) : members_(GetMembers(value)) {
    
 }

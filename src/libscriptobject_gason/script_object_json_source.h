@@ -58,6 +58,7 @@ private:
 class ScriptObjectJsonSource : public rs::scriptobject::ScriptObjectSource {
 public:
     ScriptObjectJsonSource(char* json);
+    ScriptObjectJsonSource(const char* json);
     
     virtual unsigned count() const override;
     virtual rs::scriptobject::ScriptObjectType type(int index) const override;

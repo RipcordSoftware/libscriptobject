@@ -38,7 +38,8 @@ namespace scriptobject {
  */
 class ScriptArrayJsonSource : public rs::scriptobject::ScriptArraySource {
 public:
-    ScriptArrayJsonSource(char* json);    
+    ScriptArrayJsonSource(char* json);
+    ScriptArrayJsonSource(const char* json);    
     
     virtual unsigned count() const override;
     virtual rs::scriptobject::ScriptObjectType type(int index) const override;
