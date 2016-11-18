@@ -16,7 +16,6 @@
       <itemPath>script_object_exceptions.h</itemPath>
       <itemPath>script_object_factory.h</itemPath>
       <itemPath>script_object_hash.h</itemPath>
-      <itemPath>script_object_header.h</itemPath>
       <itemPath>script_object_keys.h</itemPath>
       <itemPath>script_object_keys_cache.h</itemPath>
       <itemPath>script_object_keys_factory.h</itemPath>
@@ -260,8 +259,6 @@
       </item>
       <item path="script_object_hash.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="script_object_header.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="script_object_keys.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="script_object_keys.h" ex="false" tool="3" flavor2="0">
@@ -462,8 +459,6 @@
       <item path="script_object_hash.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="script_object_hash.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="script_object_header.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="script_object_keys.cpp" ex="false" tool="1" flavor2="0">
       </item>
