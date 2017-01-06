@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 PARENT_PROCESS=`basename $_`
+PYTHON=`type -p python27 || type -p python2.7 || type -p python-2.7 || type -p python`
 
 CONFIG=Debug
 if [[ "$1" != "" ]]; then
@@ -44,7 +45,7 @@ done
 for f in test*.json
 do
     of=`basename $f .json`.msgpack
-    python json2msgpack.py $f test.out/${of}
+    $PYTHON json2msgpack.py $f test.out/${of}
     dist/$CONFIG/GNU-Linux-x86/testlibscriptobject test.out/${of} > test.out/test.json
     json diff $f test.out/test.json > test.out/diff.out
     if [ ! `wc -l test.out/diff.out | grep -o '^[0-9]*'` == "2" ]; then
