@@ -26,6 +26,7 @@
 #include <memory>
 #include <new>
 #include <algorithm>
+#include <stdexcept>
 
 namespace rs {
 namespace scriptobject {
@@ -221,7 +222,7 @@ ScriptItemPtr<T> make_sized_script_item_ptr(size_t size, Args&&... args) {
     auto minSize = sizeof(T) / sizeof(typename T::allocated_type);
     minSize += (sizeof(T) % sizeof(typename T::allocated_type) > 0) ? 1 : 0;    
     if (size < minSize) {
-        throw std::bad_array_new_length{};
+        throw std::length_error{"size"};
     }   
     
     auto ptr = new typename T::allocated_type[size];

@@ -286,7 +286,7 @@ TEST_F(ScriptObjectPtrTests, test11) {
     
     EXPECT_THROW({
         auto ptr = rs::scriptobject::make_sized_script_item_ptr<SomeTestType>(sizeof(SomeTestType) - 1, destroyed);
-    }, std::bad_array_new_length);
+    }, std::length_error);
     
     ASSERT_EQ(2, destroyed);
 }
