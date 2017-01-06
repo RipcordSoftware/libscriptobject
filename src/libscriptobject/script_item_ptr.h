@@ -82,7 +82,13 @@ public:
  */
 template <typename T, typename AllocT = unsigned char>
 class ScriptItemPtrCountedBase : public ScriptItemPtrBase<T, AllocT> {
-    
+public:
+    ScriptItemPtrCountedBase() {}
+    ScriptItemPtrCountedBase(const ScriptItemPtrCountedBase&) = delete;
+    ScriptItemPtrCountedBase(ScriptItemPtrCountedBase&&) = delete;
+
+    ScriptItemPtrCountedBase& operator=(const ScriptItemPtrCountedBase&) = delete;
+
 private:
     friend class ScriptItemPtrBase<T, AllocT>;    
     
