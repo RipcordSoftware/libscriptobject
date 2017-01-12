@@ -11,8 +11,8 @@ fi
 # spawn make if we weren't invoked by it already
 if [[ "$PARENT_PROCESS" != "make" && "$PARENT_PROCESS" != "gmake" ]]; then
     MAKE=`type -p gmake || type -p make`
-    test "$CXX" != "" && MAKE+=" CXX=$CXX"
-    test "$CC" != "" && MAKE+=" CC=$CC"
+    test "$CXX" != "" && MAKE+=' CXX="$CXX"'
+    test "$CC" != "" && MAKE+=' CC="$CC"'
     ${MAKE} CONF=${CONFIG} || exit 5
 fi
 
